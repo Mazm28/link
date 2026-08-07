@@ -1,0 +1,73 @@
+# ─── Dependencies ────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.*
+
+# ─── Build output ────────────────────────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+.vite/
+
+# TypeScript's incremental cache. A build artifact, and it churns on every
+# compile — committed, it would put a diff in every pull request.
+*.tsbuildinfo
+
+# ─── Test and coverage output ────────────────────────────────────────────────
+coverage/
+.nyc_output/
+.vitest-cache/
+
+# ─── Environment and secrets ─────────────────────────────────────────────────
+# Round 2 introduces a Kavenegar SMS key, a Neshan map key, and a database
+# URL. None of them may ever reach this repository.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ─── Editors and OS ──────────────────────────────────────────────────────────
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ─── Logs ────────────────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Local tooling ───────────────────────────────────────────────────────────
+# `.claude/launch.json` is shared config and IS committed; personal overrides
+# are not.
+.claude/settings.local.json
+.claude/*.local.json
+*.local
+
+# ─── Real user data ──────────────────────────────────────────────────────────
+# Round 2 adds database dumps and support exports. Neither belongs in version
+# control.
+*.private.json
+*.secrets.json
+users.json
+user-data/
+*.dump
+*.sqlite
+*.sqlite3
+
+# NOTE — this section CANNOT protect `src/infra/mock/seed.ts`, and it is worth
+# knowing why rather than assuming a rule here covers it:
+#
+#   1. `seed.ts` is imported by the mock backend, so the app does not build
+#      without it. Ignoring it would break every clone.
+#   2. `.gitignore` has no effect on files git already tracks.
+#
+# The actual control is that seed data is INVENTED. Keep it that way — a rule
+# here would only look like protection.

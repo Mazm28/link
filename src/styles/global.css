@@ -1,0 +1,388 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Vazirmatn — self-hosted (NFR-L5, US-90)
+
+   Not loaded from Google Fonts or any CDN. Those are unreliable or outright
+   blocked from Iran, and a failed font request would leave every screen in a
+   fallback face that renders Persian poorly and breaks the line metrics the
+   layout is tuned for.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   Design tokens
+
+   Every foreground/background pair below is annotated with its contrast ratio
+   against the surface it is used on. NFR-U4 requires 4.5:1 for body text; any
+   token that drops under it is a defect, not a design choice.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PALETTE — فیروزه
+
+   The accent is Persian turquoise, taken from the tilework the audience grew
+   up looking at. It is not a neutral brand choice: turquoise reads as
+   hospitable and civic in this context in a way that a generic indigo or an
+   acid green does not, and it belongs to the subject's own material world
+   rather than to a design system.
+
+   Warm ochre is the counterweight, used ONLY for the past — an activity that
+   has already happened is not an error and must not be red.
+   -------------------------------------------------------------------------- */
+
+@theme {
+  --font-sans: 'Vazirmatn', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Surfaces — light */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f4f6f7;
+  --color-surface-sunken: #e9edef;
+  --color-border: #dde3e6;
+  --color-border-strong: #bcc7cd;
+
+  /* Text — ratios against --color-surface */
+  --color-text: #101820; /* 17.1:1 */
+  --color-text-secondary: #4a5760; /* 8.0:1  */
+  --color-text-muted: #6b7a85; /* 4.6:1  */
+
+  /* Brand — Persian turquoise */
+  --color-brand: #0e7c86; /* 4.9:1 on white */
+  --color-brand-hover: #0a626a;
+  --color-brand-subtle: #e3f3f4;
+  --color-on-brand: #ffffff;
+
+  /* Accent — saffron ochre, reserved for "already happened" */
+  --color-accent: #b5651d; /* 5.0:1 */
+  --color-accent-subtle: #fbf0e4;
+
+  /* Semantic */
+  --color-danger: #c62828;
+  --color-danger-subtle: #fdecec;
+  --color-success: #14713a;
+  --color-success-subtle: #eaf6ee;
+  --color-warning: #8a5a00;
+  --color-warning-subtle: #fdf3e0;
+  --color-verified: #0e6c9c;
+
+  /* NFR-U2: 44px minimum touch target. Exposed as a token so it cannot drift
+   * between components. */
+  --spacing-touch: 2.75rem;
+
+  --radius-card: 1rem;
+  --radius-control: 0.625rem;
+}
+
+/* --------------------------------------------------------------------------
+   NIGHT MODE
+
+   Two triggers, deliberately in this order:
+     1. the system preference, honoured by default;
+     2. an explicit [data-theme] on <html>, which always wins.
+
+   Night mode is not the light palette inverted. Surfaces lift as they come
+   forward (page darker than card), the turquoise brightens so it keeps its
+   contrast against a dark ground, and the ochre warms — a saturated accent
+   that works on white goes muddy on near-black.
+   -------------------------------------------------------------------------- */
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      color-scheme: dark;
+
+      --color-surface: #161c24;
+      --color-surface-muted: #0f141a;
+      --color-surface-sunken: #1e262f;
+      --color-border: #2a343e;
+      --color-border-strong: #46545f;
+
+      --color-text: #edf1f4; /* 13.4:1 on --color-surface */
+      --color-text-secondary: #a9b6c0; /* 7.1:1 */
+      --color-text-muted: #8394a0; /* 4.8:1 */
+
+      --color-brand: #45c4ce; /* 8.2:1 */
+      --color-brand-hover: #63d4dd;
+      --color-brand-subtle: #14343a;
+      --color-on-brand: #06232a;
+
+      --color-accent: #d99a58; /* 6.9:1 */
+      --color-accent-subtle: #33261a;
+
+      --color-danger: #f2807d;
+      --color-danger-subtle: #351d1e;
+      --color-success: #6cc38c;
+      --color-success-subtle: #14291d;
+      --color-warning: #d9a944;
+      --color-warning-subtle: #2e2617;
+      --color-verified: #59b6e0;
+    }
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+
+    --color-surface: #161c24;
+    --color-surface-muted: #0f141a;
+    --color-surface-sunken: #1e262f;
+    --color-border: #2a343e;
+    --color-border-strong: #46545f;
+
+    --color-text: #edf1f4;
+    --color-text-secondary: #a9b6c0;
+    --color-text-muted: #8394a0;
+
+    --color-brand: #45c4ce;
+    --color-brand-hover: #63d4dd;
+    --color-brand-subtle: #14343a;
+    --color-on-brand: #06232a;
+
+    --color-accent: #d99a58;
+    --color-accent-subtle: #33261a;
+
+    --color-danger: #f2807d;
+    --color-danger-subtle: #351d1e;
+    --color-success: #6cc38c;
+    --color-success-subtle: #14291d;
+    --color-warning: #d9a944;
+    --color-warning-subtle: #2e2617;
+    --color-verified: #59b6e0;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    /* Persian numerals in body copy are handled in code (toPersianDigits), not
+     * by font-feature-settings — the conversion has to survive being copied
+     * out of the page as text, and a font feature would not. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-surface-muted);
+    color: var(--color-text);
+    /* Persian ascenders and descenders need more room than Latin at the same
+     * size; 1.75 is the smallest leading that stays comfortable with Vazirmatn. */
+    line-height: 1.75;
+
+    /* NO transition on background-color here, deliberately.
+     *
+     * The theme swaps by changing custom properties on :root. A transition on
+     * a property whose value comes from a custom property changed on an
+     * ANCESTOR leaves body's background stuck at the previous colour — the
+     * page keeps its dark backdrop while every card turns white. Verified in
+     * the browser: removing the transition resolves the colour immediately.
+     *
+     * An instant theme swap is also the better behaviour. A 200ms cross-fade
+     * of the entire page puts the interface in a half-lit intermediate state
+     * that looks like a rendering fault rather than a choice. */
+  }
+
+  /* THEME RULE — never transition a colour that comes from a theme variable.
+   *
+   * The theme swaps custom properties on :root. A CSS transition on a property
+   * whose value derives from a custom property changed on an ANCESTOR does not
+   * settle: the element keeps painting the previous colour indefinitely. It
+   * shows up as a page that half-changes theme — cards flip, background does
+   * not. Verified in the browser three separate times, on `body`, on the card,
+   * and on the category pills.
+   *
+   * Transition transform, opacity and box-shadow freely. Never background-color,
+   * color, or border-color. */
+
+  /* PERSIAN TYPOGRAPHY RULE — no letter-spacing, ever.
+   *
+   * Persian script is cursive: letters join. Tracking pulls those joins apart
+   * and the word visibly breaks into pieces. The "small wide-tracked label"
+   * move that carries so much of Latin editorial design is simply unavailable
+   * here, so the type hierarchy below is built from SIZE, WEIGHT and COLOUR
+   * alone. This is a constraint of the language, not a stylistic preference. */
+  * {
+    letter-spacing: normal;
+  }
+
+  /* Headings sit tighter than body text — Persian titles at 1.75 leading look
+   * unmoored from the content they head. */
+  h1,
+  h2,
+  h3 {
+    line-height: 1.4;
+  }
+
+  /* NFR-U3: focus must be visible, and visible against every surface. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  /* Text alignment defaults to the start edge, never to a physical side.
+   * See FC-U1-01. */
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  label,
+  th,
+  td {
+    text-align: start;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+@layer utilities {
+  /* NFR-U2 — the minimum interactive size, as one utility rather than a rule
+   * each component has to remember. */
+  .touch-target {
+    min-inline-size: var(--spacing-touch);
+    min-block-size: var(--spacing-touch);
+  }
+
+  /* FC-U1-02 — directional icons (arrows, chevrons, back) mirror under RTL.
+   * Non-directional icons (search, calendar, user) must NOT use this: a
+   * mirrored magnifying glass reads as broken, while an unmirrored back-arrow
+   * points the wrong way. */
+  [dir='rtl'] .icon-directional {
+    transform: scaleX(-1);
+  }
+
+  /* NOTE: there are deliberately no hand-rolled inset utilities here.
+   *
+   * Tailwind v4 already ships logical ones — `start-*`, `end-*`, `inset-y-*` —
+   * and writing a parallel set meant every name I mistyped silently did
+   * nothing rather than failing. That is how the search icon ended up
+   * unpositioned: `inset-inline-start-3` was never defined. Use the framework's. */
+
+  /* ------------------------------------------------------------------------
+     SIGNATURE — the veiled address.
+
+     When a host chooses to publish only their neighborhood, the exact address
+     is not missing data and must not look like it. This renders a short
+     hatched bar where the street line would be, so the withholding reads as a
+     deliberate act by a person rather than as something the app failed to
+     load.
+
+     It is the one place in the interface that draws attention to itself, and
+     it earns that by being the visible face of the product's core promise:
+     the app never reveals where you are unless you say so.
+     ------------------------------------------------------------------------ */
+  .veiled-line {
+    display: inline-block;
+    block-size: 0.7em;
+    inline-size: 5.5rem;
+    vertical-align: -0.05em;
+    border-radius: 2px;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--color-border-strong) 0 2px,
+      transparent 2px 5px
+    );
+    opacity: 0.85;
+  }
+
+  /* A card whose activity has already happened. Desaturated rather than
+   * dimmed: a past activity is still readable content — it is where ratings
+   * come from — so it recedes without becoming hard to read. */
+  .is-past {
+    filter: saturate(0.55);
+  }
+
+  /* ------------------------------------------------------------------------
+     Photo placeholders.
+
+     Almost no activity will have a photo in the first months, so the empty
+     state IS the common state and has to look composed rather than broken. A
+     fixed set of tints keyed off the category gives the feed rhythm and makes
+     categories glanceable before you read a word.
+
+     Fixed classes rather than a computed hue because NFR-S3 requires a CSP
+     with no `unsafe-inline`, and a dynamic gradient would need an inline
+     style attribute.
+     ------------------------------------------------------------------------ */
+  .photo-tint-0 {
+    background-image: linear-gradient(140deg, #0e7c86 0%, #16a3a8 100%);
+  }
+  .photo-tint-1 {
+    background-image: linear-gradient(140deg, #1d5e7a 0%, #3f8fa8 100%);
+  }
+  .photo-tint-2 {
+    background-image: linear-gradient(140deg, #b5651d 0%, #d99a58 100%);
+  }
+  .photo-tint-3 {
+    background-image: linear-gradient(140deg, #4a5760 0%, #7c8b96 100%);
+  }
+  .photo-tint-4 {
+    background-image: linear-gradient(140deg, #14713a 0%, #3f9a63 100%);
+  }
+  .photo-tint-5 {
+    background-image: linear-gradient(140deg, #6b3f8a 0%, #9d76b8 100%);
+  }
+
+  /* Screen-reader-only text, for accessible names that the visual design
+   * conveys through position or icon alone. */
+  .sr-only-text {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

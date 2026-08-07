@@ -1,0 +1,73 @@
+name: CI
+
+# NFR-R5 / Requirements FQ4 `B` — GitHub Actions, confirmed by the user as
+# reliable enough from their environment.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      # NFR-S5 / SECURITY-10: `npm ci` installs exactly the committed lock
+      # file. A resolver free to pick newer versions would make the build
+      # non-reproducible and let an unreviewed dependency in.
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # DEP-1 … DEP-4 are enforced here. A `features/` -> `infra/` import fails
+      # no test and is invisible in the running app; this is where it is caught.
+      - name: Lint (includes import-boundary rules)
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      # PBT-08: property tests run on every push with shrinking enabled and the
+      # seed logged, so any failure is reproducible. A flaky property test is
+      # investigated, never retried away.
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      # SECURITY-10 — dependency vulnerability scanning.
+      # Reported but not blocking at this stage: a transitive advisory in a
+      # build-time dependency should not stop a prototype from shipping, and a
+      # gate that everyone learns to bypass protects nothing. Revisit before
+      # public launch, when the threshold should become `--audit-level=high`
+      # and blocking.
+      - name: Dependency audit
+        run: npm audit --audit-level=high || true
+        continue-on-error: true

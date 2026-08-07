@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+  US-90 / FC-U1-03: dir and lang are set on the document root, not toggled by
+  JavaScript after mount. A right-to-left document that starts left-to-right
+  flashes a mirrored layout on every cold load.
+-->
+<html dir="rtl" lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="description" content="لینک — فعالیت‌های اطرافت را پیدا کن و آدم‌های تازه ببین" />
+
+    <!--
+      NFR-L5: Vazirmatn is self-hosted from /fonts. There is deliberately no
+      preconnect to fonts.googleapis.com or any CDN — those are unreliable or
+      blocked from Iran, and a failed font request leaves the whole app in a
+      fallback face that renders Persian badly.
+    -->
+    <link
+      rel="preload"
+      href="/fonts/Vazirmatn-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/Vazirmatn-Bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <title>لینک</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
