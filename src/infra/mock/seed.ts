@@ -747,12 +747,32 @@ function buildRequests(now: Date, users: User[]): JoinRequest[] {
 
   return REQUEST_SEEDS.map((s, i) => {
     const requester = byId.get(u(s.requester));
+
+    /* ⚠️ AN EMPTY VALUE IS NOT A CONTACT.
+     *
+     * `?? ''` produced `{ kind: 'telegram', value: '' }` for the two seeded
+     * users who have no telegramId (محمد and شیما), and the inbox rendered that
+     * as «تلگرام: » with nothing after it. That is worse than saying nothing was
+     * shared: it CLAIMS a handle was disclosed and then shows a blank, so the
+     * poster reads it as a loading failure and waits for a way to reach someone
+     * that was never going to arrive. On the screen where you decide how to
+     * contact a stranger, a blank is not a cosmetic defect.
+     *
+     * Degrading to `none` states what is actually true. Found by the INV-3
+     * tests CR-05 added, not by review. */
+    const declared =
+      s.contact === 'phone'
+        ? requester?.phone
+        : s.contact === 'telegram'
+          ? requester?.telegramId
+          : undefined;
+
     const sharedContact =
-      s.contact === 'none'
+      s.contact === 'none' || declared === undefined || declared === ''
         ? ({ kind: 'none' } as const)
         : s.contact === 'phone'
-          ? ({ kind: 'phone', value: requester?.phone ?? '' } as const)
-          : ({ kind: 'telegram', value: requester?.telegramId ?? '' } as const);
+          ? ({ kind: 'phone', value: declared } as const)
+          : ({ kind: 'telegram', value: declared } as const);
 
     return {
       id: RequestIdCodec.slug(s.n),

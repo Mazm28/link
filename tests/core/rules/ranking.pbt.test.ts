@@ -1,7 +1,7 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { Activity } from '@core/domain';
-import { neighborhoodId } from '@core/domain';
+import { cityId, neighborhoodId } from '@core/domain';
 import { rankActivities, type ViewerContext } from '@core/rules/ranking';
 import { applyFilters } from '@core/rules/filters';
 import { arbActivity } from '@tests/generators/domain';
@@ -95,6 +95,89 @@ describe('P-U3-06 — ranking leaks no withheld field', () => {
         expect(a).toEqual(b);
       }),
     );
+  });
+});
+
+describe('⚠️ P-U3-07 — unmeasurable distance is undefined, not far (BR-U3-54)', () => {
+  /* A viewer who definitely HAS a Tehran origin, so proximity is live rather
+   * than absent for unrelated reasons — otherwise the property would pass
+   * vacuously on most runs. */
+  const arbTehranViewer: fc.Arbitrary<ViewerContext> = fc.record({
+    neighborhoodId: fc.constantFrom('yousefabad', 'vanak', 'tajrish', 'narmak').map(neighborhoodId),
+    interestIds: fc.constant([]),
+  });
+
+  const OUTSIDER = 'act_outsider' as Activity['id'];
+
+  it('an out-of-city activity ranks the same with or without neighborhood data', () => {
+    fc.assert(
+      fc.property(arbActivities, arbTehranViewer, arbActivity, (tehran, viewer, outsider) => {
+        /* The bug this pins: `neighborhoodDistance` returns FAR both for "6+
+         * hops across Tehran" and for "not in this graph at all". Only the
+         * first is a distance. Feeding the second into the formula scored a
+         * Mashhad activity 0 at FULL weight, while a Yazd activity — same
+         * distance from the viewer, i.e. unknown — returned no term at all and
+         * had its weight redistributed.
+         *
+         * So the Yazd activity outranked the Mashhad one because MASHHAD HAS
+         * BETTER REFERENCE DATA. Nobody would choose that; it fell out of a
+         * sentinel doing two jobs.
+         *
+         * City scoping used to make this unreachable, which is why BR-U3-53
+         * recorded the question as closed. CR-05 unscoped the feed and reopened
+         * it on every ranking pass. */
+        const withNeighborhood: Activity = {
+          ...outsider,
+          id: OUTSIDER,
+          cityId: cityId('mashhad'),
+          neighborhoodId: neighborhoodId('mashhad-01'),
+        };
+
+        const withoutNeighborhood: Activity = { ...outsider, id: OUTSIDER, cityId: cityId('yazd') };
+        delete withoutNeighborhood.neighborhoodId;
+
+        const positionOf = (activity: Activity) =>
+          rankActivities([...tehran, activity], viewer, NOW).findIndex((a) => a.id === OUTSIDER);
+
+        expect(positionOf(withNeighborhood)).toBe(positionOf(withoutNeighborhood));
+      }),
+    );
+  });
+
+  it('a Tehran activity still gets a real proximity term', () => {
+    /* The guard against overcorrecting. Dropping the term whenever the graph
+     * lookup is awkward would satisfy the property above and destroy US-21. */
+    const near: Activity = {
+      ...({} as Activity),
+      id: 'act_near' as Activity['id'],
+      authorId: 'usr_a' as Activity['authorId'],
+      authorKind: 'user',
+      title: 'نزدیک',
+      description: 'یک فعالیت نزدیک',
+      categoryIds: [],
+      startsAt: new Date(NOW.getTime() + 86_400_000).toISOString(),
+      cityId: cityId('tehran'),
+      neighborhoodId: neighborhoodId('yousefabad'),
+      locationPrecision: 'neighborhood',
+      status: 'published',
+      promotion: { sponsored: false },
+      createdAt: NOW.toISOString(),
+    };
+
+    const far: Activity = {
+      ...near,
+      id: 'act_far' as Activity['id'],
+      neighborhoodId: neighborhoodId('shahr-rey'),
+    };
+
+    const viewer: ViewerContext = {
+      neighborhoodId: neighborhoodId('yousefabad'),
+      interestIds: [],
+    };
+
+    /* Same startsAt, same everything but location — so if proximity were being
+     * dropped, the tie-break on id would put act_far first. It must not. */
+    expect(rankActivities([far, near], viewer, NOW).map((a) => a.id)).toEqual([near.id, far.id]);
   });
 });
 

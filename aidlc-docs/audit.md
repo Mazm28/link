@@ -1244,3 +1244,91 @@ All 25 cities were rendering; only 4 were on screen. First attempt — bounding 
 **Browser-verified**: 25/25 cities on screen (was 4); switching to اصفهان offers its own 18 neighborhoods with zero Tehran names; یزد shows no neighborhood field and still composes.
 
 ---
+
+## Session resumed — UNDOCUMENTED WORKSPACE DRIFT DETECTED
+**Timestamp**: 2026-08-08T00:56:00Z
+**User Input**: "Resume the AI-DLC workflow. Read aidlc-docs/aidlc-state.md first."
+**AI Response**: "State read. U3 Code Generation gate is still open, as recorded. But the workspace no longer matches the record — 16 modified files and 3 new files exist with no audit entry, no state entry and no change-request document. Created u3-resume-reconciliation-questions.md with 4 questions rather than approving or proceeding."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate OPEN. Resume blocked pending reconciliation.
+
+**THE RECORD AND THE TREE HAVE DIVERGED.** Last audit entry: CR-04, 2026-08-05T05:30Z. Only commit: `fb4d2ba`, 2026-08-07T17:15. The uncommitted files are dated 2026-08-07 17:30 through 2026-08-08 00:29 — i.e. entirely after both. `aidlc-state.md` describes none of it.
+
+**The change names itself and the name resolves to nothing.** `src/core/i18n/fa.ts:360` reads `profile hub (CR-05)`. No CR-05 document exists. Neither does CR-03 — the audit's own numbering jumps CR-02 to CR-04. Two change identifiers now have no definition behind them.
+
+**Six changes reconstructed from the diff**: (1) city browsing defaults to ALL cities — `ActiveCity = CityId | null` plus a `composeCityId` fallback for posting; (2) activity editing at `/activity/:id/edit`, reusing the composer; (3) `/profile` split into a hub with the form at `/profile/edit`, `MyActivitiesScreen` gaining an `embedded` prop; (4) `/requests` now renders a real `RequestsInboxScreen`; (5) `ActivityMap` gained a `height` prop; (6) `deriveState`/`editableFields`/`editActivity`/`cancelActivity` narrowed to `Pick<...>` so they accept an `ActivityView`.
+
+**⚠️ THE GREEN TEST RUN IS THE PROBLEM, NOT THE REASSURANCE.** Typecheck clean, 228/228 passing — and **228 is the exact figure recorded at U3 completion three days ago**. Grepping `tests/` for `RequestsInboxScreen`, `profile-summary`, `/profile/edit`, `city-option-all`, `/activity/:id/edit` and `composeCityId` returns nothing at all. The suite is green because it does not know this code exists. Property-Based Testing is enabled in Full (blocking) mode; this is a blocking finding.
+
+**⚠️ CHANGE 4 CROSSES A UNIT BOUNDARY INTO THE SAFETY-SENSITIVE ONE.** `RequestsInboxScreen` implements US-40, a **U4** story, built during U3's open gate. Its own header comment states it "carries the one INV-3 exception" — `sharedContact` is the single place another person's contact detail is legitimately disclosed, scoped only by `listIncomingRequests(posterId)`. That scoping has **no test**. U4 is the unit the state file flags as having the highest safety sensitivity, and its first screen arrived without a functional design, without INV-3 verification, and outside the audit trail.
+
+**⚠️ CHANGE 1 REVERSES AN APPROVED DECISION.** BR-U3-50/51 and Units-Gen answer CQ2 `A` established city-first scoping. The in-code rationale is sound — Round-1 content is almost entirely Tehran, so scoping by default hid the product — but a sound reason for an amendment does not make it not an amendment. Recorded as Question 2 rather than absorbed silently.
+
+**Not treated as junk.** The work is coherent, commented to the standard of the rest of the codebase, and changes 5 and 6 follow precedents this audit already records (`matchTier` taking `{title, description}` rather than `Activity`). The objection is to its provenance and its test coverage, not its quality.
+
+**NOT DONE, deliberately**: U3 was not approved, nothing was reverted, no tests were written, `aidlc-state.md` was untouched. Approving a gate over an unrecorded diff would put the approval on record for code the record does not contain.
+
+**Also still open from U3 completion**: DEV-U3-02 (`FilterPanel` in `app/routes/` rendered by a feature) needs acknowledgement; Vazirmatn font binaries remain uncommitted, so the app still runs in a fallback face.
+
+---
+
+## Reconciliation questions ANSWERED — CR-05 adopted, rules amended, tests first, font blocking
+**Timestamp**: 2026-08-08T01:20:00Z
+**User Input**: "1: A, 2: A, 3: A, 4: B"
+**AI Response**: "All four answered. Proceeding: adopt the drift as CR-05 with a written document, amend BR-U3-50/51 rather than treating the all-cities default as a deviation, write the missing tests BEFORE presenting the U3 approval gate, acknowledge DEV-U3-02, and treat the missing Vazirmatn binaries as blocking."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate still OPEN. Reconciliation resolved.
+
+**Q1 `A` — the six undocumented changes are ADOPTED as CR-05**, including change 4 (`RequestsInboxScreen`, US-40). US-40 therefore ships early, out of U4. The INV-3 disclosure scoping it carries must be tested here rather than in U4, since U4 will now inherit it as existing behaviour rather than build it.
+
+**Q2 `A` — BR-U3-50/51 are AMENDED, not deviated from.** The city becomes an opt-in filter rather than a scope a viewer is placed in unasked. This retires the "second-city seed content" reasoning recorded at 2026-08-05T03:10Z: seeding a second city existed to make a city-scoped feed demonstrable, and an all-cities default demonstrates it without the crutch. The seed data stays — it is now content rather than scaffolding.
+
+**Q3 `A` — tests BEFORE the approval gate.** No approval is presented while the adopted code is uncovered.
+
+**Q4 `B` — DEV-U3-02 acknowledged; the Vazirmatn binaries are BLOCKING.** `FilterPanel` stays in `app/routes/`. The font is no longer a maintainer follow-up: a Persian app rendering in a fallback face is not demoable, and "demoable in browser in Persian" is the definition of unit-done recorded in `unit-of-work.md`. U1's third deviation is thereby reopened as work rather than closed as an acknowledgement.
+
+---
+
+## CR-05 documented, rules amended, 21 tests added — TWO DEFECTS FOUND
+**Timestamp**: 2026-08-08T01:40:00Z
+**AI Response**: "CR-05 written, BR-U3-50/51 amended, BR-U3-53 retired, BR-U3-54 added, 21 tests added across 4 new files and 1 extended. Typecheck clean, lint clean, 249/249 passing (was 228), build 137.9 KB gzipped. Font still outstanding."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate still OPEN. Q1/Q2/Q3 work complete; Q4's font item not yet done.
+
+**⚠️ RANKING DEFECT — found by the test written for the amendment, not by reviewing the diff.**
+`neighborhoodDistance` returns `FAR` for BOTH "6+ hops across Tehran" and "not in this graph at all", and only the first is a distance. City scoping made the second unreachable, which is exactly why BR-U3-53 recorded the cross-city question as CLOSED. CR-05's unscoped feed reopened it on every ranking pass — and the two cases took different paths: a **Mashhad** activity has a neighborhood id, so it scored 0 **at full 0.45 weight**; a **Yazd** activity has none, so it returned no term and had its weight redistributed. **A Yazd activity therefore outranked an identical Mashhad one because Mashhad's reference data is BETTER.** Nobody would choose that; it fell out of one sentinel doing two jobs. Fixed by requiring both neighborhoods to be in the graph. Recorded as **BR-U3-54**, with **P-U3-07**.
+
+**THE PROPERTY TEST WAS VERIFIED AGAINST THE BROKEN CODE.** Fix reverted, P-U3-07 fails after 2 generated cases (`expected +0 to be 1`); fix restored, green. This project has already shipped a property test that passed regardless of what the code did (P-U3-02, comparing `"[object Object]"` to itself), so a new safety-adjacent property is not trusted until it has been seen to fail.
+
+**⚠️ SEED DEFECT — an empty string presented as a contact method.** محمد (usr_03) and شیما (usr_10) have no `telegramId`, but their request seeds declared `contact: 'telegram'`. `?? ''` produced `{ kind: 'telegram', value: '' }`, and the inbox rendered «تلگرام: » with nothing after it. That is worse than `kind: 'none'`: it CLAIMS a handle was shared, so the poster reads a blank as a loading failure and waits for a contact route that never existed — on the screen where someone decides how to reach a stranger. Now degrades to `none`.
+
+**ONE OF MY OWN TESTS WAS WRONG, AND WAS CORRECTED RATHER THAN ACCOMMODATED.** The FR-35 test first asserted `SentRequestView` carries no `sharedContact` at all, reading the type's comment ("HAS NO FIELD FOR THE POSTER'S CONTACT DETAILS") as a blanket prohibition. It failed. The field is deliberately present and holds the REQUESTER'S OWN detail, shown back so they can see what they disclosed; the type lacks a field for the POSTER's contact, which is where the asymmetry lives. Deleting the field to make the test pass would have destroyed a US-30 feature to satisfy a misreading. A second vacuous assertion was caught the same way — the profile-hub test named a `data-testid` that exists nowhere, so it would have passed against the old routing too.
+
+**Also found, not fixed**: the "second-city seed content" recorded as added to the U3 plan at 2026-08-05T03:10Z (steps 9 and 19) was **never delivered** — `ActivitySeed` has no city field and every one of the 24 seeded activities is hardcoded `cty('tehran')`. Under CR-05 this is no longer load-bearing (the default feed is unscoped), but it means **24 of 25 cities show the honest empty state if chosen**, and BR-U3-52 was amended to say so rather than leaving the claim standing.
+
+**Gates**: typecheck clean · lint clean · **249/249 tests (was 228, +21)** · build 137.9 KB gzipped. Browser verification NOT yet run — it is blocked on the font, since verifying a Persian app in a fallback face verifies the wrong thing.
+
+---
+
+## Vazirmatn installed · browser verification · A THIRD DEFECT
+**Timestamp**: 2026-08-08T02:30:00Z
+**User Input**: "yes do it"
+**AI Response**: "Font downloaded, verified rendering, browser verification run. Found and fixed a third defect. Typecheck clean, lint clean, 250/250 passing, build 137.9 KB gzipped."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate OPEN. Q4 `B` satisfied; ready to present.
+
+**Vazirmatn v33.003 installed** — `vazirmatn-v33.003.zip`, 13,047,191 bytes, SHA-256 `0a9afd41967e6f57096a56a181a23f81a2b999b62f1f2a4e4b26736580854fdb`, SIL OFL 1.1. Three static weights (Regular/Medium/Bold, ~50 KB each) plus `OFL.txt` kept; the other seven weights, the variable face and everything else discarded. Provenance table written into `public/fonts/README.md`, whose status line no longer says the binaries are missing. U1's third deviation is CLOSED.
+
+**Verified RENDERING, not merely loaded.** All three faces report `loaded` and served 200/304, but that only proves fetching. Persian text measures differently under Vazirmatn than under `system-ui`, and — the check that actually matters — **U+200C (ZWNJ) changes the rendered width**: «می‌رود» ≠ «میرود». A half-space rendering as tofu would break Persian across every screen, and «می‌رود» without it is a different word.
+
+**⚠️ THIRD DEFECT, FOUND BY HAND IN THE BROWSER — `/create` opened populated with the activity just edited.**
+Both routes render `ActivityComposerScreen` in the same position, so React reconciles them as ONE element and never remounts; the draft survived the route change. The composer showed an existing activity — exact address and coordinate included — and because `isEditing` is false on `/create`, pressing publish would have **CREATED A DUPLICATE carrying the original's location** rather than saving an edit.
+**Fixed** with distinct `key`s on the two routes. Chosen over resetting the draft inside the effect because a key retires the whole CLASS of bug rather than this instance — the same reasoning CR-04 used choosing a portal over deleting one `backdrop-blur`.
+
+**WHY THE SUITE MISSED IT, AND THIS IS THE LESSON.** A test named `the create route is an empty draft` already existed and passed the entire time. **Mounting fresh at `/create` was never the broken path.** A test that re-mounts the app at every route CANNOT OBSERVE A BUG WHOSE CAUSE IS NOT REMOUNTING. The new test drives a real click on the nav link; verified to fail against the unkeyed router before being kept.
+
+**Both new regression tests were verified against the broken code**, not just against the fix — P-U3-07 (fails after 2 generated cases) and the edit→create test. Three for three this session, tests found what review did not.
+
+**Browser results**: city switcher «همه‌ی شهرها» · requests inbox 6 rows, blank «تلگرام: » gone after reseed · profile hub one `<h1>`, **no phone in the DOM** · edit→create leak gone · **no horizontal overflow on six routes at 375px** · no console errors.
+
+**⚠️ NOT VERIFIED VISUALLY — stated rather than glossed.** Screenshot capture timed out repeatedly against the preview pane. Every result above comes from the DOM, the network log and computed styles. Layout OVERFLOW is confirmed by measurement; layout AESTHETICS are unconfirmed.
+
+**Known limitation, deliberately not fixed**: `SCHEMA_VERSION` stays at 3, so an existing browser keeps its persisted store including the blank-Telegram rows — the seed fix applies to a fresh store or the dev menu's reset. Bumping to 4 forces every install to reseed and would DISCARD activities created by hand while testing, so it is the user's call, not mine.
+
+---

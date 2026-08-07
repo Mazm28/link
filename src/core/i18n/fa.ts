@@ -317,6 +317,7 @@ export const fa = {
 
   /* --------------------------------------------------------------- city */
   'city.switch': 'تغییر شهر',
+  'city.all': 'همه‌ی شهرها',
   'city.current': 'شهر: {{city}}',
 
   /* ------------------------------------------------------- my activities */
@@ -328,6 +329,7 @@ export const fa = {
   'my.emptyTitle': 'هنوز فعالیتی نساخته‌ای',
   'my.emptyBody': 'اولین فعالیتت را بساز تا دیگران پیدایش کنند.',
   'my.attendancePending': 'تأیید حضور انجام نشده',
+  'my.edit': 'ویرایش',
 
   /* --------------------------------------------------------- categories */
   'categories.title': 'دسته‌بندی‌ها',
@@ -354,6 +356,25 @@ export const fa = {
   'errors.precisionRequired': 'انتخاب کن که مکان دقیق نشان داده شود یا حدودی.',
   'errors.addressRequired': 'برای نمایش موقعیت دقیق، آدرس لازم است.',
   'errors.capacityInvalid': 'ظرفیت باید عددی بین ۲ تا ۵۰۰ باشد.',
+
+  /* ------------------------------------------------ profile hub (CR-05) */
+  'profile.hubTitle': 'پروفایل من',
+  'profile.editInfo': 'ویرایش اطلاعات',
+  'profile.editInfoHint': 'نام، تصویر، درباره‌ی من، علاقه‌مندی‌ها و شهر',
+  'profile.myActivities': 'فعالیت‌های من',
+
+  /* --------------------------------------------- incoming requests (US-40) */
+  'requests.title': 'درخواست‌ها',
+  'requests.subtitle': 'کسانی که خواسته‌اند به فعالیت‌های تو بپیوندند.',
+  'requests.emptyTitle': 'هنوز درخواستی نداری',
+  'requests.emptyBody': 'وقتی کسی بخواهد به یکی از فعالیت‌هایت بپیوندد، اینجا می‌بینی‌اش.',
+  'requests.sharedPhone': 'شماره تماس',
+  'requests.sharedTelegram': 'تلگرام',
+  'requests.sharedNone': 'راه تماسی به اشتراک نگذاشته است.',
+  'requests.revoked': 'این راه تماس دیگر معتبر نیست.',
+  'requests.withdrawn': 'پس گرفته شده',
+  'requests.forActivity': 'برای:',
+  'requests.oneWay': 'اطلاعات تماس تو برای این شخص فرستاده نشده است.',
 
 } as const;
 

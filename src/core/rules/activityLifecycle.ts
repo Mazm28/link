@@ -22,7 +22,13 @@ import { startOfTehranDay } from './jalali';
  * "past" at 20:30 Tehran merely because UTC has already rolled over to the
  * next date.
  */
-export function deriveState(activity: Activity, now: Date): DerivedActivityState {
+/* Takes only the two fields it reads, so it works on an Activity and on an
+ * ActivityView alike — a view already carries both, and widening this would
+ * make every view-holding caller fabricate a record. */
+export function deriveState(
+  activity: Pick<Activity, 'startsAt' | 'status'>,
+  now: Date,
+): DerivedActivityState {
   if (activity.status === 'cancelled') return 'cancelled';
 
   const activityDay = startOfTehranDay(new Date(activity.startsAt));
@@ -55,7 +61,7 @@ export function isAuthor(activity: Activity, userId: UserId | null): boolean {
  * weeks" without altering the record of what happened.
  */
 export function editableFields(
-  activity: Activity,
+  activity: Pick<Activity, 'startsAt' | 'status'>,
   now: Date,
 ): 'all' | 'description-only' | 'none' {
   const state = deriveState(activity, now);
@@ -64,6 +70,6 @@ export function editableFields(
   return 'all';
 }
 
-export function mayCancel(activity: Activity, now: Date): boolean {
+export function mayCancel(activity: Pick<Activity, 'startsAt' | 'status'>, now: Date): boolean {
   return deriveState(activity, now) === 'upcoming';
 }

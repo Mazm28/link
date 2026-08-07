@@ -21,10 +21,15 @@ export function ActivityMap({
   activities,
   center,
   onSelect,
+  /* The feed's map view wants the room; the detail page's inset does not, and
+   * forcing both to one size made the detail page scroll for a map showing a
+   * single activity. */
+  height = 420,
 }: {
   activities: readonly ActivityView[];
   center: GeoPoint;
   onSelect?: (id: string) => void;
+  height?: number;
 }) {
   const { markers, areas } = useMemo(() => {
     const pins: MapMarker[] = [];
@@ -69,7 +74,7 @@ export function ActivityMap({
         markers={markers}
         areas={areas}
         {...(onSelect === undefined ? {} : { onMarkerClick: onSelect })}
-        height={420}
+        height={height}
         data-testid="activity-map"
       />
 

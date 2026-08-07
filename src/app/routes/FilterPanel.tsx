@@ -125,6 +125,10 @@ export function FilterPanel() {
       {/* U3 — the neighborhood filter, finally wired. The contract and the
        * read pipeline have supported it since U1; only the control was
        * missing (CR-01 change A). */}
+      {/* Neighborhoods belong to a city, so this only makes sense once one is
+        * chosen. Showing every city's محله‌ها at once would be a list nobody
+        * can use. */}
+      {cityId !== null && (
       <NeighborhoodSelector
         cityId={cityId}
         mode="multiple"
@@ -132,6 +136,7 @@ export function FilterPanel() {
         onChange={setNeighborhoodIds}
         label={t('activity.neighborhoodLabel')}
       />
+      )}
 
       <fieldset className="flex flex-col gap-2">
         <legend className="text-sm font-medium text-text">{t('filter.authorKind')}</legend>

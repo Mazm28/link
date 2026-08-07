@@ -66,6 +66,25 @@ function proximityTerm(viewer: ViewerContext, activity: Activity): Term | null {
    * so it contributes no proximity term rather than a worst-case one. */
   if (activity.neighborhoodId === undefined) return null;
 
+  /* BR-U3-54 — UNMEASURABLE IS NOT FAR.
+   *
+   * `neighborhoodDistance` returns FAR both for "6+ hops across Tehran" and
+   * for "not in this graph at all", and only the first of those is a distance.
+   * Feeding the second into the formula yields 0 at FULL weight, which reads
+   * as "as far away as anything gets" rather than "no idea".
+   *
+   * Under CR-05 that stopped being hypothetical. The feed is unscoped by
+   * default, so a Tehran viewer sees Mashhad and Yazd activities on every
+   * pass — and the two took DIFFERENT paths: Mashhad has neighborhood data, so
+   * it scored 0 at full weight; Yazd has none, so it returned null above and
+   * had its weight redistributed. A Yazd activity therefore outranked an
+   * identical Mashhad one because Mashhad's reference data was BETTER.
+   *
+   * The graph covers Tehran only, so this check also catches two neighborhoods
+   * in the same non-Tehran city — same situation, same answer. */
+  if (!GRAPH.adjacency.has(viewer.neighborhoodId) || !GRAPH.adjacency.has(activity.neighborhoodId))
+    return null;
+
   const hops = neighborhoodDistance(viewer.neighborhoodId, activity.neighborhoodId, GRAPH);
 
   return { value: Math.max(0, 1 - hops / MAX_HOPS), weight: WEIGHTS.proximity };

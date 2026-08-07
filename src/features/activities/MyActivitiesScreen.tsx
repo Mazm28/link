@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { useSession } from '@app/SessionProvider';
 import type { ActivityView } from '@core/domain';
 import { t } from '@core/i18n';
@@ -16,7 +17,7 @@ import { useActivityService } from './useActivityServices';
  * flow depends on both routes surviving, since a rating can only come from an
  * activity that already happened.
  */
-export function MyActivitiesScreen() {
+export function MyActivitiesScreen({ embedded = false }: { embedded?: boolean } = {}) {
   const { user, viewerId } = useSession();
   const service = useActivityService();
 
@@ -41,7 +42,9 @@ export function MyActivitiesScreen() {
 
   return (
     <section className="flex flex-col gap-6">
-      <h1 className="text-xl font-semibold text-fg">{t('my.title')}</h1>
+      {/* The profile hub supplies its own heading, so an embedded copy would
+          give the page two. */}
+      {!embedded && <h1 className="text-xl font-semibold text-fg">{t('my.title')}</h1>}
 
       {groups.map((group) =>
         group.items.length === 0 ? null : (
@@ -51,7 +54,22 @@ export function MyActivitiesScreen() {
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {group.items.map((a) => (
-                <ActivityCard key={a.id} activity={a} />
+                <div key={a.id} className="flex flex-col gap-1">
+                  <ActivityCard activity={a} />
+                  {/* BR-U3-31/32 — an UPCOMING activity is fully editable. A
+                    * past one takes description edits only and a cancelled one
+                    * none, so offering the link there would promise something
+                    * the service refuses. */}
+                  {a.derivedState === 'upcoming' && (
+                    <Link
+                      to={`/activity/${a.id}/edit`}
+                      className="self-start text-sm text-brand underline"
+                      data-testid={`edit-activity-${a.id}`}
+                    >
+                      {t('my.edit')}
+                    </Link>
+                  )}
+                </div>
               ))}
             </div>
           </div>

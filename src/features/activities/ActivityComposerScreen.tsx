@@ -1,9 +1,12 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useRepositories } from '@app/RepositoryProvider';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@app/SessionProvider';
 import { NeighborhoodSelector } from '@features/identity';
-import type { CategoryId, LocationPrecision, NeighborhoodId } from '@core/domain';
+import type { ActivityId, CategoryId, LocationPrecision, NeighborhoodId } from '@core/domain';
 import { t, tError } from '@core/i18n';
 import { CATEGORIES } from '@core/reference/taxonomy';
 import { cityHasNeighborhoods } from '@core/reference/neighborhoods';
@@ -33,18 +36,64 @@ import { useActivityService } from './useActivityServices';
  * which is the worst possible place for the one decision this screen has to
  * get right.
  */
+/**
+ * Create AND edit. `/create` opens an empty draft; `/activity/:id/edit` loads
+ * the activity and prefills.
+ *
+ * One screen rather than two, because the fields, the validation and — most
+ * importantly — the location-precision control are identical. A second edit
+ * form would be the obvious place for that control to drift out of sync with
+ * US-11, and it is the one control that must not.
+ */
 export function ActivityComposerScreen() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { id: editingId } = useParams<{ id: string }>();
   const { user, isLoading } = useSession();
+  const { viewerId } = useSession();
   const service = useActivityService();
+  const repositories = useRepositories();
 
-  const { cityId } = useCity();
-  const [draft, setDraft] = useState<ActivityDraftInput>(() => emptyActivityDraft(cityId));
+  const isEditing = editingId !== undefined;
+
+  const { data: existing, isLoading: isLoadingExisting } = useQuery({
+    queryKey: ['activity', 'raw', editingId],
+    queryFn: () => repositories.activities.getActivity(viewerId, editingId as ActivityId),
+    enabled: isEditing,
+  });
+
+  const { composeCityId } = useCity();
+  const [draft, setDraft] = useState<ActivityDraftInput | null>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setSubmitting] = useState(false);
 
-  if (isLoading) return <Skeleton variant="card" lines={6} />;
+  /* Prefill once the activity arrives. The author sees their own address and
+   * point back (BR-U3-14), which is exactly why an edit form can show them —
+   * `getActivity` returns them only to the author. */
+  useEffect(() => {
+    if (!isEditing) {
+      setDraft((d) => d ?? emptyActivityDraft(composeCityId));
+      return;
+    }
+    if (existing === undefined || existing === null) return;
+
+    setDraft({
+      title: existing.title,
+      description: existing.description,
+      categoryIds: existing.categoryIds,
+      startsAt: existing.startsAt,
+      cityId: existing.cityId,
+      neighborhoodId: existing.neighborhoodId ?? null,
+      locationPrecision: existing.locationPrecision,
+      exactAddress: existing.exactAddress ?? '',
+      ...(existing.coordinate === undefined ? {} : { coordinate: existing.coordinate }),
+      capacity: existing.capacity === undefined ? '' : String(existing.capacity),
+    });
+  }, [isEditing, existing, composeCityId]);
+
+  if (isLoading || (isEditing && isLoadingExisting) || draft === null) {
+    return <Skeleton variant="card" lines={6} />;
+  }
   if (user === null) return null;
 
   /* CR-02 item 3's rule, applied here too: editing a field clears THAT field's
@@ -57,7 +106,7 @@ export function ActivityComposerScreen() {
       delete next[key as string];
       return next;
     });
-    setDraft((d) => ({ ...d, [key]: value }));
+    setDraft((d) => (d === null ? d : { ...d, [key]: value }));
   };
 
   const errorFor = (field: string) => {
@@ -69,8 +118,13 @@ export function ActivityComposerScreen() {
     event.preventDefault();
     if (user === null) return;
 
+    if (draft === null) return;
+
     setSubmitting(true);
-    const result = await service.createActivity(user, draft, new Date());
+    const result =
+      isEditing && existing !== undefined && existing !== null
+        ? await service.editActivity(user, existing, draft, new Date())
+        : await service.createActivity(user, draft, new Date());
     setSubmitting(false);
 
     if (!result.ok) {
@@ -79,10 +133,13 @@ export function ActivityComposerScreen() {
     }
 
     await queryClient.invalidateQueries({ queryKey: ['feed'] });
+    await queryClient.invalidateQueries({ queryKey: ['activity'] });
+    await queryClient.invalidateQueries({ queryKey: ['activities'] });
     void navigate(`/activity/${result.value.id}`, { replace: true });
   }
 
   function toggleCategory(id: CategoryId) {
+    if (draft === null) return;
     const next = draft.categoryIds.includes(id)
       ? draft.categoryIds.filter((c) => c !== id)
       : [...draft.categoryIds, id];
@@ -94,7 +151,9 @@ export function ActivityComposerScreen() {
       onSubmit={(event) => void submit(event)}
       className="mx-auto flex w-full max-w-2xl flex-col gap-6 py-6"
     >
-      <h1 className="text-xl font-semibold text-fg">{t('activity.createTitle')}</h1>
+      <h1 className="text-xl font-semibold text-fg">
+        {isEditing ? t('activity.editTitle') : t('activity.createTitle')}
+      </h1>
 
       <Input
         value={draft.title}

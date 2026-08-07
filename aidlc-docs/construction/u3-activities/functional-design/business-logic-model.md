@@ -96,7 +96,7 @@ U1 defined the order and it is contractual. U3 fills in the two placeholder stag
 ```
 load
   -> filter blocks            INV-1        (U6 populates; already wired)
-  -> filter city              BR-U3-50     NEW
+  -> filter city              BR-U3-50     NEW — skipped entirely when no city is chosen (CR-05)
   -> filter past              BR-U3-40     NEW — always on for discovery
   -> filter query + filters   BR-U3-70..73 U3 replaces the placeholder
   -> rank                     BR-U3-60..67 U3 replaces the placeholder
@@ -175,19 +175,34 @@ The last row is the one worth watching. Ratings come from activities that alread
 
 ---
 
-## 7. City Scoping
+## 7. City Filtering (amended by CR-05)
 
 ```
-active city = local override ?? viewer.homeCityId ?? tehran     BR-U3-51
+active city = local choice ?? ALL CITIES                        BR-U3-51
   |
-  feed / search / browse / map are scoped to it                 BR-U3-50
+  a city chosen -> feed / search / browse / map filter to it    BR-U3-50
+  no city chosen -> unscoped, every city                        BR-U3-50
   |
   switching it does NOT write to the profile
   |
-  no activities in that city -> honest empty state naming it    BR-U3-52
+  chosen city with no activities -> honest empty state          BR-U3-52
+
+posting city = active city ?? viewer.homeCityId ?? tehran       BR-U3-51
+  (composeCityId — browsing everywhere still posts somewhere)
 ```
 
-**This dissolves a problem rather than solving it.** CR-01 §4 warned that a second city splits the adjacency graph, leaving hop distance between cities undefined. Scoping to one city means that distance is never computed. The cost of adding a city drops to authoring its neighborhoods.
+**It no longer dissolves the cross-city distance problem — it asks it constantly.** CR-01 §4 warned that a second city splits the adjacency graph, leaving hop distance between cities undefined. City scoping meant that distance was never computed, and BR-U3-53 recorded the question as closed. An unscoped feed reopens it on every ranking pass.
+
+```
+proximity(viewer, activity)                                     BR-U3-54
+  |
+  viewer has no neighborhood        -> no term  (BR-U3-61)
+  activity has no neighborhood      -> no term  (city without neighborhoods)
+  DIFFERENT CITIES                  -> no term  ⟵ NEW; was FAR, i.e. 0 at full weight
+  same city                         -> 1 - hops/MAX_HOPS
+```
+
+The middle two cases were the same situation reaching two different answers, and city scoping is what hid it: a Mashhad activity scored 0 at full weight while a Yazd one had its weight redistributed, so **the city with better reference data ranked worse**. BR-U3-54 makes the graph's disconnection mean what it says — undefined, not distant.
 
 ---
 

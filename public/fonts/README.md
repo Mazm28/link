@@ -1,25 +1,35 @@
 # Vazirmatn — self-hosted webfont
 
-**Status: the font binaries are NOT in this repository yet. Three files must be placed here before the app renders correctly.**
+**Status: ✅ present.** Added 2026-08-08 under CR-05, on an explicit maintainer decision.
 
 ```
-public/fonts/Vazirmatn-Regular.woff2    (weight 400)
-public/fonts/Vazirmatn-Medium.woff2     (weight 500)
-public/fonts/Vazirmatn-Bold.woff2       (weight 700)
+public/fonts/Vazirmatn-Regular.woff2    (weight 400)   50,684 bytes
+public/fonts/Vazirmatn-Medium.woff2     (weight 500)   51,128 bytes
+public/fonts/Vazirmatn-Bold.woff2       (weight 700)   51,020 bytes
+public/fonts/OFL.txt                    (licence)
 ```
 
 The `@font-face` declarations in [`src/styles/global.css`](../../src/styles/global.css) and the
-`<link rel="preload">` tags in [`index.html`](../../index.html) already reference exactly these
-three paths. Dropping the files in makes them live; no code change is needed.
+`<link rel="preload">` tags in [`index.html`](../../index.html) reference exactly these paths.
 
-## Where to get them
+## Provenance
 
-Vazirmatn is released under the SIL Open Font License 1.1 by Saber Rastikerdar:
-<https://github.com/rastikerdar/vazirmatn> — take the `woff2` build from a tagged release.
+| | |
+|---|---|
+| Project | Vazirmatn by Saber Rastikerdar — <https://github.com/rastikerdar/vazirmatn> |
+| Release | **v33.003** (the font build reports version 33.197) |
+| Archive | `vazirmatn-v33.003.zip`, 13,047,191 bytes |
+| SHA-256 | `0a9afd41967e6f57096a56a181a23f81a2b999b62f1f2a4e4b26736580854fdb` |
+| Licence | SIL Open Font License 1.1 — `OFL.txt`, checked in alongside |
+| Taken from | `fonts/webfonts/` in the archive; every other file discarded |
 
-Files were not downloaded automatically because fetching and committing third-party binaries is a
-decision for a maintainer to make deliberately, not a side effect of code generation. Check the
-licence file into the repository alongside them.
+Three weights out of the ten published, because `global.css` declares three. Shipping the variable
+`Vazirmatn[wght].woff2` (111 KB) instead would cost more than all three static weights together,
+for weights nothing asks for.
+
+**These are the FULL faces, not subset.** Subsetting is documented below and is available if the
+payload ever needs trimming, but unsubset is the safe default: no glyph in the app can render as a
+tofu box because it was cut out.
 
 ## Why self-hosted at all (NFR-L5, US-90)
 

@@ -78,7 +78,7 @@ export function ProfileEditScreen() {
       setConfirmLeave(true);
       return;
     }
-    void navigate('/');
+    void navigate('/profile');
   }
 
   async function signOut() {

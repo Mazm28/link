@@ -19,7 +19,7 @@ export function CitySwitcher() {
   return (
     <>
       <Button variant="ghost" size="sm" onClick={() => setOpen(true)} data-testid="city-switcher">
-        {cityName}
+        {cityName === '' ? t('city.all') : cityName}
       </Button>
 
       <Sheet open={open} onClose={() => setOpen(false)} title={t('city.switch')}>
@@ -28,6 +28,17 @@ export function CitySwitcher() {
           * above the viewport, so most of the list was unreachable and it
           * looked as though only a handful of cities existed. */}
         <div className="flex max-h-[60vh] flex-wrap gap-2 overflow-y-auto">
+          {/* An explicit choice rather than "clear the filter" — browsing
+            * everywhere is the default, so it deserves a name. */}
+          <Chip
+            label={t('city.all')}
+            selected={cityId === null}
+            onClick={() => {
+              setCityId(null);
+              setOpen(false);
+            }}
+            data-testid="city-option-all"
+          />
           {cities.map((city) => (
             <Chip
               key={city.id}

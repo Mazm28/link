@@ -46,7 +46,7 @@ export function ActivityDetailScreen() {
     data.coordinate ?? data.approximateArea?.center ?? { lat: 35.6997, lng: 51.4015 };
 
   return (
-    <article className="mx-auto flex w-full max-w-2xl flex-col gap-5 py-6">
+    <article className="mx-auto flex w-full max-w-2xl flex-col gap-3 py-3">
       <div className="flex flex-wrap gap-2">
         {data.derivedState === 'cancelled' && (
           <Badge variant="warning" label={t('activity.stateCancelled')} />
@@ -80,7 +80,7 @@ export function ActivityDetailScreen() {
 
       <p className="whitespace-pre-line text-sm leading-7 text-fg">{data.description}</p>
 
-      <ActivityMap activities={[data]} center={mapCenter} />
+      <ActivityMap activities={[data]} center={mapCenter} height={180} />
 
       {/* The host, with their rating. Deliberately present: this is the moment
           someone decides whether to contact a stranger, and reputation is most

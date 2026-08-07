@@ -44,7 +44,7 @@ export function FeedScreen() {
     queryFn: () =>
       service.getFeed({
         viewer: user,
-        cityId,
+        ...(cityId === null ? {} : { cityId }),
         mode,
         ...(filters === undefined ? {} : { filters }),
         limit: 50,
@@ -131,7 +131,12 @@ export function FeedScreen() {
       ) : view === 'map' ? (
         <ActivityMap
           activities={page.items}
-          center={CITY_BY_ID.get(cityId)?.center ?? { lat: 35.6997, lng: 51.4015 }}
+          center={
+            (cityId === null ? undefined : CITY_BY_ID.get(cityId)?.center) ?? {
+              lat: 35.6997,
+              lng: 51.4015,
+            }
+          }
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-testid="feed-grid">

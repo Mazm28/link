@@ -1,5 +1,6 @@
 export { SignInFlow } from './SignInFlow';
 export { ProfileSetupScreen } from './ProfileSetupScreen';
+export { ProfileScreen } from './ProfileScreen';
 export { ProfileEditScreen } from './ProfileEditScreen';
 export { AccountDeletionFlow } from './AccountDeletionFlow';
 export { SafetyGuidanceScreen } from './SafetyGuidanceScreen';

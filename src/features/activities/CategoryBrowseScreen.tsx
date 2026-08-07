@@ -19,7 +19,13 @@ export function CategoryBrowseScreen() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['categories-browse', cityId],
-    queryFn: () => service.getFeed({ viewer: user, cityId, mode: 'combined', limit: 200 }),
+    queryFn: () =>
+      service.getFeed({
+        viewer: user,
+        ...(cityId === null ? {} : { cityId }),
+        mode: 'combined',
+        limit: 200,
+      }),
   });
 
   if (isLoading) return <Skeleton variant="card" lines={4} />;

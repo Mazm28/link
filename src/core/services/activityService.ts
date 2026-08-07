@@ -40,7 +40,9 @@ async function toResult<T>(operation: () => Promise<T>): Promise<Result<T, AppEr
 
 export interface FeedRequest {
   viewer: User | null;
-  cityId: CityId;
+  /** Absent = every city. The default, since Round-1 content is almost all
+   *  in one city and scoping by default hid the product. */
+  cityId?: CityId | undefined;
   mode: FeedMode;
   filters?: ActivityFilters | undefined;
   cursor?: string | undefined;
@@ -97,7 +99,10 @@ export function createActivityService(repository: ActivityRepository) {
 
     async editActivity(
       author: User,
-      activity: Activity,
+      /* Only what `editableFields` reads. Widening this to `Activity` forced
+       * the edit screen — which holds an ActivityView — to invent the fields a
+       * view deliberately lacks. */
+      activity: Pick<Activity, 'id' | 'startsAt' | 'status'>,
       input: ActivityDraftInput,
       now: Date,
     ): Promise<ValidationResult<Activity>> {
@@ -132,7 +137,7 @@ export function createActivityService(repository: ActivityRepository) {
      */
     async cancelActivity(
       author: User,
-      activity: Activity,
+      activity: Pick<Activity, 'id' | 'startsAt' | 'status'>,
       now: Date,
     ): Promise<Result<Activity, AppError>> {
       if (!mayCancel(activity, now)) {
@@ -153,7 +158,7 @@ export function createActivityService(repository: ActivityRepository) {
           limit: request.limit ?? 20,
           filters: {
             ...request.filters,
-            cityId: request.cityId,
+            ...(request.cityId === undefined ? {} : { cityId: request.cityId }),
             /* BR-U3-40 — past activities have left discovery entirely. Set
              * here, not offered as a toggle: the control that used to expose
              * them was removed with the rule. */

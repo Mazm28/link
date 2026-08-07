@@ -1,7 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { RequestsInboxScreen } from '@features/connections';
 import {
   AccountDeletionFlow,
   ProfileEditScreen,
+  ProfileScreen,
   SafetyGuidanceScreen,
 } from '@features/identity';
 import {
@@ -47,17 +49,31 @@ export function AppRouter() {
                 <Route path="/" element={<FeedScreen />} />
                 <Route path="/search" element={<SearchScreen />} />
                 <Route path="/categories" element={<CategoryBrowseScreen />} />
-                <Route path="/create" element={<ActivityComposerScreen />} />
+                {/* ⚠️ THE KEYS ARE LOAD-BEARING, NOT DECORATION.
+                  * Both routes render the same component type in the same
+                  * position, so React reconciles them as ONE element and keeps
+                  * the instance — and its draft — mounted across the route
+                  * change. Editing an activity and then pressing «ساخت فعالیت»
+                  * therefore opened the composer fully populated with that
+                  * activity, exact address and coordinate included, and
+                  * submitting would have CREATED A DUPLICATE rather than saved
+                  * an edit.
+                  * A distinct key forces a remount, which retires the whole
+                  * class of bug rather than the one instance — the same reason
+                  * CR-04 chose a portal over deleting one `backdrop-blur`. */}
+                <Route path="/create" element={<ActivityComposerScreen key="create" />} />
                 <Route path="/activity/:id" element={<ActivityDetailScreen />} />
+                <Route path="/activity/:id/edit" element={<ActivityComposerScreen key="edit" />} />
                 <Route path="/my-activities" element={<MyActivitiesScreen />} />
-                <Route path="/profile" element={<ProfileEditScreen />} />
+                <Route path="/profile" element={<ProfileScreen />} />
+                <Route path="/profile/edit" element={<ProfileEditScreen />} />
                 <Route path="/profile/delete" element={<AccountDeletionFlow />} />
                 {/* U1's demo, kept behind an explicit path. It is the only
                     surface exercising a few U1 primitives, and its tests are
                     still the ones that cover them. */}
                 <Route path="/foundation-demo" element={<FoundationDemo />} />
                 {/* U4 replaces this. */}
-                <Route path="/requests" element={<FoundationDemo />} />
+                <Route path="/requests" element={<RequestsInboxScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </AppShell>

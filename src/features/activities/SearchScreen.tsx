@@ -30,7 +30,7 @@ export function SearchScreen() {
     queryFn: () =>
       service.getFeed({
         viewer: user,
-        cityId,
+        ...(cityId === null ? {} : { cityId }),
         mode: 'combined',
         ...(filters === undefined ? {} : { filters }),
         limit: 50,

@@ -110,7 +110,33 @@ The host block rendered an avatar, a name and a star rating with nothing saying 
 | Venue publishing reuses the composer but skips the precision choice (FR-54) | **U5** |
 | `INV-1` blocking already filters the pipeline; U6 populates the block set | **U6** |
 | Neshan tiles — the component supports them, no key configured | Round 2 |
-| **CR-01 change A**, the neighborhood filter — still deferred, now a one-line addition | Backlog |
+| ~~**CR-01 change A**, the neighborhood filter~~ — **wired in `FilterPanel` under CR-05** | ✅ done |
+
+---
+
+## 8. CR-05 — folded in 2026-08-08, after this summary was first written
+
+Full account: [`change-requests/cr-05-navigation-and-requests.md`](../../../change-requests/cr-05-navigation-and-requests.md).
+
+Six changes were found in the workspace **with no audit entry, no state entry and no CR document**, three days after this unit was declared complete. They were adopted rather than reverted (reconciliation answer Q1 `A`), documented, amended into the rules, and tested.
+
+**What changed in the product**: browsing defaults to **all cities** rather than one; activities can be **edited** at `/activity/:id/edit`; `/profile` is a **hub** with the form at `/profile/edit`; `/requests` renders a real **inbox** (US-40, pulled forward from U4); `ActivityMap` takes a `height`; four signatures narrowed to `Pick<...>`.
+
+**What changed in the rules**: BR-U3-50/51 rewritten, BR-U3-52 narrowed, **BR-U3-53 retired**, **BR-U3-54 added** with **P-U3-07**. Seven property tests now, not six.
+
+**Three defects, none found by reading the diff:**
+
+1. **Ranking penalised better data.** `neighborhoodDistance` returns `FAR` for both "6+ hops across Tehran" and "not in this graph", and only the first is a distance — so a Mashhad activity scored 0 at full weight while a Yazd one had its weight redistributed. City scoping had made this unreachable, which is exactly why BR-U3-53 recorded the question as closed.
+2. **A blank presented as a contact method.** Two seeded users have no `telegramId` but their requests declared `kind: 'telegram'`, so the inbox rendered «تلگرام: » followed by nothing — worse than saying nothing was shared, because it claims a handle exists.
+3. **`/create` opened populated with the activity just edited.** Both routes render the same component in the same position, so React never remounted and the draft survived; submitting would have created a **duplicate carrying the original's exact address**.
+
+**Every regression test was verified to fail against the broken code before being kept.** §4 of this document records why that discipline exists: P-U3-02 shipped green while comparing `"[object Object]"` to itself.
+
+**The test-count lesson**: the suite sat at exactly 228 — the figure recorded here at completion — across three days of visible feature work, because it did not know the new code existed. A test count at every gate would have caught the drift in one line.
+
+**Vazirmatn is in** (v33.003, three weights, OFL 1.1, provenance in `public/fonts/README.md`), closing U1's third deviation. Verified **rendering**, not merely loaded: ZWNJ alters the measured width, so «می‌رود» is not «میرود».
+
+**Still open**: `SCHEMA_VERSION` stays at 3, so an existing browser keeps its persisted store including the blank-Telegram rows; a bump to 4 would reseed everyone and discard hand-created test data, so it is a maintainer decision. Screenshot capture timed out throughout, so layout **overflow** is confirmed by measurement but layout **aesthetics** are unverified.
 
 ---
 

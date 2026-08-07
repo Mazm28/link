@@ -82,15 +82,40 @@ Public, not private. US-53 — "see a person's rating and history" — depends o
 
 ---
 
-## 5. City Scoping (CQ2 `A`)
+## 5. City Filtering (CQ2 `A`, **amended by CR-05**)
 
-**BR-U3-50** — the feed, search, and category browse are scoped to **one city**.
+> **Amended 2026-08-08 (CR-05, answer Q2 `A`).** CQ2 `A` chose city-*first* navigation and BR-U3-50/51 encoded it as a scope. In practice Round-1 content is almost entirely Tehran, so a viewer placed in another city without asking met a one-item feed and concluded the app was broken. The city is now a filter someone opts into. The original text of each amended rule is kept below it, because BR-U3-53 depended on the old form and its dependency did not survive.
 
-**BR-U3-51** — the active city defaults to the viewer's `homeCityId`, then to Tehran. It is switchable from the top bar and persists locally. Switching it **does not** change the saved profile — the same separation US-21 already requires for the neighborhood filter.
+**BR-U3-50** — the feed, search, and category browse are scoped to **one city only when the viewer chooses one**. With no city chosen — the default — they are **unscoped** and return activities from every city.
+> *Was: "are scoped to one city."*
 
-**BR-U3-52** — a city with no activities gets an **honest empty state** naming the city, not a spinner and not a blank screen (NFR-U5). Round 1's content is overwhelmingly Tehran, so this state is reachable and must be designed rather than discovered.
+**BR-U3-51** — the active city defaults to **all cities**. It is switchable from the top bar, where "all cities" is an explicit named option rather than a cleared filter, and it persists locally. Switching it **does not** change the saved profile — the same separation US-21 already requires for the neighborhood filter. Posting still needs one concrete city, supplied by `composeCityId`: the active city if chosen, else the viewer's `homeCityId`, else Tehran.
+> *Was: "defaults to the viewer's `homeCityId`, then to Tehran."* Only the default changed; the no-write-to-profile guarantee is the part that mattered and it is untouched.
 
-**BR-U3-53** — city scoping **dissolves** the cross-city distance problem CR-01 §4 raised. Hop distance between two cities is undefined because the adjacency graph is disconnected; scoping to one city means it is never computed. The question stops existing rather than needing an answer.
+**BR-U3-52** — a city with no activities gets an **honest empty state** naming the city, not a spinner and not a blank screen (NFR-U5). Still reachable — a viewer who *does* choose a small city gets exactly this — but it is no longer the state a new viewer lands in by default.
+
+**BR-U3-53** — ⚠️ **RETIRED. Its premise is gone, and its retirement is not free.**
+> *Was: "city scoping **dissolves** the cross-city distance problem CR-01 §4 raised. Hop distance between two cities is undefined because the adjacency graph is disconnected; scoping to one city means it is never computed. The question stops existing rather than needing an answer."*
+
+The question stopped existing only because scoping guaranteed it was never asked. An unscoped feed asks it on **every** ranking pass: a Tehran viewer now routinely sees activities in Mashhad and Yazd, and proximity has to mean something for them. See **BR-U3-54**, which is what BR-U3-53 was standing in for all along.
+
+**BR-U3-54 (new, CR-05)** — **unmeasurable distance is UNDEFINED, not far.** Proximity contributes a term only when **both** neighborhoods are present in the adjacency graph. Otherwise it contributes **no term at all** and its weight is redistributed, exactly as BR-U3-61 requires for any missing input. Such an activity is ranked on interest and recency alone.
+
+The graph covers Tehran only, so in practice this covers two cases with one test: an activity in a different city, and two neighborhoods in the same non-Tehran city — which has neighborhood *names* (CR-04) but no adjacency data and never had any.
+→ *Property test (P-U3-07).*
+
+**Why this needed a rule rather than being left to the code**: before CR-05 the code produced two *different* answers for the same situation, and the difference was invisible because city scoping made it unreachable.
+
+| Activity | `neighborhoodId` | In `GRAPH` (Tehran-only)? | Old result |
+|---|---|---|---|
+| Mashhad | present | no | `neighborhoodDistance` → `FAR` (7) → `max(0, 1 − 7/6)` = **0, at full 0.45 weight** |
+| Yazd | absent (no neighborhoods in that city) | — | `null` → **term dropped, weight redistributed** |
+
+So a Yazd activity systematically **outranked** an otherwise-identical Mashhad one, for no reason a user could perceive and none a designer intended — purely because Mashhad has neighborhood data in the reference set and Yazd does not. Better data made an activity rank worse.
+
+BR-U3-54 makes both behave identically, which is the honest reading: the adjacency graph is disconnected, so the distance is not large — it does not exist.
+
+**The alternative, considered and not taken**: treat cross-city as maximally far, so out-of-city activities sink. Defensible on product grounds — someone browsing probably does want nearby things first — but it contradicts BR-U3-61 in writing, and it would need its own rule and its own weight rather than reusing a sentinel that means "unreachable within 6 hops". Recorded here so the choice is visible rather than implicit.
 
 ---
 
@@ -167,7 +192,7 @@ Weights are **data, not code**, so tuning does not require a change to the ranki
 
 ## 10. Property Tests (PBT-01, CQ1 `A`)
 
-Six. Four from the story map, two added.
+Seven. Four from the story map, two added at design, **one added by CR-05**.
 
 | ID | Property | Category |
 |---|---|---|
@@ -177,6 +202,7 @@ Six. Four from the story map, two added.
 | **P-U3-04** | Filter composition is commutative | Commutativity |
 | **P-U3-05** | ⚠️ Search results satisfy P-U3-01 for every query | Safety — BR-U3-74 |
 | **P-U3-06** | Ranking order is unchanged when a withheld field is varied | Non-leakage — BR-U3-67 |
+| **P-U3-07** | ⚠️ For any viewer and any two activities identical except that one is in a city **with** neighborhood data and one in a city **without**, neither outranks the other on proximity — cross-city contributes no term either way | Consistency — BR-U3-54, CR-05 |
 
 **P-U3-01's equality clause is the one that matters.** A test asserting only "no coordinate key" passes against a jittered implementation, which is the exact failure INV-5 exists to prevent. Asserting the area *equals* the neighborhood-derived area is what makes jitter a test failure.
 
