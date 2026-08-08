@@ -55,7 +55,7 @@ D) **Amend US-32 and re-open AR-02.** Contact sharing becomes mandatory. This is
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]: E make a way so day can communicate through the platform itself, like poster can reply on request and the response to eachother in a page dedicated to requests(sent and recieved)
+[Answer]: D
 
 ---
 

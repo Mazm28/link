@@ -1480,3 +1480,32 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 **NOT DONE**: no U4 functional-design artifacts. Designing a contact-sharing flow while the existence of contact sharing is undecided would be work thrown away.
 
 ---
+
+## CR-06 WITHDRAWN · CQ1 re-answered `D` → CR-07 raised
+**Timestamp**: 2026-08-08T05:20:00Z
+**User Input**: "I've changed my mind / remove CR-06 for now / I answered u4-connection-clarification-questions.md's first question again"
+**AI Response**: "CR-06 withdrawn. CQ1 re-read as `D` — retire US-32, rewrite FR-31, re-decide AR-02 — raised as CR-07 with four decisions. Still no U4 artifacts."
+**Context**: CONSTRUCTION — U4 Functional Design Part 1, still blocked. Two change requests raised and one withdrawn without any design or code being written.
+
+**CR-06 withdrawn, not deleted.** The file is now a short withdrawal record pointing at commit `af85540` for the full text. Deleting it outright would have created a third change-request identifier resolving to nothing — this project already has CR-03, which appears nowhere, and CR-05, which had to be reconstructed from a comment in `fa.ts`. **The numbering IS the audit trail.** Stated to the user, with an offer to delete it entirely if preferred.
+
+**CQ1 `E` → `D`.** The user reversed direction entirely: from adding in-app messaging so that sharing nothing becomes viable, to removing the ability to share nothing at all. Chosen after the argument against it was put in full, which is exactly how it should happen — recorded without re-arguing.
+
+**⚠️ THE FINDING THAT MATTERS IS AN INTERACTION BETWEEN TWO ANSWERS GIVEN AT DIFFERENT TIMES.**
+`requirements.md` lists AR-02's mitigations as a set of FOUR: *"FR-32 mandatory in-UI disclosure at the point of sharing; **FR-31 'share nothing' must be a real, prominent option**; FR-38 rate limiting in R2; FR-60/61 reporting."*
+
+- **CQ1 `D`** removes FR-31 — permanently.
+- **CQ2 `C`** keeps FR-38 out of Round 1.
+- FR-60/61 is capture-only until the Round-3 console.
+
+**So in Round 1 the FR-32 disclosure would be the ONLY active mitigation, where AR-02 was accepted on the assumption it was one of four.** Concretely: someone can post a fake activity, every interested person MUST hand over a real phone number or Telegram handle, there is no cap on requests sent or received, and no moderation console until Round 3.
+
+Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public users — but because AR-02's own text says *"monitor for harvesting patterns after launch"*, and the risk now being accepted is materially larger than the one that sentence was written about. **Accepting it knowingly is fine; accepting it because two separate answers quietly compounded is not.** Recommended CR-07 Q1 `B`: bring FR-38 back into Round 1 so two guards are active rather than one — which was the user's own earlier instinct before CQ2 `C`.
+
+**Also raised in CR-07**: what replaces «هیچ‌کدام» in the sheet; what happens to the 5 seeded requests carrying `kind: 'none'` and to the `SharedContact['none']` variant in the domain type (keep as legacy, or remove and migrate to schema v4); and whether the disclosure copy changes now that sharing is compulsory rather than voluntary — it was written for a voluntary act, and US-31 warns explicitly against weakening it.
+
+**Artifact impact recorded**: FR-31 rewritten, AR-02 restated, US-32 retired, US-30 and US-41 criteria amended, the abuse-mitigation checklist corrected, U4 drops to **9 stories**, `validateShareSelection` no longer accepts `'none'`, `requiresDisclosure` becomes always-true.
+
+**NOT DONE**: no U4 functional-design artifacts, for the third turn running. This is the correct outcome — the share sheet is the centre of this unit, and its options have changed twice in two turns.
+
+---
