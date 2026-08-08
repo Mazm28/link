@@ -1638,3 +1638,31 @@ Adding the other two would have made the seed larger and the demo no more comple
 **Gates**: typecheck clean · lint clean · **261/261** (down from 267 because the mock's 6 tests were deleted with it).
 
 ---
+
+## U4 Code Generation — Part 2 (Generation) COMPLETE
+**Timestamp**: 2026-08-09T02:10:00Z
+**AI Response**: "All 45 steps executed. Typecheck clean, lint clean, 289/289 tests passing, build 143.2 KB gzipped. Full loop verified in a real browser."
+**Context**: CONSTRUCTION — U4 Code Generation Part 2 complete, awaiting approval.
+
+**289 tests, up from 250** — +39 net, and −6 that were deleted along with the CR-05 mock. Recorded explicitly because the plan demanded it at step 43: this project once ran three days of visible feature work against an unchanged count of 228.
+
+**⚠️ INV-3 VERIFIED ON THE WIRE, not merely asserted.** With a fresh store the browser held **9 contact values the viewer has no claim to**, and **0 of them reached the DOM**. The inbox rendered 12 requests in 2 activity groups with 6 rating summaries.
+
+**⚠️ THE DISCLOSURE VERIFIED BY MEASUREMENT, not by eye**: warning **first** in document order, `role="alert"`, **20px** above the send action, fully inside the viewport without scrolling, not inside a `<details>`. Both radios unchecked on open, send disabled, and the disclosure absent until a channel is chosen — so a person cannot be trained to dismiss a warning that does not yet apply to them.
+
+**Full loop confirmed end to end**: request sent → stored as `{kind:'phone', requestSeq:1, status:'sent'}` → quota recorded `{count:1}` → the join action replaced by the existing-request state. Attendance showed 12 rows with **1 labelled «تأیید نشده»** — the third state, rendered as unreviewed rather than absent. No console errors; no horizontal overflow on four routes at 375px.
+
+**FOUR DEFECTS AND BEHAVIOUR CHANGES, none found by reading the diff**:
+
+1. **The badge counted every notification kind**, where BR-U4-102 requires unread REQUESTS only. Fixed, and the fix correctly broke `repository-swap.test.tsx` whose stub encoded the old contract. Its `getUnreadCount` now returns **99, deliberately different from the 7 the badge should read**, so a regression fails loudly rather than passing by coincidence.
+2. **The U1 oracle caught CR-07 twice** — `'none'` refusal, then the Telegram format rule. Both times the MODEL was updated, not the code.
+3. **My own duplicate-request test passed against a blank page** — it waited for an element to be ABSENT, which is true while loading. Now waits for something present first. Same class as U3's P-U3-02.
+4. **A seed row I drafted contradicted the seed** — claiming الهام was unconfirmed on activity 21 while `buildAttendance` confirms her as attended. Two of three drafted rows were unnecessary; only the `requestSeq: 2` re-request was genuinely missing.
+
+**P-U4-01 VERIFIED AGAINST TWO BROKEN IMPLEMENTATIONS** before being kept: attendance check removed → 2 failures; `attended` flag ignored so a confirmed absentee counts as present → 3 failures; restored → 7 pass.
+
+**⚠️ NOT VERIFIED VISUALLY, stated rather than glossed.** Screenshot capture timed out against the preview pane, as in U3. Every result above comes from the DOM, computed styles and measured geometry. Overflow and element positions are confirmed by measurement; aesthetics are not.
+
+**Carried into later units**: FR-38's limit is a courtesy limit and must never be described as protection (Round 2 / US-34); **AR-02's risk is larger since CR-07 retired the "share nothing" mitigation**, so post-launch harvesting monitoring moves from advisable to necessary; blocking and reporting must extend to requests (U6); `attendance_due` notifications are modelled but nothing generates them on a schedule (Round 2).
+
+---
