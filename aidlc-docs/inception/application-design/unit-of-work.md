@@ -206,7 +206,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 
 **Depends on**: U1, U2, U3
 
-**Stories**: US-30, US-31, US-32, US-33, US-40, US-41, US-50, US-51, US-52, US-53 · *(US-34 rate limiting is Round 2)*
+**Stories** (9 since CR-07): US-30, US-31, ~~US-32~~, US-33, US-40, US-41, US-50, US-51, US-52, US-53 · *(**US-32 retired 2026-08-08 by CR-07** — sharing is mandatory. **US-34 rate limiting: a Round-1 courtesy limit of 5/day was pulled forward by CR-07 Q1 `B`; enforced rate limiting remains Round 2**.)*
 
 **Safety-critical stories**: **US-31** (disclosure) and **US-52** (rating eligibility). Two of the four.
 

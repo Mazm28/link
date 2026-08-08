@@ -1,7 +1,7 @@
 # CR-07 — Mandatory Contact Sharing: retire US-32, rewrite FR-31, re-decide AR-02
 
 **Raised**: 2026-08-08, answering U4 Clarification Question 1 with `D`
-**Status**: 🟠 **RAISED — AR-02 must be re-accepted before U4 design proceeds**
+**Status**: ✅ **ADOPTED 2026-08-08** — AR-02 re-accepted on a restored two-guard set
 **Supersedes**: the withdrawn CR-06
 
 ---
@@ -28,10 +28,10 @@ After CR-07, and taking your other answers into account:
 |---|---|---|
 | **FR-32** — mandatory disclosure at the point of sharing | ✅ Unchanged, still binding | ✅ Yes |
 | **FR-31** — "share nothing" as a real, prominent option | ❌ **REMOVED by this CR** | ❌ Gone |
-| **FR-38** — rate limiting | Round 2 by design — and **CQ2 `C` confirmed no Round-1 limit** | ❌ No |
+| **FR-38** — rate limiting | ✅ **RESTORED to Round 1 by answer Q1 `B`** — see §5 | ✅ Yes, as a courtesy limit |
 | **FR-60/61** — reporting | ✅ Survives, U6 builds it; review console is Round 3 | ⚠️ Capture only |
 
-**Two of the four are gone from Round 1, and one of those is gone permanently.**
+**Resolved: one of the four is gone permanently (FR-31), and Q1 `B` brought FR-38 back to replace it.** Round 1 therefore ships with **two active guards**, not one. The rest of this section records the situation as it stood before that answer, because the reasoning is what produced it.
 
 ### 2.1 The interaction you may not have intended
 
@@ -80,7 +80,7 @@ D) **Do not accept.** Revisit CQ1 and keep US-32.
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B
 
 ---
 
@@ -93,7 +93,7 @@ B) **Two options, plus a clear exit** — the sheet states that joining requires
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B
 
 ---
 
@@ -106,7 +106,7 @@ B) **Remove `'none'` entirely** — from the type, the seed, and the UI. A clean
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -119,4 +119,42 @@ B) **Add one line** acknowledging that sharing is required to join, so the reque
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B
+
+---
+
+## 5. Resolution — what was decided
+
+**Q1 `B` · Q2 `B` · Q3 `A` · Q4 `B`.**
+
+### 5.1 ⚠️ Q1 `B` REVERSES CQ2 `C`
+
+CQ2 `C` had kept rate limiting out of Round 1 on the grounds that US-34 belongs to Round 2 and a browser-enforced limit is bypassable. **Q1 `B` overrides that**: FR-38 returns to Round 1 specifically to replace the guard FR-31 took with it.
+
+Both positions were right about different things, and the resolution keeps both true:
+
+- **It is bypassable.** The limit lives in `localStorage`; clearing storage resets it. It stops accidental spam and honest over-eagerness. It does **not** stop a determined harvester, and this design does not claim it does.
+- **It is still worth having**, because with FR-31 gone the alternative was a single guard. Two weak guards plus honest documentation beats one guard and a silent gap.
+
+**Recorded so nobody later reads the limit as a security control**: real enforcement is server-side in Round 2 under US-34. The Round-1 limit is a courtesy limit. It appears in `business-rules.md` labelled as such.
+
+### 5.2 The other three
+
+**Q2 `B`** — the sheet offers «شماره تلفن» and «آی‌دی تلگرام», nothing pre-selected, plus a plain statement that joining requires sharing one of them and a way to back out. The choice is *share or do not join*, stated, rather than a dead end the user has to infer.
+
+**Q3 `A`** — `SharedContact['none']` stays in the domain type as a **legacy state**. New requests cannot produce it; the 5 seeded requests carrying it still render, and US-41's "no contact route" copy survives for them. No migration, no schema bump, no discarded history. New writes are constrained by `validateShareSelection`, not by the type.
+
+**Q4 `B`** — one line is added to the disclosure. **Placement is deliberate**: the existing warning comes **first**, unchanged and verbatim, and the new line follows it. Leading with "sharing is required" would frame the screen as a demand and invite skimming past the warning — and US-31 calls this the single most important copy in the product and warns explicitly against weakening it. Adding context after it does not weaken it; putting anything in front of it would.
+
+---
+
+## 6. What this CR does NOT change
+
+- **FR-32's disclosure remains mandatory, unavoidable, adjacent to the send action, and not collapsible.** US-31's rule stands untouched.
+- **Nothing is pre-selected.** US-30's requirement survives verbatim — mandatory *sharing* is not a default *selection*.
+- **No silent substitution.** Selecting Telegram without a stored ID still fails and prompts, and never sends a phone number instead.
+- **FR-35's asymmetry.** The poster's own details are still never disclosed.
+
+---
+
+**End of CR-07.**

@@ -74,7 +74,7 @@ Mapping of all 40 user stories to units of work.
 |---|---|---|---|
 | US-30 | Send a join request and choose what to share | Must | FR-30, FR-31, AR-02 |
 | **US-31** | **Understand what I am about to disclose** | **Must** | **FR-32 — safety-critical** |
-| US-32 | Send a request sharing nothing | Must | FR-31 |
+| ~~US-32~~ | ⛔ ~~Send a request sharing nothing~~ — **RETIRED 2026-08-08 by CR-07**, sharing is mandatory | ~~Must~~ | ~~FR-31~~ |
 | US-33 | See and withdraw my sent requests | Must / Should | FR-36, FR-37 |
 | US-40 | Receive join requests in my inbox | Must | FR-33, FR-34, FR-70, FR-71, FR-72 |
 | US-41 | Understand that my own details are not shared | Must | FR-35 |

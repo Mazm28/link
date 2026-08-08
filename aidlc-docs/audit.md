@@ -1509,3 +1509,31 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 **NOT DONE**: no U4 functional-design artifacts, for the third turn running. This is the correct outcome — the share sheet is the centre of this unit, and its options have changed twice in two turns.
 
 ---
+
+## CR-07 ADOPTED · U4 Functional Design Part 2 COMPLETE
+**Timestamp**: 2026-08-08T22:20:00Z
+**User Input**: "B, B, A, B"
+**AI Response**: "CR-07 adopted. Upstream artifacts amended, four U4 functional-design artifacts generated."
+**Context**: CONSTRUCTION — U4 Functional Design complete, awaiting approval.
+
+**⚠️ Q1 `B` REVERSES CQ2 `C`, and both positions are kept true.** CQ2 `C` had kept rate limiting out of Round 1 because US-34 is Round 2 and a browser limit is bypassable. Q1 `B` overrides it: FR-38 returns to Round 1 **specifically to replace the guard FR-31 took with it**. The resolution records BOTH facts rather than picking one — it is bypassable AND worth having, because the alternative was a single guard. **BR-U4-36 and FR-38 both state in writing that it is a courtesy limit and must never be described as protection.**
+
+**Q2 `B`** — two options, nothing pre-selected, plus a stated "sharing is required" and a visible انصراف. The choice is share-or-don't-join, said out loud, rather than a dead end the user infers.
+
+**Q3 `A`** — `SharedContact['none']` stays as a **legacy variant**. The type is now deliberately WIDER than what can be written: readers must handle `'none'`, writers cannot produce it (BR-U4-11). Narrowing it would have forced either a migration claiming five people shared a phone number they never shared, or discarding them. Same shape as U3's `exactAddress`: **representable is not writeable**. Flagged that a future linter suggesting the dead branch be removed is wrong.
+
+**Q4 `B` — the ORDER is a rule, not layout.** The verbatim warning comes FIRST, unchanged; the "sharing is required" line follows. Leading with the requirement frames the screen as a demand and invites skimming past the warning, which IS the weakening US-31 prohibits. Adding context after does not weaken it; putting anything before it would.
+
+**Upstream amended**: FR-31 rewritten (mandatory, "or nothing" struck) · FR-38 pulled into Round 1 as a documented courtesy limit · **AR-02 re-accepted with the risk explicitly recorded as INCREASED** — the exposed population is no longer self-selecting, and "monitor for harvesting patterns after launch" moves from advisable to necessary · **US-32 RETIRED**, kept in place struck-through with what was given up recorded rather than deleted · US-30 amended, third criterion added · the abuse-mitigation table and residual-risk paragraph corrected · the INVEST checklist's "no story contradicts an accepted risk" line re-verified and annotated · U4 drops to **9 stories**.
+
+**Four artifacts generated** under `construction/u4-connections/functional-design/`: `domain-entities.md`, `business-rules.md` (**59 rules**, BR-U4-10…105), `business-logic-model.md`, `frontend-components.md`.
+
+**Two gaps in the binding sequence are now specified as rules** — BR-U4-30 (published + not past; only existence was ever checked) and BR-U4-32 (duplicate refusal, absent entirely despite US-30's criteria requiring it).
+
+**`requestSeq: 1|2` added to `JoinRequest`** rather than deriving the re-request count by scanning rows — counting is ambiguous when a row is deleted, and Round 2's server must reach the same answer from the same data. Withdrawing a second request is **terminal**; without that, withdraw-and-resend is a way to sit at the top of a poster's inbox indefinitely.
+
+**Six property tests specified**, P-U4-01…06. **P-U4-01 must be verified against a deliberately broken implementation before it is trusted** — this project shipped P-U3-02 green while it compared `"[object Object]"` to itself, and shipped a ranking bug P-U3-07 later caught.
+
+**Schema stays at v3.** No migration.
+
+---

@@ -238,8 +238,9 @@ Persona-based organization · Given/When/Then acceptance criteria · one story p
 **Priority**: Must · **Traces**: FR-30, FR-31, AR-02 · **Round**: 1 · **Safety-critical**
 
 **Acceptance Criteria**
-- **Given** I open the join action on an upcoming activity, **When** the sheet opens, **Then** I can write an optional short note and must actively choose what to share: **phone number** (`شماره تلفن`), **Telegram ID** (`آی‌دی تلگرام`), or **nothing** (`هیچ‌کدام`).
-- **Given** the share options render, **When** they first appear, **Then** **nothing is pre-selected** — no contact detail is shared by default under any circumstance.
+- **Given** I open the join action on an upcoming activity, **When** the sheet opens, **Then** I can write an optional short note and must actively choose what to share: **phone number** (`شماره تلفن`) or **Telegram ID** (`آی‌دی تلگرام`). ⚠️ *Amended by CR-07: the third option `هیچ‌کدام` is retired and sharing one of the two is required to send.*
+- **Given** the share options render, **When** they first appear, **Then** **nothing is pre-selected** — no contact detail is shared by default under any circumstance. *(Unchanged by CR-07: mandatory sharing is not a default selection. The user still chooses which detail, deliberately.)*
+- **Given** sharing is required, **When** the sheet renders, **Then** it says so plainly and offers a way to back out, so the choice is an explicit "share or do not join" rather than a dead end I have to infer (CR-07 Q2 `B`).
 - **Given** I select Telegram ID, **When** I have not stored one, **Then** I am asked to enter it at that moment rather than being silently switched to my phone number.
 - **Given** I submit the request, **When** it is sent, **Then** only the detail I explicitly selected is transmitted — never both, never a fallback.
 - **Given** I have already requested this activity, **When** I view it, **Then** the join action shows my existing request state instead of allowing a duplicate.
@@ -262,15 +263,15 @@ Persona-based organization · Given/When/Then acceptance criteria · one story p
 
 ---
 
-## US-32 — Send a request sharing nothing
-**As** a cautious Activity Seeker, **I want** to signal interest without giving any contact detail, **so that** I can engage without exposing myself.
+## ~~US-32 — Send a request sharing nothing~~ — ⛔ **RETIRED 2026-08-08 by CR-07**
 
-**Priority**: Must · **Traces**: FR-31 · **Round**: 1
+**Was**: *As a cautious Activity Seeker, I want to signal interest without giving any contact detail, so that I can engage without exposing myself.* **Priority**: Must · **Traces**: FR-31 · **Round**: 1
 
-**Acceptance Criteria**
-- **Given** I choose **nothing**, **When** I send the request, **Then** it is delivered and appears in the poster's inbox marked as having no contact detail.
-- **Given** the "nothing" option renders, **When** the sheet displays, **Then** it is presented with equal visual weight to the other options — never de-emphasized, greyed, or hidden behind "more options".
-- **Given** the poster views such a request, **When** it renders, **Then** they see my profile and note but have no contact route, and the UI explains this plainly.
+**Retired by user decision** (U4 Clarification Question 1, answer `D`): sharing a contact detail is now required to send a join request. FR-31 is amended and AR-02 was re-accepted on the reduced mitigation set — see `change-requests/cr-07-mandatory-contact-sharing.md`.
+
+⚠️ **What was given up, recorded rather than deleted.** This story was one of AR-02's four named mitigations, and `stories.md`'s own abuse analysis called it *"the strongest argument"* for tolerating immediate disclosure — in the same breath as noting that blocking in Link does not block Telegram. Its retirement means **every requester must now disclose a real phone number or Telegram handle to an unvetted stranger**, so the population exposed to a fake activity is no longer self-selecting. FR-38's courtesy rate limit was pulled forward into Round 1 to partially replace it; a client-side limit is not an equivalent guard, and CR-07 says so.
+
+**Its third criterion survives** as legacy behaviour (CR-07 Q3 `A`): `SharedContact['none']` remains in the domain type, the five seeded requests carrying it still render, and the poster is still told plainly when such a request has no contact route. New requests cannot produce that state.
 
 ---
 
@@ -627,7 +628,7 @@ flowchart TD
 2. Feed ranks by neighborhood proximity and interest match — US-21, US-22
 3. Seeker searches or browses a category — US-23, US-24
 4. Seeker opens the activity detail and reviews the host's rating — US-25
-5. Seeker chooses which contact detail to share, or none — US-30, US-32
+5. Seeker chooses which contact detail to share — US-30 *(CR-07: choosing none is no longer possible)*
 6. Seeker reads the mandatory disclosure — US-31
 7. Request is sent; contact detail is transmitted immediately, with no approval
 8. Poster sees the unread badge and opens the request — US-40
@@ -654,7 +655,8 @@ Explicit misuse cases with the controls that limit them. Required by SECURITY-11
 **Controls**
 | Control | Story | Round |
 |---|---|---|
-| Requester explicitly chooses what to share, defaulting to nothing | US-30, US-32 | 1 |
+| Requester explicitly chooses WHICH detail to share; nothing is pre-selected | US-30 | 1 |
+| ⛔ *Was: "defaulting to nothing" via US-32 — **retired by CR-07**, sharing is now required* | ~~US-32~~ | — |
 | Mandatory disclosure that the host is unvetted | US-31 | 1 |
 | Report an activity as suspected harvesting | US-71 | 1 |
 | Rate limiting on requests sent | US-34 | 2 |
@@ -714,11 +716,13 @@ Explicit misuse cases with the controls that limit them. Required by SECURITY-11
 |---|---|---|
 | Report accepts free-text detail and optional evidence for off-platform abuse | US-70 | 1 |
 | Block removes all mutual visibility in the app | US-72 | 1 |
-| Sharing nothing is a first-class option | US-32 | 1 |
+| ⛔ ~~Sharing nothing is a first-class option~~ — **REMOVED by CR-07.** Partially replaced by FR-38's Round-1 courtesy rate limit, which is client-side and bypassable and is **not** an equivalent guard | ~~US-32~~ → FR-38 | 1 |
 | Withdrawal states honestly that disclosure cannot be undone | US-33 | 1 |
 | Suspension | US-82 | 3 |
 
-**Residual risk**: high and structural. Once a phone number is disclosed, the platform cannot protect the user off-platform — blocking in Link does not block Telegram. This is the strongest argument for keeping the "share nothing" option prominent (US-32) and the disclosure honest (US-31).
+**Residual risk**: ⚠️ **higher than at first assessment, and structural.** Once a phone number is disclosed, the platform cannot protect the user off-platform — blocking in Link does not block Telegram.
+
+This was originally recorded as *"the strongest argument for keeping the 'share nothing' option prominent (US-32) and the disclosure honest (US-31)."* **CR-07 retired US-32**, so only the second half of that sentence still has a mechanism behind it. Every requester now discloses, which means the population exposed to a fake activity is no longer self-selecting. The disclosure (US-31) and FR-38's bypassable Round-1 courtesy limit are what remain.
 
 ---
 
@@ -750,7 +754,7 @@ All **53** functional requirements are covered.
 | FR-26 Activity detail view | US-25 |
 | FR-27 Ranking isolated and testable | US-20 (notes) |
 | FR-30 Send join request | US-30 |
-| FR-31 Explicit contact selection | US-30, US-32 |
+| FR-31 Explicit contact selection (mandatory since CR-07) | US-30 |
 | FR-32 Mandatory disclosure | US-31 |
 | FR-33 Immediate delivery, no approval | US-40 |
 | FR-34 Requests inbox with badge | US-40 |
@@ -806,8 +810,8 @@ All **53** functional requirements are covered.
 - ✅ Every one of the 53 functional requirements maps to at least one story (§13)
 - ✅ Every story traces to at least one requirement ID — no untraced stories, so no scope creep
 - ✅ Safety-critical criteria align with the PBT property candidates in requirements §7.3: location precision (US-11), rating eligibility (US-52), block visibility (US-72), ranking set-preservation (US-20), filter commutativity (US-23), Jalali round-trip (US-91), normalization idempotence (US-92)
-- ✅ No story contradicts an accepted risk (AR-01…AR-04)
-- ✅ No story reintroduces a rejected feature — verified absent: in-app chat, friend/follow graph, GPS or device location, push notifications, approval gate on join requests, age verification
+- ⚠️ No story contradicts an accepted risk (AR-01…AR-04) — **re-verified 2026-08-08 after CR-07.** US-32's retirement did not *contradict* AR-02; it **removed one of AR-02's four named mitigations**, so AR-02 was formally re-accepted on the reduced set rather than left standing on its original justification. See `requirements.md` AR-02 and `change-requests/cr-07-mandatory-contact-sharing.md`.
+- ✅ No story reintroduces a rejected feature — verified absent: in-app chat, friend/follow graph, GPS or device location, push notifications, approval gate on join requests, age verification. *(Re-checked 2026-08-08: in-app chat was proposed as CR-06 and **withdrawn before any design**, so this line still holds.)*
 - ✅ Empty and error states specified where NFR-U5 applies
 - ✅ Mermaid diagram in §11 validated (alphanumeric node IDs, no special characters in labels, `<br/>` only) with a text alternative provided per content-validation.md
 
