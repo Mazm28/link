@@ -1378,3 +1378,19 @@ Reading it as approval would put U3 — including CR-05's rule amendment and the
 **Net effect on the approval about to be requested**: it is a SMALLER claim than the one I presented. U3 no longer signs off US-40 as delivered.
 
 ---
+
+## Correction committed and pushed to main
+**Timestamp**: 2026-08-08T04:05:00Z
+**User Input**: "commit, push and merge with main."
+**AI Response**: "Committed 0577bde, pushed to origin/main. The merge was already in place — origin/main had advanced to 7675c57 between turns, so HEAD was on main and the correction landed there directly."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate **STILL OPEN**.
+
+**`main` = `origin/main` = `0577bde`**, in sync, working tree clean. Gates re-run on the exact pushed state: typecheck clean, lint clean, **250/250**.
+
+**Stated rather than glossed**: I had deliberately branched at 7675c57 rather than committing to the default branch. By this turn `origin/main` already contained it and HEAD was on `main`, so the correction went straight onto `main` — which is what "merge with main" asked for, but it happened by position rather than by an explicit merge, and that is worth recording accurately.
+
+`u3-cr-05-navigation-and-requests` still exists locally and on the remote at 7675c57. It is now an ancestor of `main` and carries nothing `main` lacks — redundant, not deleted without asking.
+
+**No approval recorded.** Committing is not approving; the U3 gate remains open.
+
+---
