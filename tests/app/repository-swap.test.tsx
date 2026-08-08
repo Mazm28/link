@@ -139,8 +139,29 @@ function createStubHttpRepositories(): Repositories {
       unpublishActivity: () => Promise.resolve(),
     },
     notifications: {
-      list: () => Promise.resolve([]),
-      getUnreadCount: () => Promise.resolve(7),
+      /* ⚠️ AMENDED BY U4 / BR-U4-102. The badge used to call
+       * `getUnreadCount`, which counts EVERY notification kind. Answer Q6 `C`
+       * settled that it counts unread REQUESTS only, so the shell now derives
+       * the number from `list` — and this stub had to start returning rows
+       * rather than a bare count.
+       *
+       * The test's point is unchanged: seven comes from the stub, not from a
+       * store, which is what proves the shell is source-agnostic. */
+      list: () =>
+        Promise.resolve(
+          Array.from({ length: 7 }, (_, i) => ({
+            id: `ntf_stub_${i}` as never,
+            userId: VIEWER,
+            kind: 'request_received' as const,
+            channel: 'in_app' as const,
+            payload: {},
+            createdAt: new Date(Date.UTC(2026, 7, 1, 12, i)).toISOString(),
+          })),
+        ),
+      /* Deliberately a DIFFERENT number from the seven above. If the badge
+       * ever regresses to calling this, the test fails loudly instead of
+       * passing by coincidence. */
+      getUnreadCount: () => Promise.resolve(99),
       markRead: () => Promise.resolve(),
       create: notImplemented as never,
     },

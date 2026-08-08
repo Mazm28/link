@@ -1,5 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { RequestsInboxScreen } from '@features/connections';
+import {
+  AttendanceConfirmationScreen,
+  RequestsInboxScreen,
+  SentRequestsScreen,
+} from '@features/connections';
+import { NotificationsScreen } from '@features/notifications';
 import {
   AccountDeletionFlow,
   ProfileEditScreen,
@@ -72,8 +77,13 @@ export function AppRouter() {
                     surface exercising a few U1 primitives, and its tests are
                     still the ones that cover them. */}
                 <Route path="/foundation-demo" element={<FoundationDemo />} />
-                {/* U4 replaces this. */}
                 <Route path="/requests" element={<RequestsInboxScreen />} />
+                <Route path="/requests/sent" element={<SentRequestsScreen />} />
+                <Route path="/notifications" element={<NotificationsScreen />} />
+                <Route
+                  path="/activity/:id/attendance"
+                  element={<AttendanceConfirmationScreen />}
+                />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </AppShell>

@@ -1616,3 +1616,25 @@ Adding the other two would have made the seed larger and the demo no more comple
 **Gates**: typecheck clean · lint clean · **267/267**.
 
 ---
+
+## U4 Part 2 — checkpoint 3 (steps 24–36: the frontend)
+**Timestamp**: 2026-08-09T01:30:00Z
+**Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
+
+**Built**: `DisclosureNotice`, `ContactShareSelector`, `JoinRequestSheet`, `RequestsInboxScreen` (rebuilt), `SentRequestsScreen`, `AttendanceConfirmationScreen`, `RatingSheet`, `NotificationsScreen`, `RatingSummaryBadge`, plus routes, the join action, and the badge.
+
+**Step 36 executed**: the CR-05 mock and its test file are **deleted** (`git rm`), per answer Q1 `C`.
+
+**⚠️ THE BADGE WAS COUNTING THE WRONG THING AND NOBODY HAD NOTICED.** `AppShell` called `repositories.notifications.getUnreadCount`, which counts EVERY notification kind — ratings, cancellations, attendance prompts. BR-U4-102 and answer Q6 `C` require unread REQUESTS only. It now derives the number from the notification service. A badge that sometimes means "someone wants to join" and sometimes "a rating arrived" sends people to the wrong screen, and US-40 calls it the entire retention mechanism for the poster persona.
+
+**That change broke `repository-swap.test.tsx`, correctly.** The stub returned `list: []` with `getUnreadCount: 7`, encoding the old contract. Updated to return seven `request_received` rows — and its `getUnreadCount` now returns **99, deliberately different**, so that if the badge ever regresses to calling it the test fails loudly instead of passing by coincidence.
+
+**`DisclosureNotice` carries a "do not improve this component" header** enumerating six specific defects — collapsing it, moving it below the fold, separating it from send, adding a dismiss control, rewording it, and **putting the "sharing is required" line first**. The last looks like trivial reordering and is not: leading with the requirement frames the screen as a demand and invites skimming past the warning, which is the weakening US-31 prohibits.
+
+**Refusals get their own sentences, not a generic error.** `joinErrorMessage` maps all eight refusal codes; `ratingRefusalMessage` maps five. Each of these refusals is ACTIONABLE — telling someone "something went wrong" when the answer is "you already requested this" or "enter your Telegram ID" wastes the one moment they were willing to act.
+
+**The join action is ABSENT rather than disabled** when the write would refuse (own activity, not upcoming, already requested). Blocking needs no case: a blocked viewer never receives the activity at all (INV-1), so the screen has already returned — the invariant doing the work rather than a forgotten branch.
+
+**Gates**: typecheck clean · lint clean · **261/261** (down from 267 because the mock's 6 tests were deleted with it).
+
+---

@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Badge } from '@ui/Badge';
 import { IconSearch, LogoMark } from '@ui/icons';
 import { useI18n } from './I18nProvider';
-import { useRepositories } from './RepositoryProvider';
 import { useSession } from './SessionProvider';
 import { useTheme } from './ThemeProvider';
 import { useFeedFilters } from './FeedFilterProvider';
+import { useNotificationService } from '@features/connections';
 import { CitySwitcher } from './CitySwitcher';
 
 /* No «جست‌وجو» destination: the search field is in the bar on every screen, so
@@ -23,13 +23,25 @@ const NAV_ITEMS = [
 export function AppShell({ children }: { children: ReactNode }) {
   const { t } = useI18n();
   const { viewerId } = useSession();
-  const repositories = useRepositories();
   const { resolved, toggle } = useTheme();
   const { query, setQuery } = useFeedFilters();
 
+  /* ⚠️ U4 / BR-U4-102 — UNREAD REQUESTS, not unread notifications.
+   *
+   * This used to call `getUnreadCount`, which counts EVERYTHING — new ratings,
+   * cancellations, attendance prompts. US-40 calls this badge the entire
+   * retention mechanism for the poster persona, and answer Q6 `C` settled that
+   * it counts one thing so the number means one thing. A badge that sometimes
+   * means "someone wants to join" and sometimes "a rating arrived" is one
+   * nobody can act on, and it sends people to the wrong screen. */
+  const notificationService = useNotificationService();
   const { data: unread = 0 } = useQuery({
-    queryKey: ['notifications', 'unread', viewerId],
-    queryFn: () => (viewerId === null ? 0 : repositories.notifications.getUnreadCount(viewerId)),
+    queryKey: ['notifications', 'unread-requests', viewerId],
+    queryFn: async () => {
+      if (viewerId === null) return 0;
+      const result = await notificationService.unreadRequestCount(viewerId);
+      return result.ok ? result.value : 0;
+    },
     enabled: viewerId !== null,
   });
 

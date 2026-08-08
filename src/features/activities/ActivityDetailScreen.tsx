@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { useSession } from '@app/SessionProvider';
@@ -12,6 +13,8 @@ import { Card } from '@ui/Card';
 import { ErrorState } from '@ui/ErrorState';
 import { RatingStars } from '@ui/RatingStars';
 import { Skeleton } from '@ui/Skeleton';
+import { JoinRequestSheet } from '@features/connections';
+import { Button } from '@ui/Button';
 import { ActivityMap } from './ActivityMap';
 import { useActivityService } from './useActivityServices';
 
@@ -27,6 +30,7 @@ export function ActivityDetailScreen() {
   const { id } = useParams<{ id: string }>();
   const { viewerId } = useSession();
   const service = useActivityService();
+  const [joinOpen, setJoinOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['activity', id],
@@ -44,6 +48,23 @@ export function ActivityDetailScreen() {
 
   const mapCenter =
     data.coordinate ?? data.approximateArea?.center ?? { lat: 35.6997, lng: 51.4015 };
+
+  /* ⚠️ US-30 / BR-U4-30…35 — WHEN THE JOIN ACTION EXISTS AT ALL.
+   *
+   * Each of these is a case where the write would refuse, so the control is
+   * ABSENT rather than present-and-failing. Absent is the honest rendering:
+   * an enabled button that always errors teaches people the app is broken.
+   *
+   * Blocking (BR-U4-31) needs no case here — a blocked viewer never receives
+   * the activity in the first place (INV-1), so `data` is null and this screen
+   * has already returned. That is the invariant doing the work, not an
+   * omission. */
+  const isAuthor = data.author.id === viewerId;
+  const canJoin =
+    viewerId !== null &&
+    !isAuthor &&
+    data.derivedState === 'upcoming' &&
+    !data.viewerHasRequested;
 
   return (
     <article className="mx-auto flex w-full max-w-2xl flex-col gap-3 py-3">
@@ -79,6 +100,29 @@ export function ActivityDetailScreen() {
       </dl>
 
       <p className="whitespace-pre-line text-sm leading-7 text-fg">{data.description}</p>
+
+      {canJoin && (
+        <div>
+          <Button onClick={() => setJoinOpen(true)} data-testid="join-action">
+            {t('join.submit')}
+          </Button>
+        </div>
+      )}
+
+      {/* Already requested — the state is shown INSTEAD of the action, which
+          is what US-30's criterion asks for rather than a disabled button. */}
+      {data.viewerHasRequested && (
+        <p className="text-sm text-fg-muted" data-testid="join-already-requested">
+          {t('join.errorDuplicate')}
+        </p>
+      )}
+
+      <JoinRequestSheet
+        activityId={data.id}
+        activityTitle={data.title}
+        open={joinOpen}
+        onClose={() => setJoinOpen(false)}
+      />
 
       <ActivityMap activities={[data]} center={mapCenter} height={180} />
 
