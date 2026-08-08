@@ -1394,3 +1394,42 @@ Reading it as approval would put U3 — including CR-05's rule amendment and the
 **No approval recorded.** Committing is not approving; the U3 gate remains open.
 
 ---
+
+## ✅ U3 Code Generation APPROVED · U4 Connections started
+**Timestamp**: 2026-08-08T04:15:00Z
+**User Input**: "approve U3 and start U4"
+**AI Response**: "U3 Code Generation approved and recorded. Marking the stage complete and opening U4 Functional Design Part 1 (Planning)."
+**Context**: CONSTRUCTION — U3 Code Generation CLOSED. U4 Functional Design OPEN.
+
+**Clear and unambiguous**, unlike the earlier "done" which was not recorded as approval.
+
+**What this approval covers**: U3's 45 generated steps plus CR-05's six adopted changes, the amended BR-U3-50/51, the retired BR-U3-53, the new BR-U3-54 and P-U3-07, three defect fixes, 22 added tests (250 total), and the Vazirmatn binaries closing U1's third deviation. DEV-U3-02 acknowledged.
+
+**What this approval does NOT cover**: `RequestsInboxScreen`. Per the user's own correction it is a MOCK, and **U4 must rebuild it**. US-40 is not delivered.
+
+**U3 was the unit that carried US-11**, the first safety-critical story, verified on the wire under INV-5.
+
+---
+
+## U4 Connections — Functional Design Part 1 (Planning) started
+**Timestamp**: 2026-08-08T04:15:00Z
+**Context**: CONSTRUCTION — U4 Functional Design, Part 1.
+
+**U4 is the largest unit and the most safety-sensitive**: 10 stories (US-30..33, US-40, US-41, US-50..53), TWO of them safety-critical — **US-31** (contact disclosure) and **US-52** (rating eligibility). It also inherits two accepted risks that shape its design rather than being footnotes: **AR-02** (no approval gate on contact exchange) and **AR-04** (no in-app chat), plus **INV-3**, whose single exception lives entirely inside this unit.
+
+**Plan created**: `aidlc-docs/construction/plans/u4-connections-functional-design-plan.md` — 10 questions, awaiting answers.
+
+**⚠️ CODE AUDIT AGAINST THE BINDING SEQUENCE — TWO OF SEVEN STEPS ARE MISSING.** `services.md` §4.4 specifies `sendJoinRequest` as a seven-step sequence and calls it binding. Reading `connectionRepository.ts` against it:
+- **Step 1 incomplete** — the activity's existence is checked, but NOT that it is published and not past. A request can currently be sent to a past activity.
+- **Step 3 absent entirely** — no duplicate-request check. **US-30's acceptance criteria explicitly require** that a second request shows the existing request state instead of creating a duplicate. Nothing prevents it today.
+Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wires.
+
+**⚠️ NEITHER PURE RULE THE DESIGN MANDATES EXISTS.** `unit-of-work.md` says U4 owns `core/rules/{ratingEligibility,contactSharing}`. Both behaviours are inline in the repository instead: `canRate`'s reasoning is buried in `listRateableParticipants` and returns a LIST rather than the specified typed `{allowed, reason}`; `validateShareSelection`/`requiresDisclosure` do not exist, and `invalid_telegram_format` is specified but unimplemented. U1's own comment anticipated this — *"U4 moves this to core/rules/contactSharing with its own property test"*. Raised as Question 8 rather than assumed, because extraction means rewriting code that currently works.
+
+**U4 IS MOSTLY EXTRACTION, NOT GREENFIELD** — most of its repository layer was built in U1 and works. Recorded at the top of the plan so the design does not duplicate what exists.
+
+**`NEW_MEMBER_RATING_THRESHOLD = 3` is a PLACEHOLDER awaiting this stage** — `views.ts` says so in a comment: *"The threshold value is set in U4's functional design."* Question 2.
+
+**Questions deliberately raised beyond the obvious**: whether a withdrawn request frees the slot (a harassment route if it does — withdraw and re-send repeatedly to keep reappearing in an inbox); whether attendance confirmation has a deadline (no deadline means someone can confirm months later purely to open a rating window); and whether rating COMMENTS are displayed at all, since with few ratings an unattributed comment plus a known activity roster often identifies its author — which would defeat US-53's non-attribution requirement.
+
+---

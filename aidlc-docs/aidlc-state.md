@@ -130,7 +130,8 @@ Build sequence: **U1 → U2 → U3 → { U4, U5 } → U6**. Critical path: U1→
 - [ ] Infrastructure Design — **SKIP** (no infrastructure in Round 1) → deferred to Round 2
 - [x] **U1** Code Generation — Part 1 APPROVED · Part 2 **COMPLETE and APPROVED 2026-08-04** (41/41 steps, 4 change-request rounds, 160 tests passing)
 - [x] **U2** Code Generation — **COMPLETE and APPROVED 2026-08-05** (36/36 steps, plus CR-02's six changes; 208 tests passing)
-- [x] **U3** Code Generation — Part 1 APPROVED · Part 2 **COMPLETE 2026-08-05** (45/45 steps) · **CR-05 folded in 2026-08-08** (6 changes adopted, 22 tests added, 3 defects fixed, font closed; **250 tests passing**; awaiting approval)
+- [x] **U3** Code Generation — Part 1 APPROVED · Part 2 COMPLETE 2026-08-05 (45/45 steps) · CR-05 folded in 2026-08-08 · **APPROVED 2026-08-08** (6 CR-05 changes adopted, 22 tests added, 3 defects fixed, font closed; **250 tests passing**)
+- [ ] **U4** Functional Design — **IN PROGRESS** (Part 1 Planning, started 2026-08-08)
 - [ ] U4–U6 Code Generation — **EXECUTE** per unit (always)
 - [ ] Build and Test — **EXECUTE** once after all units
 
