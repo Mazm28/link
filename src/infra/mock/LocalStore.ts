@@ -6,6 +6,7 @@ import type {
   Notification,
   Rating,
   Report,
+  RequestQuota,
   Session,
   User,
   Venue,
@@ -45,6 +46,10 @@ export interface StoreShape {
   notifications: Notification[];
   /** Venue metrics (FR-55). Counts only — never viewer identity. */
   activityViews: Record<string, number>;
+  /** U4 / BR-U4-36 — per-user, per-Tehran-day join-request counts.
+   *  ⚠️ A courtesy limit, not a security control. See `RequestQuota`.
+   *  Additive: an older store simply has none, which reads as an empty quota. */
+  requestQuotas: RequestQuota[];
   /** The signed-in user. Mocked auth in Round 1; real sessions in Round 2. */
   currentUserId: string | null;
   /**

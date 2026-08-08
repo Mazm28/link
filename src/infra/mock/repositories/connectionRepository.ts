@@ -19,6 +19,9 @@ import type { ConnectionRepository } from '@core/repositories';
 import { deriveState } from '@core/rules/activityLifecycle';
 import { projectActivity } from '@core/rules/projection';
 import { canSendRequestTo } from '@core/rules/visibility';
+import { validateShareSelection } from '@core/rules/contactSharing';
+import { canRate, rateableParticipants } from '@core/rules/ratingEligibility';
+import { canSendToday, recordSend } from '@core/rules/requestQuota';
 import type { MockContext } from './context';
 
 export function createConnectionRepository(ctx: MockContext): ConnectionRepository {
@@ -66,32 +69,74 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
         refusal(ErrorCode.FORBIDDEN, 'errors.forbidden');
       }
 
+      /* U4 / BR-U4-30 — step 1 of the binding sequence, COMPLETED.
+       * Until now only the activity's EXISTENCE was checked, so a request
+       * could be sent to an unpublished or already-finished activity. */
+      if (activity.status !== 'published') refusal(ErrorCode.FORBIDDEN, 'errors.forbidden');
+      if (deriveState(activity, ctx.now()) !== 'upcoming') {
+        refusal('activity_not_upcoming', 'errors.forbidden');
+      }
+
+      /* BR-U4-35 — you cannot request your own activity. */
+      if (activity.authorId === input.requesterId) {
+        refusal(ErrorCode.FORBIDDEN, 'errors.forbidden');
+      }
+
       const requester = ctx.findUser(input.requesterId);
       if (!requester) refusal(ErrorCode.NOT_FOUND, 'errors.notFound');
 
-      // Verify the selection against what the user actually has, and FAIL
-      // rather than substitute (US-30). U4 moves this to
-      // core/rules/contactSharing with its own property test.
-      if (input.sharedContact.kind === 'phone' && !requester.phone) {
-        refusal('no_phone_on_file', 'errors.phoneInvalidFormat');
+      const state2 = ctx.store.read();
+      const priorForActivity = state2.joinRequests.filter(
+        (r) => r.activityId === input.activityId && r.requesterId === input.requesterId,
+      );
+
+      /* U4 / BR-U4-32 — step 3 of the binding sequence, WHICH WAS ABSENT
+       * ENTIRELY. US-30's acceptance criteria require a second request to show
+       * the existing request's state rather than create a duplicate, and
+       * nothing enforced it. */
+      if (priorForActivity.some((r) => r.status === 'sent')) {
+        refusal('duplicate_request', 'errors.forbidden');
       }
-      if (input.sharedContact.kind === 'telegram' && !requester.telegramId) {
-        refusal('no_telegram_on_file', 'errors.telegramInvalidFormat');
-      }
+
+      /* BR-U4-33 — exactly ONE re-request after a withdrawal. Withdrawing a
+       * second request is terminal: without that, withdraw-and-resend is a way
+       * to sit at the top of a poster's inbox indefinitely. */
+      const highestSeq = priorForActivity.reduce((max, r) => Math.max(max, r.requestSeq), 0);
+      if (highestSeq >= 2) refusal('rerequest_exhausted', 'errors.forbidden');
+      const requestSeq: 1 | 2 = highestSeq === 1 ? 2 : 1;
+
+      /* BR-U4-36 — the daily courtesy limit. ⚠️ NOT a security control: it
+       * lives in localStorage and resets when storage is cleared. It replaces
+       * part of the guard CR-07 removed with US-32; real enforcement is
+       * server-side in Round 2 (US-34). */
+      const quota = canSendToday(input.requesterId, state2.requestQuotas ?? [], ctx.now());
+      if (!quota.allowed) refusal('daily_limit_reached', 'errors.forbidden');
+
+      /* BR-U4-11/13 — resolve through the pure rule rather than inline, so the
+       * UI, this repository and Round 2's server all reach the same answer.
+       * ⚠️ It FAILS rather than substituting a different channel. */
+      const validation = validateShareSelection(
+        input.sharedContact.kind,
+        requester,
+        input.sharedContact.kind === 'telegram' ? input.sharedContact.value : undefined,
+      );
+      if (!validation.valid) refusal(validation.reason, 'errors.forbidden');
 
       const request: JoinRequest = {
         id: RequestIdCodec.create(),
         activityId: input.activityId,
         requesterId: input.requesterId,
-        sharedContact: input.sharedContact,
+        sharedContact: validation.resolved,
         status: 'sent',
         contactRevoked: false,
         createdAt: new Date().toISOString(),
+        requestSeq,
         ...(input.note === undefined ? {} : { note: input.note }),
       };
 
       ctx.store.mutate((s) => {
         s.joinRequests.push(request);
+        s.requestQuotas = recordSend(input.requesterId, s.requestQuotas ?? [], ctx.now());
         s.notifications.push({
           id: NotificationIdCodec.create(),
           userId: activity.authorId,
@@ -259,26 +304,19 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
       const state = ctx.store.read();
       const activity = state.activities.find((a) => a.id === activityId);
       if (!activity) return [];
-      if (deriveState(activity, ctx.now()) !== 'past') return [];
 
-      const confirmed = state.attendance
-        .filter((a) => a.activityId === activityId && a.attended)
-        .map((a) => a.participantId);
-
-      const actorIsParticipant = actorId === activity.authorId || confirmed.includes(actorId);
-      if (!actorIsParticipant) return [];
-
-      const alreadyRated = new Set(
-        state.ratings
-          .filter((r) => r.activityId === activityId && r.raterId === actorId)
-          .map((r) => r.subjectId),
-      );
-
-      const candidates = [activity.authorId, ...confirmed].filter(
-        (id) => id !== actorId && !alreadyRated.has(id),
-      );
-
-      return [...new Set(candidates)].map((id) => ctx.profileOf(id));
+      /* U4 — DELEGATED. The reasoning that used to live inline here now lives
+       * in `core/rules/ratingEligibility`, built on `canRate`, so the list and
+       * the predicate cannot disagree. They would have disagreed exactly at
+       * the edges, where it matters: the UI would offer a write the store then
+       * refuses, or hide one it would have allowed. */
+      return rateableParticipants({
+        actorId,
+        activity,
+        attendance: state.attendance,
+        existingRatings: state.ratings,
+        now: ctx.now(),
+      }).map((id) => ctx.profileOf(id));
     },
 
     /**
@@ -295,13 +333,32 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
     }): Promise<Rating> {
       await ctx.delay();
 
-      if (input.raterId === input.subjectId) refusal('self_rating', 'errors.forbidden');
-      if (input.score < 1 || input.score > 5) refusal('score_out_of_range', 'errors.forbidden');
-
-      const eligible = await this.listRateableParticipants(input.raterId, input.activityId);
-      if (!eligible.some((p) => p.id === input.subjectId)) {
-        refusal('not_confirmed_attendee', 'errors.forbidden');
+      /* BR-U4-64 — score is validated before eligibility, so an out-of-range
+       * score reports itself rather than being masked by a permission error. */
+      if (!Number.isInteger(input.score) || input.score < 1 || input.score > 5) {
+        refusal('score_out_of_range', 'errors.forbidden');
       }
+
+      const state = ctx.store.read();
+      const activity = state.activities.find((a) => a.id === input.activityId);
+      if (!activity) refusal(ErrorCode.NOT_FOUND, 'errors.notFound');
+
+      /* ⚠️ BR-U4-63 — THE WRITE RE-CHECKS, and it calls the SAME pure function
+       * the UI called. Hiding a control is not the check (NFR-S6): the
+       * operation is reachable by anyone who can reach the repository, and in
+       * Round 2 the server runs this identical function again.
+       *
+       * Delegated rather than re-derived from `listRateableParticipants` — the
+       * typed reason is what lets the UI say WHY, and a list cannot. */
+      const eligibility = canRate({
+        actorId: input.raterId,
+        subjectId: input.subjectId,
+        activity,
+        attendance: state.attendance,
+        existingRatings: state.ratings,
+        now: ctx.now(),
+      });
+      if (!eligibility.allowed) refusal(eligibility.reason, 'errors.forbidden');
 
       const rating: Rating = {
         id: RatingIdCodec.create(),

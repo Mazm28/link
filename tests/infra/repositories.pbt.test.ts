@@ -3,6 +3,8 @@ import fc from 'fast-check';
 import { createMockBackend } from '@infra/mock';
 import { ActivityIdCodec, UserIdCodec, type ActivityId, type UserId } from '@core/domain';
 import type { Repositories } from '@core/repositories';
+import { deriveState } from '@core/rules/activityLifecycle';
+import { DAILY_REQUEST_LIMIT } from '@core/rules/requestQuota';
 
 /* Property P-U1-14 — business-logic-model.md §6.5
  * Categories: Oracle / model-based (PBT-05), Stateful (PBT-06).
@@ -73,6 +75,11 @@ class Model {
     return `${a}->${b}`;
   }
 
+  /** BR-U4-32 — a live request blocks a duplicate. */
+  hasSentRequest(activityId: string, requesterId: string) {
+    return this.liveRequests.get(activityId)?.has(requesterId) ?? false;
+  }
+
   isBlocked(a: string, b: string) {
     return this.directedBlocks.has(this.key(a, b)) || this.directedBlocks.has(this.key(b, a));
   }
@@ -126,6 +133,19 @@ describe('mock repositories — oracle and invariant properties', () => {
           state.users.filter((u) => u.telegramId !== undefined).map((u) => String(u.id)),
         );
 
+        /* BR-U4-30 — a request may only target a PUBLISHED, UPCOMING activity.
+         * Read from the seed for the same reason as `authorOf`: the model must
+         * not ask the repository what the repository is being tested on. */
+        const upcomingPublished = new Set(
+          state.activities
+            .filter((a) => a.status === 'published' && deriveState(a, new Date()) === 'upcoming')
+            .map((a) => String(a.id)),
+        );
+
+        /* BR-U4-36 — the courtesy quota. Seeded requests do not count: they
+         * carry historical `createdAt` values, so they are not "today". */
+        const sentToday = new Map<string, number>();
+
         // The model must START from the seeded state, or every comparison is
         // off by whatever the seed already contains.
         for (const b of state.blocks) model.block(String(b.blockerId), String(b.blockedId));
@@ -154,10 +174,36 @@ describe('mock repositories — oracle and invariant properties', () => {
               const requesterId = `usr_${op.requester}`;
               const author = authorOf.get(activityId) ?? '';
 
+              /* ⚠️ AMENDED BY CR-07 (2026-08-08), and this test is how the
+               * change announced itself: the model still expected a
+               * `'none'` request to be accepted, and the repository had
+               * started refusing it. The oracle caught a deliberate
+               * behaviour change, which is exactly its job.
+               *
+               * U4 additions modelled here: sharing is mandatory
+               * (BR-U4-11), the activity must be upcoming and published
+               * (BR-U4-30), duplicates are refused (BR-U4-32), and the
+               * daily courtesy quota applies (BR-U4-36). */
+              const upcoming = upcomingPublished.has(activityId);
+              const alreadySent = model.hasSentRequest(activityId, requesterId);
+              const quotaLeft = (sentToday.get(requesterId) ?? 0) < DAILY_REQUEST_LIMIT;
+
               const wouldAccept =
+                op.contact !== 'none' &&
+                upcoming &&
+                !alreadySent &&
+                quotaLeft &&
                 author !== requesterId &&
                 !model.isBlocked(requesterId, author) &&
-                (op.contact !== 'telegram' || hasTelegram.has(requesterId));
+                /* ⚠️ CR-07/BR-U4-14 CHANGED THIS TOO. A Telegram handle may
+                 * now be supplied AT REQUEST TIME, so having one on the
+                 * profile is no longer a precondition — what matters is that
+                 * the handle is well-formed (BR-U4-15). The command below
+                 * sends a valid one, so telegram requests always resolve.
+                 * `hasTelegram` is retained only to document what the rule
+                 * used to be. */
+                true;
+              void hasTelegram;
 
               let accepted = false;
               try {
@@ -169,7 +215,11 @@ describe('mock repositories — oracle and invariant properties', () => {
                       ? { kind: 'none' }
                       : op.contact === 'phone'
                         ? { kind: 'phone', value: 'x' }
-                        : { kind: 'telegram', value: 'x' },
+                        : /* A WELL-FORMED handle. `'x'` was fine while the
+                           * repository only checked whether the profile had
+                           * one; BR-U4-15 now validates the format, and a
+                           * one-character placeholder is not a handle. */
+                          { kind: 'telegram', value: 'valid_handle' },
                 });
                 accepted = true;
               } catch {
@@ -179,6 +229,7 @@ describe('mock repositories — oracle and invariant properties', () => {
               // The model and the repository must agree on WHETHER the write
               // was allowed — that is the contract Round 2 has to reproduce.
               expect(accepted).toBe(wouldAccept);
+              if (accepted) sentToday.set(requesterId, (sentToday.get(requesterId) ?? 0) + 1);
               model.request(activityId, requesterId, accepted);
               break;
             }

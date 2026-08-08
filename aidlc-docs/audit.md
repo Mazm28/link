@@ -1566,3 +1566,29 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 **§5 records six things the plan deliberately does NOT do** — no in-app chat (CR-06 withdrawn, AR-04 stands), no approval gate, no enforced rate limiting, no comment display, no schema migration, no rewrite of working persistence. Stated so a later session does not add them believing they were forgotten.
 
 ---
+
+## ✅ U4 Code Generation Part 1 APPROVED — Part 2 (Generation) started
+**Timestamp**: 2026-08-08T23:00:00Z
+**User Input**: "approve"
+**AI Response**: "Plan approved. Executing all 45 steps."
+**Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
+
+## U4 Code Generation Part 2 — checkpoint (steps 1–11, 18–20 of 45)
+**Timestamp**: 2026-08-09T00:20:00Z
+**Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
+
+**Done**: domain (`requestSeq`, `RequestQuota`, the legacy-`'none'` annotation) · three pure rules (`contactSharing`, `ratingEligibility`, `requestQuota`) · rating threshold 3 → 2 · P-U4-01/02/03 and the quota tests · the repository gaps and delegation.
+
+**Gates**: typecheck clean · lint clean · **267/267** (was 250, +17).
+
+**⚠️ P-U4-01 VERIFIED AGAINST TWO DELIBERATELY BROKEN IMPLEMENTATIONS before being kept.** Removing the attendance check entirely → 2 failures; ignoring the `attended` flag so a confirmed ABSENTEE counts as present → 3 failures; restored → 7 pass. This is the discipline the plan demanded at step 10, and it exists because this project shipped P-U3-02 green while it compared `"[object Object]"` to itself.
+
+**⚠️ THE U1 ORACLE TEST CAUGHT CR-07, WHICH IS EXACTLY ITS JOB.** P-U1-14 models what the repository should accept and compares against what it does. It failed the moment `sendJoinRequest` started refusing `'none'` — the model still expected the old rule. The failure was a **behaviour change announcing itself**, not a defect, and the MODEL was updated rather than the code.
+
+It then caught a **second** difference on the next run: the oracle sent `{kind:'telegram', value:'x'}`, which was fine while the repository merely checked whether the profile had a handle, but BR-U4-15 now validates the format and a one-character placeholder is not a handle. Both amendments are commented in place with what the rule used to be.
+
+**Two never-implemented steps of the binding seven-step sequence are now real code**: BR-U4-30 (published **and** upcoming — previously only existence was checked, so a request could be sent to an activity that had already happened) and BR-U4-32 (duplicate refusal — absent entirely, though US-30's acceptance criteria require it).
+
+**Rating logic is now DELEGATED, not duplicated.** `listRateableParticipants` calls `rateableParticipants`, which is built on `canRate`; `submitRating` calls `canRate` directly and refuses with its typed reason. The inline copy is gone rather than left alongside — two copies would disagree at the edges, which is where it matters.
+
+---

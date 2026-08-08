@@ -60,6 +60,25 @@ export interface GeoArea {
 
 /** What a requester chose to disclose. Discriminated so `none` is a real,
  *  first-class option rather than an empty string (FR-31). */
+/**
+ * What a requester chose to disclose.
+ *
+ * ⚠️ THIS TYPE IS DELIBERATELY WIDER THAN WHAT CAN BE WRITTEN.
+ *
+ * `{ kind: 'none' }` is a LEGACY variant. CR-07 (2026-08-08) made contact
+ * sharing mandatory and retired US-32, so `validateShareSelection` refuses
+ * `'none'` for every new request (BR-U4-11). The constraint lives at the WRITE
+ * boundary, not in the type.
+ *
+ * Why not simply narrow the type: five seeded requests carry `'none'`, and
+ * narrowing would force either a migration that rewrites them — claiming those
+ * people shared a phone number they never shared — or discarding them. Both
+ * are worse than a type a reader must handle and a writer cannot produce. Same
+ * shape as `Activity.exactAddress`: representable is not writeable.
+ *
+ * ⚠️ Every `switch` over this type must keep its `'none'` branch. It is not
+ * dead code, and a linter suggesting its removal is wrong.
+ */
 export type SharedContact =
   | { kind: 'none' }
   | { kind: 'phone'; value: string }
@@ -229,6 +248,44 @@ export interface JoinRequest {
   contactRevoked: boolean;
   createdAt: string;
   withdrawnAt?: string;
+  /**
+   * U4 / BR-U4-33 — which attempt this is. 1 on a first request, 2 on the one
+   * re-request allowed after a withdrawal. Withdrawing a `2` is TERMINAL: that
+   * person can never request that activity again.
+   *
+   * STORED, not derived by counting rows. Counting is ambiguous the moment a
+   * row is removed, and Round 2's server must reach the same answer from the
+   * same data without replaying history.
+   *
+   * Why a terminal state exists at all: without it, withdraw-and-resend is a
+   * way to sit at the top of a poster's inbox indefinitely. That is a
+   * harassment vector, not a UX detail.
+   */
+  requestSeq: 1 | 2;
+}
+
+/**
+ * U4 / BR-U4-36, FR-38 — the Round-1 join-request quota.
+ *
+ * ⚠️ A COURTESY LIMIT, NOT A SECURITY CONTROL, and nothing may describe it as
+ * one. It lives in `localStorage`; clearing storage resets it. It stops
+ * accidental spam and honest over-eagerness. A determined harvester bypasses
+ * it in one click.
+ *
+ * It exists because CR-07 retired US-32 — the "share nothing" option that was
+ * one of AR-02's four named mitigations — and one remaining guard was judged
+ * too few. Real enforcement is server-side in Round 2 (US-34).
+ *
+ * Keyed by Tehran-local day, not UTC: a quota that resets at 03:30 local time
+ * because UTC rolled over is a quota that behaves inexplicably for every user
+ * in the launch market.
+ */
+export interface RequestQuota {
+  userId: UserId;
+  /** Tehran-local calendar day, `YYYY-MM-DD` in the Gregorian proleptic form
+   *  used as a key only — never displayed. */
+  dayKey: string;
+  count: number;
 }
 
 /**

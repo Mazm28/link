@@ -709,9 +709,14 @@ interface RequestSeed {
   n: string;
   activity: string;
   requester: string;
+  /** ⚠️ `'none'` is LEGACY — CR-07 made sharing mandatory and no NEW request
+   *  can produce it. The rows below that use it are kept deliberately: they
+   *  are the only proof the legacy render path still works (CR-07 Q3 `A`). */
   contact: 'none' | 'phone' | 'telegram';
   note?: string;
   withdrawn?: boolean;
+  /** BR-U4-33 — 2 marks the one allowed re-request after a withdrawal. */
+  seq?: 1 | 2;
 }
 
 /** Eighteen requests spanning upcoming and past activities, with all three
@@ -781,6 +786,10 @@ function buildRequests(now: Date, users: User[]): JoinRequest[] {
       sharedContact,
       status: s.withdrawn ? ('withdrawn' as const) : ('sent' as const),
       contactRevoked: s.withdrawn === true,
+      /* U4 / BR-U4-33 — seeded requests are all first attempts except the
+       * re-request seeded deliberately below, so the terminal path is
+       * reachable in a demo without setting it up by hand. */
+      requestSeq: s.seq ?? 1,
       createdAt: ago(now, 30 - i),
       ...(s.note === undefined ? {} : { note: s.note }),
       ...(s.withdrawn ? { withdrawnAt: ago(now, 2) } : {}),
@@ -942,6 +951,8 @@ export function createSeed(now: Date = new Date()): StoreShape {
     reports: buildReports(now),
     blocks: buildBlocks(now),
     notifications: buildNotifications(now),
+    /* U4 / BR-U4-36 — empty at seed. The courtesy quota accrues in use. */
+    requestQuotas: [],
     activityViews: {
       act_16: 412,
       act_17: 188,

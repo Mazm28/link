@@ -17,6 +17,7 @@ const emptyStore = (): StoreShape => ({
   blocks: [],
   notifications: [],
   activityViews: {},
+  requestQuotas: [],
   currentUserId: null,
   session: null,
 });

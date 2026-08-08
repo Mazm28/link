@@ -22,7 +22,13 @@ import type { LocalStore } from '../LocalStore';
  * U4 owns the real value (application-design.md §10). Named so that setting it
  * is a one-line change rather than a hunt through render code.
  */
-export const NEW_MEMBER_RATING_THRESHOLD = 3;
+/* U4 / BR-U4-70 — lowered 3 → 2 by CR-07's round of answers (Q2 `C`).
+ *
+ * ⚠️ A DISPLAY DECISION UNDER SPARSE ROUND-1 DATA, not a claim that two
+ * ratings are statistically meaningful. With almost no rating data a threshold
+ * of 3 means effectively nobody ever shows a score, which makes US-53's entire
+ * signal invisible. Round 2 should raise it once real volume exists. */
+export const NEW_MEMBER_RATING_THRESHOLD = 2;
 
 const DEFAULT_PAGE_LIMIT = 20;
 
