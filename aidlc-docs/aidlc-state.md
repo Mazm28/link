@@ -2,7 +2,7 @@
 
 ## ▶️ RESUME INSTRUCTIONS (read first in a new session)
 
-**Where we are**: **U1 and U2 are COMPLETE and APPROVED**; **U3 is code-complete, CR-05 is folded in, and it is awaiting approval.** The app signs a user in, sets up a profile, shows safety guidance, posts **and edits** activities with a location-precision choice, finds them by feed, search, filter, category and **map**, and shows a profile hub and a requests inbox — all in Persian, **now in Vazirmatn rather than a fallback face**. 250 passing tests, clean typecheck and lint, production build 137.9 KB gzipped.
+**Where we are**: **U1, U2 and U3 are COMPLETE and APPROVED** (U3 approved 2026-08-08 including CR-05). **U4's Functional Design is APPROVED; U4 Code Generation Part 1 is in planning.** The app signs a user in, sets up a profile, shows safety guidance, posts **and edits** activities with a location-precision choice, finds them by feed, search, filter, category and **map**, and shows a profile hub and a requests inbox — all in Persian, **now in Vazirmatn rather than a fallback face**. 250 passing tests, clean typecheck and lint, production build 137.9 KB gzipped.
 
 **⚠️ A FRESH SESSION MUST READ THIS FIRST — the tree once diverged from the record.** On 2026-08-08, resuming found three days of undocumented, untested, uncommitted work in the workspace: 16 modified and 3 new files, no audit entry, no state entry, no CR document, and a suite still green at exactly the 228 recorded at U3 completion because it did not know the code existed. It is now adopted as **CR-05** (`change-requests/cr-05-navigation-and-requests.md`) and tested. **Record a test count at every gate** — 228 → 228 across three days of visible feature work was detectable in one line.
 
@@ -11,7 +11,8 @@
 2. `aidlc-docs/construction/u2-identity/code/implementation-summary.md` — what U2 built and the four defects it hit
 3. `aidlc-docs/construction/u1-foundation/code/implementation-summary.md` — what U1 built, 3 recorded deviations
 4. `README.md` at the workspace root — architecture, the DEP rules, how to run it
-5. `aidlc-docs/inception/application-design/unit-of-work.md` §U3 — the next unit's definition
+5. `aidlc-docs/construction/u4-connections/functional-design/` — U4's four artifacts, 59 rules
+6. `aidlc-docs/inception/application-design/unit-of-work.md` §U4 — the current unit's definition
 6. `aidlc-docs/inception/application-design/component-methods.md` — repository interface + rule signatures
 7. `aidlc-docs/inception/requirements/requirements.md` — 53 FRs, 40 NFRs, 4 accepted risks
 
@@ -21,7 +22,9 @@
 
 **🔀 CR-01 is now FULLY LIVE** — `aidlc-docs/change-requests/cr-01-location-filters-and-map.md`. **A** (the neighborhood filter) is wired in `FilterPanel`, shown only once a city is chosen; **B** (filters on the right) shipped in CR-02; **C** (a second city) shipped as 25 cities — adopted first as city-first navigation, then **amended by CR-05 to city-as-filter**; **D** (the activity map) was un-deferred 2026-08-05 and is designed in U3 under INV-5. Nothing from CR-01 remains deferred.
 
-**Next action**: obtain approval for **U3 Code Generation (including CR-05)**, then begin **U4 Connections** — the largest unit and the one with the highest safety sensitivity (US-31 disclosure, US-52 rating eligibility).
+**Next action**: approve the **U4 Code Generation plan** (Part 1), then execute it. U4 is the largest unit and the most safety-sensitive — **US-31** (disclosure) and **US-52** (rating eligibility).
+
+**⚠️ CR-07 CHANGED THE PRODUCT'S RISK POSTURE — read `change-requests/cr-07-mandatory-contact-sharing.md` before touching the join flow.** Contact sharing is now **mandatory**: US-32 («هیچ‌کدام») is **retired**, FR-31 is rewritten, and **AR-02 was re-accepted with the risk explicitly recorded as INCREASED** — the population exposed to a fake activity is no longer self-selecting. FR-38's rate limit was pulled into Round 1 as a **courtesy limit** to partially replace the lost guard; it is client-side, bypassable by clearing storage, and **must never be described as protection**.
 
 **⚠️ `RequestsInboxScreen` IS PROVISIONAL — U4 REBUILDS IT, DOES NOT INHERIT IT.** User decision 2026-08-08 at the approval gate: *"what we built is a mocked version and must be rebuilt in U4"*. CR-05 shipped it early to fill the gap where `/requests` rendered `FoundationDemo`, but it is **not delivered US-40**. U4 owns the real one, designed through its own functional-design stage with its own safety review — including the loop CR-05 never touched: sending, the disclosure sheet, withdrawal, attendance, ratings.
 
@@ -131,7 +134,8 @@ Build sequence: **U1 → U2 → U3 → { U4, U5 } → U6**. Critical path: U1→
 - [x] **U1** Code Generation — Part 1 APPROVED · Part 2 **COMPLETE and APPROVED 2026-08-04** (41/41 steps, 4 change-request rounds, 160 tests passing)
 - [x] **U2** Code Generation — **COMPLETE and APPROVED 2026-08-05** (36/36 steps, plus CR-02's six changes; 208 tests passing)
 - [x] **U3** Code Generation — Part 1 APPROVED · Part 2 COMPLETE 2026-08-05 (45/45 steps) · CR-05 folded in 2026-08-08 · **APPROVED 2026-08-08** (6 CR-05 changes adopted, 22 tests added, 3 defects fixed, font closed; **250 tests passing**)
-- [ ] **U4** Functional Design — **IN PROGRESS** (Part 1 Planning, started 2026-08-08)
+- [x] **U4** Functional Design — COMPLETE and **APPROVED 2026-08-08** (4 artifacts, 59 rules, 6 PBT properties; **CR-07 folded in** — US-32 retired, AR-02 re-accepted)
+- [ ] **U4** Code Generation — **IN PROGRESS** (Part 1 Planning, 2026-08-08)
 - [ ] U4–U6 Code Generation — **EXECUTE** per unit (always)
 - [ ] Build and Test — **EXECUTE** once after all units
 

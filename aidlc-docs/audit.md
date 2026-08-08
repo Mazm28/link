@@ -1537,3 +1537,32 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 **Schema stays at v3.** No migration.
 
 ---
+
+## ✅ U4 Functional Design APPROVED · Code Generation Part 1 (Planning) started
+**Timestamp**: 2026-08-08T22:35:00Z
+**User Input**: "approve and start code generation"
+**AI Response**: "U4 Functional Design approved and recorded. Creating the U4 code generation plan for approval before any code is written."
+**Context**: CONSTRUCTION — U4 Functional Design CLOSED. U4 Code Generation Part 1 OPEN.
+
+**Approval covers**: four artifacts, 59 business rules (BR-U4-10…105), six property tests (P-U4-01…06), the CR-07 amendments to `requirements.md` and `stories.md`, US-32's retirement, AR-02's re-acceptance on the reduced mitigation set, and the schema staying at v3.
+
+**Clear and unambiguous.** Recorded as approval; the earlier bare "done" in this session was not.
+
+## U4 Code Generation Part 1 — plan complete, approval prompt
+**Timestamp**: 2026-08-08T22:50:00Z
+**AI Response**: "45-step plan created at `construction/plans/u4-connections-code-generation-plan.md`. Asking for approval before writing any code."
+**Context**: CONSTRUCTION — U4 Code Generation Part 1, awaiting approval.
+
+**45 steps**: 3 domain · 4 pure rules · 4 rule tests · 6 services · 3 repository · 2 seed · 1 i18n · 12 frontend · 1 deletion · 6 tests · 3 verification. Comparable to U3's 45.
+
+**⚠️ The plan states explicitly that U4 is EXTRACTION, not greenfield.** Most of the repository layer was built in U1 and works. Steps 5–7 move reasoning into pure rules; steps 18–20 make the repository call them; the plan says in §1.5 and §5 **do not rewrite working persistence**. Without that instruction the obvious failure mode is a well-intentioned rewrite of code that already passes its tests.
+
+**Steps carrying a ⚠️ are the ones that must not be quietly softened**: Step 5 (`canRate` pure — a Round-2 server must call it with no browser and no repository), Step 10 (**verify P-U4-01 fails against a deliberately broken `canRate` before keeping it**), Step 18 (the two never-implemented steps of the binding seven-step sequence), Step 26 (`DisclosureNotice`, carrying a *do not "improve" this component* header), Step 36 (delete the CR-05 mock AND its tests), Step 39 (INV-3 on the wire for every user), Step 42 (`Notification.requestPermission` never called).
+
+**Step 34 carries a U3 lesson forward**: distinct route `key`s wherever two routes share a component. U3 shipped `/create` opening prefilled with the activity just edited because React reconciled the two routes as one element and never remounted; submitting would have created a duplicate carrying the original's exact address.
+
+**Step 43 requires recording the test count.** This project ran three days of visible feature work against an unchanged count of 228, and the drift was detectable in one line.
+
+**§5 records six things the plan deliberately does NOT do** — no in-app chat (CR-06 withdrawn, AR-04 stands), no approval gate, no enforced rate limiting, no comment display, no schema migration, no rewrite of working persistence. Stated so a later session does not add them believing they were forgotten.
+
+---
