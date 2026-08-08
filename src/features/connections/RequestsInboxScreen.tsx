@@ -14,8 +14,21 @@ import { Skeleton } from '@ui/Skeleton';
 /**
  * RequestsInboxScreen — US-40.
  *
+ * ⚠️⚠️ PROVISIONAL. U4 REBUILDS THIS SCREEN — IT DOES NOT INHERIT IT. ⚠️⚠️
+ *
+ * User decision, 2026-08-08, at the U3 approval gate: what is here is a MOCKED
+ * read surface built ahead of its unit, not the delivered US-40. Do not treat a
+ * polished-looking screen as finished work. U4 owns the real one, designed
+ * through its own functional-design stage with its own safety review.
+ *
+ * What survives the rebuild is the TEST FILE, not this component:
+ * `tests/features/connections/requestsInbox.test.tsx` pins the INV-3 scoping on
+ * the wire, and U4's replacement has to satisfy it too. Treat those tests as
+ * acceptance criteria that already exist rather than as coverage of this code.
+ *
  * People who asked to join MY activities. Until now `/requests` rendered the
- * old foundation demo, so the nav item promised one thing and showed another.
+ * old foundation demo, so the nav item promised one thing and showed another —
+ * which is the gap this fills in the meantime.
  *
  * ⚠️ THIS SCREEN CARRIES THE ONE INV-3 EXCEPTION.
  *

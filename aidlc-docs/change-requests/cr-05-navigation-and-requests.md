@@ -99,9 +99,23 @@ feed; it is now simply content, and an all-cities feed shows it without needing 
 showed another. It now renders `RequestsInboxScreen` — **US-40**, a story assigned to **U4
 Connections**, the unit `aidlc-state.md` flags as carrying the highest safety sensitivity.
 
-Adopted rather than reverted, per answer Q1 `A`. That decision has a consequence worth stating
-plainly: **U4 will inherit this screen as existing behaviour rather than build it**, so the
-verification U4 would have performed has to happen here instead.
+Adopted rather than reverted, per answer Q1 `A` — but **as a provisional surface, not as delivered
+work**. Clarified by the user at the approval gate on 2026-08-08:
+
+> *"what we built is a mocked version and must be rebuilt in U4"*
+
+This reverses what an earlier draft of this document said. **U4 does NOT inherit this screen — U4
+rebuilds it**, through its own functional-design stage with its own safety review. What is in the
+tree fills the gap where `/requests` used to render `FoundationDemo` and promised something the
+nav item did not deliver.
+
+**What survives the rebuild is the test file, not the component.**
+`tests/features/connections/requestsInbox.test.tsx` pins the INV-3 scoping on the wire, and U4's
+replacement has to satisfy it too. Those tests are best read as **acceptance criteria that already
+exist** rather than as coverage of code that is staying.
+
+The component itself now carries this warning in its own header, because a polished-looking screen
+is exactly the thing a later session mistakes for finished work.
 
 ### 4.1 The INV-3 exception this screen carries
 

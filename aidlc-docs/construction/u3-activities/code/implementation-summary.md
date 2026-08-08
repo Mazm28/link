@@ -107,6 +107,7 @@ The host block rendered an avatar, a name and a star rating with nothing saying 
 | `cancelActivity` defines the notification trigger; delivery is unimplemented | **U4** |
 | Attendance-pending flags on my-activities need real attendance data | **U4** |
 | Past activities reachable via my-activities and sent-requests — the only two routes left | **U4** |
+| **`RequestsInboxScreen` is a MOCK — rebuild it.** Its test file is the acceptance criteria | **U4** |
 | Venue publishing reuses the composer but skips the precision choice (FR-54) | **U5** |
 | `INV-1` blocking already filters the pipeline; U6 populates the block set | **U6** |
 | Neshan tiles — the component supports them, no key configured | Round 2 |
@@ -120,7 +121,9 @@ Full account: [`change-requests/cr-05-navigation-and-requests.md`](../../../chan
 
 Six changes were found in the workspace **with no audit entry, no state entry and no CR document**, three days after this unit was declared complete. They were adopted rather than reverted (reconciliation answer Q1 `A`), documented, amended into the rules, and tested.
 
-**What changed in the product**: browsing defaults to **all cities** rather than one; activities can be **edited** at `/activity/:id/edit`; `/profile` is a **hub** with the form at `/profile/edit`; `/requests` renders a real **inbox** (US-40, pulled forward from U4); `ActivityMap` takes a `height`; four signatures narrowed to `Pick<...>`.
+**What changed in the product**: browsing defaults to **all cities** rather than one; activities can be **edited** at `/activity/:id/edit`; `/profile` is a **hub** with the form at `/profile/edit`; `/requests` renders a **provisional inbox** in place of the old foundation demo; `ActivityMap` takes a `height`; four signatures narrowed to `Pick<...>`.
+
+**⚠️ The inbox is a mock and U4 REBUILDS it** — user decision at the approval gate, 2026-08-08. It is not delivered US-40. What carries forward is `tests/features/connections/requestsInbox.test.tsx`, which pins the INV-3 scoping on the wire and stands as acceptance criteria for U4's replacement.
 
 **What changed in the rules**: BR-U3-50/51 rewritten, BR-U3-52 narrowed, **BR-U3-53 retired**, **BR-U3-54 added** with **P-U3-07**. Seven property tests now, not six.
 

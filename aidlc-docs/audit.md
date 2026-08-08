@@ -1332,3 +1332,49 @@ Both routes render `ActivityComposerScreen` in the same position, so React recon
 **Known limitation, deliberately not fixed**: `SCHEMA_VERSION` stays at 3, so an existing browser keeps its persisted store including the blank-Telegram rows — the seed fix applies to a fresh store or the dev menu's reset. Bumping to 4 forces every install to reseed and would DISCARD activities created by hand while testing, so it is the user's call, not mine.
 
 ---
+
+## Committed and pushed · ambiguous "done" — approval NOT recorded
+**Timestamp**: 2026-08-08T02:45:00Z
+**User Input**: "commit and push it"
+**AI Response**: "Committed as 7675c57 on a new branch `u3-cr-05-navigation-and-requests` (38 files, +1758/-83) and pushed to origin. `main` left untouched at fb4d2ba."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate OPEN.
+
+**Branched rather than committing to main.** The request named no branch, `main` is the default branch, and this commit reverses an approved rule (BR-U3-50/51) and pulls a U4 story forward — so it is not a change to land unreviewed on the default branch. Fast-forward or PR both left available to the user.
+
+---
+
+## User said "done" — treated as AMBIGUOUS, not as approval
+**Timestamp**: 2026-08-08T02:47:00Z
+**User Input**: "done"
+**AI Response**: "Asked what 'done' refers to rather than recording a stage approval."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate **STILL OPEN**.
+
+**NOT recorded as approval.** `code-generation.md` Step 15 requires approval to be "clear and unambiguous". "done" arrived immediately after a commit-and-push report and could equally mean the merge is done, or the session is done. In this workflow "done" is also the conventional signal that a QUESTION FILE has been filled in — and no question file is currently awaiting answers, which makes the word ambiguous in a third way.
+
+Reading it as approval would put U3 — including CR-05's rule amendment and the early US-40 screen carrying the INV-3 exception — on record as signed off on the strength of one word. Asked instead.
+
+---
+
+## Gate answers — US-40 RECLASSIFIED as a mock U4 must rebuild
+**Timestamp**: 2026-08-08T02:55:00Z
+**User Input**: "1 is ok
+2 what we built is a mocked version and must be rebuilt in U4
+3 is right"
+**AI Response**: "Item 2 reverses what I had recorded. Corrected in four places plus the component's own header."
+**Context**: CONSTRUCTION — U3 Code Generation, approval gate OPEN.
+
+**Item 1 `ok`** — the city-as-filter amendment stands. BR-U3-50/51 rewritten; Round 2 builds the amended rule, not the original.
+
+**Item 3 `right`** — BR-U3-53 retired, BR-U3-54 and P-U3-07 stand.
+
+**⚠️ ITEM 2 IS A CORRECTION, NOT A CONFIRMATION, AND I HAD IT BACKWARDS.** I recorded that **U4 INHERITS** `RequestsInboxScreen` as existing behaviour. The user's answer is the opposite: it is a **MOCKED** surface and **U4 REBUILDS IT**. That reading was reasonable from `Q1 A` ("adopt all six changes") but it silently upgraded "keep this code in the tree" into "US-40 is delivered", which is a much larger claim and not one the user made.
+
+**Why the difference matters rather than being a labelling detail**: under my reading, U4 would open with US-40 already ticked off and the safety-sensitive part of its scope quietly reduced — a screen carrying the product's ONE INV-3 exception would have passed into the finished pile without ever going through U4's functional design or its safety review. Under the user's reading, U4 designs and builds it properly and this is scaffolding filling the gap where `/requests` used to render `FoundationDemo`.
+
+**Corrected in five places**: the component's own header (⚠️ PROVISIONAL, first thing anyone reads), `cr-05-navigation-and-requests.md` §4, `aidlc-state.md` resume block, `implementation-summary.md` §8, and the §7 carried-into-later-units table.
+
+**THE TESTS STAY, AND THEIR MEANING CHANGES.** `tests/features/connections/requestsInbox.test.tsx` is no longer coverage of code that is staying — it is **acceptance criteria that already exist** for U4's replacement. It asserts, for EVERY user rather than a chosen one, that `sharedContact` reaches only the poster it was shared with, checked on the rendered DOM and not merely at the repository. A rebuild that breaks INV-3 now fails a test written before it was started, which is a better position than U4 would have been in either way.
+
+**Net effect on the approval about to be requested**: it is a SMALLER claim than the one I presented. U3 no longer signs off US-40 as delivered.
+
+---
