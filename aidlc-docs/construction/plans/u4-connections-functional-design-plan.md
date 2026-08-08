@@ -95,7 +95,7 @@ C) **Discard both the screen and its tests** and design the inbox from scratch, 
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C
 
 ---
 
@@ -110,7 +110,7 @@ C) **Lower to 2.** In Round 1 there is almost no rating data; a high threshold m
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C
 
 ---
 
@@ -125,7 +125,7 @@ C) **Withdrawn requests free the slot, but re-requesting is limited** (e.g. one 
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C only one chance of re-requesting is allowed and also only 5 request can be sent per day.
 
 ---
 
@@ -140,7 +140,7 @@ C) **No deadline, but the prompt ages** — still confirmable, with the my-activ
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C
 
 ---
 
@@ -159,7 +159,7 @@ C) **Comments are shown only to the person rated**, unattributed, and never publ
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -174,7 +174,7 @@ C) **A notifications screen AND the requests inbox**, with the badge counting on
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C
 
 ---
 
@@ -189,7 +189,7 @@ C) **Saved, with an explicit opt-in checkbox** («این آی‌دی در پرو
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]:B
 
 ---
 
@@ -204,7 +204,7 @@ C) **Leave both inline** and property-test through the repository instead.
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -217,11 +217,11 @@ B) **Keep the seed as-is** and reach the remaining states by using the app.
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
 ### Question 10
 Anything about this unit you already know you want, that the questions above do not cover? Copy tone, screen layout, something you saw in another app, a worry about the disclosure wording — anything.
 
-[Answer]:
+[Answer]: something to mention: ways of connecting must not be empty, user have to fill something.

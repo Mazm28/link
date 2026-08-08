@@ -1433,3 +1433,26 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 **Questions deliberately raised beyond the obvious**: whether a withdrawn request frees the slot (a harassment route if it does — withdraw and re-send repeatedly to keep reappearing in an inbox); whether attendance confirmation has a deadline (no deadline means someone can confirm months later purely to open a rating window); and whether rating COMMENTS are displayed at all, since with few ratings an unattributed comment plus a known activity roster often identifies its author — which would defeat US-53's non-attribution requirement.
 
 ---
+
+## U4 Functional Design — answers received, 1 CONTRADICTION and 2 ambiguities
+**Timestamp**: 2026-08-08T04:40:00Z
+**User Input**: "questions qnswered" — Q1 `C` · Q2 `C` · Q3 "C only one chance of re-requesting is allowed and also only 5 request can be sent per day." · Q4 `C` · Q5 `A` · Q6 `C` · Q7 `B` · Q8 `A` · Q9 `A` · Q10 "something to mention: ways of connecting must not be empty, user have to fill something."
+**AI Response**: "Eight answers recorded as final. Created u4-connections-clarification-questions.md — one contradiction with an approved Must story and two ambiguities. Did NOT generate artifacts."
+**Context**: CONSTRUCTION — U4 Functional Design Part 1, blocked on clarification.
+
+**Recorded as final**: Q1 `C` (inbox redesigned from scratch) · Q2 `C` (**threshold 3 → 2**) · Q4 `C` (no attendance deadline, prompt ages) · Q5 `A` (**rating comments stored but NEVER displayed** in Round 1) · Q6 `C` (notifications screen + inbox; badge counts unread REQUESTS only) · Q7 `B` (a Telegram ID entered at request time is used once, not saved) · Q8 `A` (**both pure rules extracted**, repository calls them) · Q9 `A` (seed extended).
+
+**⚠️ CONTRADICTION — Q10 DELETES AN APPROVED MUST STORY. Not implemented.**
+*"ways of connecting must not be empty, user have to fill something"* directly contradicts **US-32 — "Send a request sharing nothing"** (Must, FR-31), whose criteria require the «هیچ‌کدام» option to exist AND to be shown with EQUAL VISUAL WEIGHT — *"never de-emphasized, greyed, or hidden behind 'more options'"*.
+
+**Why this is not an edit but a re-decision.** AR-02 accepts that contact details go out immediately, to a stranger, with no approval gate, unrecallable. That acceptance rests on TWO mitigations: the US-31 disclosure, and the fact that a cautious person can participate WITHOUT disclosing anything. `stories.md` says so directly in the abuse analysis — *"the strongest argument for keeping the 'share nothing' option prominent (US-32)"*, immediately after noting that blocking in Link does not block Telegram. Remove the second mitigation and **every join request in the product becomes a mandatory disclosure of a real phone number to an unvetted stranger** — a materially different risk posture from the one accepted. Also stated plainly in the clarification file: the person most likely to want to attend and not hand over her number is a woman evaluating a stranger's activity in Tehran, and US-32 was written for her.
+
+**The instinct behind it may still be right** — a request with no note and no contact is unactionable for the poster. Offered option B (require a NOTE when sharing nothing) and C (state the consequence at send time), both of which address that without retiring the story. Option D retires US-32 openly as a change request rather than by side effect.
+
+**⚠️ AMBIGUITY — the 5-per-day limit is ROUND-2 SCOPE pulled forward.** Rate limiting is **US-34**, and `unit-of-work.md`'s U4 story list literally carries *"(US-34 rate limiting is Round 2)"*; FR-38 is recorded as a deferred AR-02 mitigation. The user may pull it forward, but **Round 1 has no backend**, so any limit is enforced in the browser against local storage and **a determined harvester clears storage and continues**. It stops accidental spam; it does not stop the attack AR-02 is about. Flagged BEFORE building so it is not later mistaken for a real defence.
+
+**AMBIGUITY — Q1 `C` discards the inbox tests.** The screen, agreed. But that file is barely a component test: most of it asserts, for EVERY user rather than a chosen one, that `sharedContact` reaches only its intended poster — at the repository boundary and on the rendered DOM. That is **INV-3**, whose single product-wide exception lives in this unit, and it already caught a real defect. Deleting the file is fine; deleting the ASSERTIONS would leave U4 rebuilding the one screen carrying the INV-3 exception with less coverage than the mock had.
+
+**NOT DONE**: no functional-design artifacts generated. Proceeding would have meant designing a contact-sharing flow while its most safety-relevant option was in dispute.
+
+---
