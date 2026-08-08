@@ -55,7 +55,7 @@ D) **Amend US-32 and re-open AR-02.** Contact sharing becomes mandatory. This is
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: E make a way so day can communicate through the platform itself, like poster can reply on request and the response to eachother in a page dedicated to requests(sent and recieved)
 
 ---
 
@@ -86,7 +86,7 @@ C) **Do not build it in Round 1.** Leave US-34 in Round 2 where it is recorded, 
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C
 
 ---
 
@@ -109,4 +109,4 @@ C) **Delete the file and its assertions.** U4 writes fresh coverage from US-40's
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A

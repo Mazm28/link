@@ -1456,3 +1456,27 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 **NOT DONE**: no functional-design artifacts generated. Proceeding would have meant designing a contact-sharing flow while its most safety-relevant option was in dispute.
 
 ---
+
+## U4 clarifications answered — CQ1 `E` REVERSES AN EXPLICITLY REJECTED FEATURE → CR-06
+**Timestamp**: 2026-08-08T05:00:00Z
+**User Input**: "done" — CQ1 `E` "make a way so day can communicate through the platform itself, like poster can reply on request and the response to eachother in a page dedicated to requests(sent and recieved)" · CQ2 `C` · CQ3 `A`
+**AI Response**: "CQ2 and CQ3 recorded as final. CQ1 `E` is in-app messaging — raised as CR-06 with five scoping questions rather than folded into U4's design."
+**Context**: CONSTRUCTION — U4 Functional Design Part 1, still blocked. No artifacts generated.
+
+**CQ2 `C` — the 5/day rate limit is NOT built in Round 1.** US-34 stays in Round 2 where `unit-of-work.md` records it. The limit will exist in exactly one place and be real when it appears, rather than existing twice with the Round-1 copy bypassable by clearing localStorage.
+
+**CQ3 `A` — the INV-3 assertions are rewritten into U4's own suite.** The mock's test file goes with the mock; the checks survive at least as strong — every user, on the wire, plus FR-35's asymmetry.
+
+**⚠️ CQ1 `E` IS IN-APP MESSAGING, WHICH WAS NOT MERELY ABSENT BUT AUDITED FOR.** `requirements.md` AR-04 records "No in-app chat" as **"Deliberate product philosophy — the app is an introduction layer"**, from Q5 and CQ5. `stories.md`'s own validation checklist reads: *"✅ No story reintroduces a rejected feature — verified absent: **in-app chat**, friend/follow graph, GPS or device location, push notifications, approval gate on join requests, age verification."* This is that audit item returning. Legitimate — but it belongs in the open, as a requirements change, not inside U4's functional design.
+
+**THE IDEA IS GOOD AND I SAID SO.** It dissolves the very problem that produced Clarification 1: a request sharing nothing is unactionable, so «هیچ‌کدام» is a dead end. With a thread it stops being one — a cautious person takes part, talks, and decides LATER whether to hand over a number. **That is a BETTER safety posture than AR-02 accepted**, not a worse one: disclosure stops being the price of entry. It also gives U6 something to investigate — `stories.md` currently says of harassment *"there is no in-app chat (AR-04), so the platform has no record of what happened"*, and US-70's report form is shaped around that absence.
+
+**⚠️ THE OBJECTION THAT MATTERS IS NOT EFFORT — IT IS THAT MESSAGING CANNOT WORK IN ROUND 1, AND CONTACT EXCHANGE CAN.** Round 1 has no backend; the whole store is ONE browser's localStorage. A phone number reaching the poster's screen is real — a person can dial it today. A message written in one browser reaches nobody and can only be demonstrated as a thread talking to itself inside a single browser. **Replacing contact exchange with messaging in Round 1 would make the product LESS functional, not more.** Recorded as the argument against CR-06 Q1 option `C`.
+
+**Also flagged**: it is a subsystem, not a screen (message entity, thread identity, per-participant read state, notification kind, blocking semantics, schema v4); it is a harassment surface U6 must then cover; and it touches four upstream artifacts — `requirements.md` (AR-04 and AR-02's mitigation set), `stories.md` (new story, US-32/US-41 amended, the rejected-feature checklist corrected), `application-design/`, and `unit-of-work.md` (U4 and U6 scope).
+
+**Recommended CR-06 Q1 `B`**: build messaging AND keep contact exchange, with «هیچ‌کدام» becoming the recommended path. Round 1 still delivers something that works end to end, and the messaging surface is real code waiting for a backend rather than a promise.
+
+**NOT DONE**: no U4 functional-design artifacts. Designing a contact-sharing flow while the existence of contact sharing is undecided would be work thrown away.
+
+---
