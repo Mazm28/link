@@ -719,9 +719,17 @@ interface RequestSeed {
   seq?: 1 | 2;
 }
 
-/** Eighteen requests spanning upcoming and past activities, with all three
- *  share kinds represented — including several `none`, because "share nothing"
- *  has to be a real and visible option (FR-31), not a theoretical one. */
+/** Requests spanning upcoming and past activities.
+ *
+ * ⚠️ THE `none` ROWS ARE LEGACY AND ARE KEPT ON PURPOSE (CR-07 Q3 `A`).
+ * They were written when US-32 — "send a request sharing nothing" — was a
+ * Must story. CR-07 retired it and made sharing mandatory, so NO new request
+ * can produce `kind: 'none'` any more. These rows are the only proof that the
+ * legacy render path still works, and deleting them would mean the poster-side
+ * copy for "shared no contact" is never exercised again.
+ *
+ * U4 additions at the end make every state of the loop reachable without
+ * setting it up by hand (answer Q9 `A`). */
 const REQUEST_SEEDS: RequestSeed[] = [
   { n: '01', activity: '01', requester: '03', contact: 'telegram', note: 'تا حالا بازی نکردم ولی خیلی دوست دارم شروع کنم.' },
   { n: '02', activity: '01', requester: '07', contact: 'phone', note: 'میزت جا داره؟' },
@@ -745,6 +753,33 @@ const REQUEST_SEEDS: RequestSeed[] = [
   { n: '16', activity: '19', requester: '06', contact: 'none' },
   { n: '17', activity: '20', requester: '11', contact: 'phone' },
   { n: '18', activity: '20', requester: '10', contact: 'telegram' },
+
+  /* ---------------------------------------------- U4, answer Q9 `A` -------
+   * Every remaining state of the loop, reachable on first load rather than
+   * after ten minutes of clicking. Each row exists to make ONE state visible.
+   */
+
+  /* BR-U4-33 — the one allowed RE-REQUEST. سینا withdrew from activity 08 and
+   * came back. Withdrawing this one is TERMINAL, so the exhausted path is
+   * demoable by pressing withdraw once. */
+  { n: '19', activity: '08', requester: '05', contact: 'phone', seq: 2, note: 'ببخشید، دوباره پشیمان شدم — این بار حتماً می‌آیم.' },
+
+  /* ⚠️ NOTHING ELSE WAS ADDED, because nothing else was missing.
+   *
+   * Two rows were drafted here for the other states Q9 asked for and then
+   * removed: the seed ALREADY reaches them, and one of the drafts was
+   * factually wrong — it claimed الهام (08) was unconfirmed on activity 21
+   * while `buildAttendance` confirms her as attended.
+   *
+   *   BR-U4-54 UNCONFIRMED (no attendance row at all)
+   *     → request 16 (مریم on activity 19) and request 18 (شیما on 20).
+   *       Both requested, neither has a row. The poster sees «تأیید نشده».
+   *
+   *   BR-U4-61 not_confirmed_attendee via CONFIRMED ABSENT
+   *     → attendance rows 23/06 and 21/12, both `attended: false`.
+   *
+   * Adding duplicates would have made the seed larger and the demo no more
+   * complete, while burying the rows that actually carry those states. */
 ];
 
 function buildRequests(now: Date, users: User[]): JoinRequest[] {

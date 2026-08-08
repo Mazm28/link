@@ -376,6 +376,107 @@ export const fa = {
   'requests.forActivity': 'برای:',
   'requests.oneWay': 'اطلاعات تماس تو برای این شخص فرستاده نشده است.',
 
+  /* =============================================== U4 — Connections =====
+   * ⚠️ THE DISCLOSURE BLOCK BELOW IS THE SINGLE MOST IMPORTANT COPY IN THIS
+   * PRODUCT. It is quoted VERBATIM from stories.md US-31 and business-rules.md
+   * BR-U4-20/22. Do not reword it, shorten it, soften it, or "improve" it.
+   *
+   * US-31 is the primary mitigation for AR-02 — contact details go out
+   * immediately, to a stranger, with no approval gate, and cannot be recalled.
+   * stories.md states that if this disclosure is weakened, watered down, or
+   * made dismissible, THE RISK ACCEPTANCE NO LONGER HOLDS and must be
+   * revisited. CR-07 made it more load-bearing still by retiring US-32, the
+   * option to share nothing.
+   * =================================================================== */
+
+  /* -------------------------------------------------- join request (US-30) */
+  'join.title': 'پیوستن به «{{title}}»',
+  'join.noteLabel': 'یادداشت (اختیاری)',
+  'join.notePlaceholder': 'چیزی که دوست داری میزبان بداند…',
+  'join.shareQuestion': 'چه راه تماسی به اشتراک می‌گذاری؟',
+  'join.sharePhone': 'شماره تلفن',
+  'join.shareTelegram': 'آی‌دی تلگرام',
+  'join.telegramPrompt': 'آی‌دی تلگرامت را وارد کن',
+  'join.telegramHint': 'این آی‌دی فقط برای همین درخواست استفاده می‌شود و در پروفایلت ذخیره نمی‌شود.',
+  'join.submit': 'ارسال درخواست',
+  'join.cancel': 'انصراف',
+  'join.sent': 'درخواستت فرستاده شد.',
+
+  /* ⚠️ VERBATIM — BR-U4-20. The warning, first and unchanged. */
+  'join.disclosure':
+    'این اطلاعات بلافاصله برای میزبان ارسال می‌شود. میزبان فردی ناشناس است و درخواست شما را تأیید نکرده است. پس از ارسال، امکان پس‌گرفتن آن وجود ندارد.',
+  /* ⚠️ VERBATIM — BR-U4-22. AFTER the warning, never before it. Leading with
+   * "sharing is required" frames the screen as a demand and invites skimming
+   * past the warning, which IS the weakening US-31 prohibits. */
+  'join.disclosureRequired': 'برای پیوستن به این فعالیت، اشتراک‌گذاری یکی از راه‌های تماس الزامی است.',
+
+  /* ------------------------------------------- join refusals (BR-U4-30…36) */
+  'join.errorDuplicate': 'قبلاً برای این فعالیت درخواست فرستاده‌ای.',
+  'join.errorRerequestExhausted': 'یک بار درخواستت را پس گرفتی و دوباره فرستادی. امکان درخواست دوباره وجود ندارد.',
+  'join.errorNotUpcoming': 'این فعالیت دیگر پذیرای درخواست نیست.',
+  'join.errorOwnActivity': 'این فعالیت خودت است.',
+  'join.errorDailyLimit': 'امروز به سقف ۵ درخواست رسیده‌ای. فردا دوباره تلاش کن.',
+  'join.errorNoPhone': 'شماره‌ای در پروفایلت ثبت نشده است.',
+  'join.errorNoTelegram': 'آی‌دی تلگرامی ثبت نشده است. همین‌جا واردش کن.',
+  'join.errorTelegramFormat': 'آی‌دی تلگرام باید بین ۵ تا ۳۲ نویسه و شامل حروف انگلیسی، عدد یا زیرخط باشد.',
+  'join.errorSharingRequired': 'برای فرستادن درخواست باید یک راه تماس انتخاب کنی.',
+
+  /* ------------------------------------------------ sent requests (US-33) */
+  'sent.title': 'درخواست‌های فرستاده‌شده',
+  'sent.tabIncoming': 'دریافتی',
+  'sent.tabSent': 'ارسالی',
+  'sent.shared': 'آنچه به اشتراک گذاشتی:',
+  'sent.withdraw': 'پس گرفتن درخواست',
+  'sent.emptyTitle': 'هنوز درخواستی نفرستاده‌ای',
+  'sent.emptyBody': 'وقتی به فعالیتی درخواست بدهی، اینجا پیدایش می‌کنی.',
+  /* ⚠️ BR-U4-42 — HONEST. A withdrawal UI implying recall would be false, and
+   * US-33's notes say that is worse than not offering withdrawal at all. */
+  'sent.withdrawWarning':
+    'این کار اطلاعاتی را که فرستاده‌ای پس نمی‌گیرد. میزبان ممکن است آن را دیده و ذخیره کرده باشد.',
+  'sent.withdrawConfirm': 'بله، پس می‌گیرم',
+  'sent.stateSent': 'فرستاده‌شده',
+  'sent.stateWithdrawn': 'پس گرفته شده',
+
+  /* ------------------------------------------------- attendance (US-50) */
+  'attendance.title': 'تأیید حضور',
+  'attendance.subtitle': 'چه کسانی واقعاً آمدند؟',
+  'attendance.present': 'حاضر بود',
+  'attendance.absent': 'حاضر نبود',
+  /* ⚠️ BR-U4-54 — the third state. NOT "absent". */
+  'attendance.unreviewed': 'تأیید نشده',
+  'attendance.save': 'ذخیره',
+  'attendance.notYet': 'تأیید حضور پس از برگزاری فعالیت ممکن است.',
+  'attendance.empty': 'کسی برای این فعالیت درخواست نداده بود.',
+  'attendance.saved': 'حضور ثبت شد. حالا می‌توانید به هم امتیاز بدهید.',
+
+  /* ----------------------------------------------------- rating (US-51/52) */
+  'rating.title': 'امتیاز به {{name}}',
+  'rating.score': 'امتیاز',
+  'rating.commentLabel': 'توضیح (اختیاری)',
+  /* ⚠️ BR-U4-72 — comments are STORED AND NEVER DISPLAYED in Round 1. This
+   * placeholder must not hint at an audience, because there is none. */
+  'rating.commentPlaceholder': 'برای خودت یادداشت کن…',
+  'rating.submit': 'ثبت امتیاز',
+  'rating.done': 'امتیازت ثبت شد.',
+  'rating.noneRateable': 'کسی برای امتیازدهی در این فعالیت نیست.',
+  /* Per-reason refusals — BR-U4-61. Deliberately different sentences. */
+  'rating.refusedNotPast': 'امتیازدهی پس از برگزاری فعالیت ممکن است.',
+  'rating.refusedUnreviewed': 'میزبان هنوز حضور را تأیید نکرده است.',
+  'rating.refusedAbsent': 'حضور تو در این فعالیت تأیید نشده است.',
+  'rating.refusedAlready': 'قبلاً به این شخص برای این فعالیت امتیاز داده‌ای.',
+  'rating.refusedSelf': 'به خودت نمی‌توانی امتیاز بدهی.',
+  'rating.refusedNotParticipant': 'این شخص در این فعالیت شرکت نداشته است.',
+
+  /* ------------------------------------------------ notifications (FR-70) */
+  'notifications.title': 'اعلان‌ها',
+  'notifications.emptyTitle': 'اعلانی نداری',
+  'notifications.emptyBody': 'وقتی خبری باشد، اینجا می‌بینی‌اش.',
+  'notifications.requestReceived': 'یک درخواست تازه دریافت کردی.',
+  'notifications.requestWithdrawn': 'یک درخواست پس گرفته شد.',
+  'notifications.activityCancelled': 'فعالیتی که درخواست داده بودی لغو شد.',
+  'notifications.attendanceDue': 'تأیید حضور برای یکی از فعالیت‌هایت مانده است.',
+  'notifications.ratingReceived': 'امتیاز تازه‌ای گرفتی.',
+
 } as const;
 
 export type MessageKey = keyof typeof fa;

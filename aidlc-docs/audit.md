@@ -1592,3 +1592,27 @@ It then caught a **second** difference on the next run: the oracle sent `{kind:'
 **Rating logic is now DELEGATED, not duplicated.** `listRateableParticipants` calls `rateableParticipants`, which is built on `canRate`; `submitRating` calls `canRate` directly and refuses with its typed reason. The inline copy is gone rather than left alongside — two copies would disagree at the edges, which is where it matters.
 
 ---
+
+## U4 Part 2 — checkpoint 2 (steps 12–17, 21–23)
+**Timestamp**: 2026-08-09T00:45:00Z
+**Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
+
+**Done**: `connectionService` and `notificationService` · seed reviewed and extended · ~60 Persian keys.
+
+**⚠️ THE SEED "EXTENSION" WAS MOSTLY A CORRECTION, AND ONE DRAFT ROW WAS FACTUALLY WRONG.** Answer Q9 `A` asked for every state of the loop to be reachable without setup. Two of the three rows I drafted were unnecessary — the seed already reaches those states — and one **contradicted the existing data**: it claimed الهام (08) was unconfirmed on activity 21 while `buildAttendance` confirms her as `attended: true`. Had it shipped, the seed would have asserted two different things about the same person and the demo would have shown the opposite of what the comment promised.
+
+What the seed already had, now documented in place rather than duplicated: **BR-U4-54 unconfirmed** (requests 16 and 18 — مریم on activity 19, شیما on 20, both requested, neither has an attendance row) and **confirmed absent** (attendance rows 23/06 and 21/12). Only ONE row was genuinely added: **request 19, the `requestSeq: 2` re-request**, which no existing data reached.
+
+Adding the other two would have made the seed larger and the demo no more complete, while burying the rows that actually carry those states.
+
+**The legacy `'none'` rows are annotated, not removed** (CR-07 Q3 `A`): they are the only remaining proof that the poster-side "shared no contact" copy still renders, since no new request can produce that state.
+
+**`notificationService.unreadRequestCount` computes the badge itself rather than delegating to `repository.getUnreadCount`**, which counts everything. BR-U4-102 says the badge counts unread REQUESTS only — US-40 calls it the entire retention mechanism for the poster persona, and two different numbers under one name is how a badge starts lying.
+
+**`connectionService.submitRating` deliberately does NOT pre-check `canRate`.** The repository re-runs it before writing; a second copy in the service would be a second place for it to drift, and the write is the only check that matters.
+
+**The disclosure strings are quoted verbatim** from `stories.md` US-31 and BR-U4-20/22, under a comment block stating that rewording them re-opens AR-02's risk acceptance. `join.disclosureRequired` is stored as a separate key so the ORDER — warning first — is a property of the component and visible in review.
+
+**Gates**: typecheck clean · lint clean · **267/267**.
+
+---
