@@ -42,6 +42,31 @@ export function buildBlockIndex(blocks: readonly Block[]): BlockIndex {
   };
 }
 
+
+/**
+ * U6 / BR-U6-30 — ⚠️ THE SINGLE PREDICATE EVERY U6 READ PATH USES.
+ *
+ * "Is `otherId` invisible to `viewerId`?" — true when a block exists in either
+ * direction. `buildBlockIndex` already links both ways, so this needs no
+ * direction logic of its own.
+ *
+ * ⚠️ One predicate, nine call sites, on purpose. US-72's criterion is that a
+ * blocked person is absent from EVERY read path, and nine hand-written
+ * comparisons are nine chances for one of them to be subtly different. If the
+ * rule ever changes it changes here, and P-U6-01 covers all nine at once.
+ *
+ * A null viewer (signed out) hides nobody: there is no block set to consult,
+ * and returning true would empty every public read.
+ */
+export function isHiddenFrom(
+  viewerId: UserId | null,
+  otherId: UserId,
+  blocks: BlockIndex,
+): boolean {
+  if (viewerId === null) return false;
+  return blocks.has(viewerId, otherId);
+}
+
 /** True when no block exists in EITHER direction between the two users. */
 export function isMutuallyUnblocked(x: UserId, y: UserId, blocks: BlockIndex): boolean {
   return !blocks.has(x, y);

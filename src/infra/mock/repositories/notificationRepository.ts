@@ -1,14 +1,52 @@
 import { NotificationIdCodec, type Notification, type UserId } from '@core/domain';
 import type { CreateNotificationInput, NotificationRepository } from '@core/repositories';
+import { isHiddenFrom } from '@core/rules/visibility';
 import type { MockContext } from './context';
 
 export function createNotificationRepository(ctx: MockContext): NotificationRepository {
+  /**
+   * U6 / BR-U6-30 — is this notification about someone the viewer has blocked?
+   *
+   * ⚠️ Payloads carry IDS ONLY (NFR-S1, BR-U4-92), so the originating person is
+   * resolved through the store rather than read off the notification. That is
+   * the point of the ids-only rule, and this is the first consumer to depend
+   * on it.
+   *
+   * ⚠️ `rating_received` IS DELIBERATELY NOT FILTERED, and that is not an
+   * oversight. Its payload carries only an activity id, and ratings are NEVER
+   * ATTRIBUTED to their author anywhere in the product (BR-U4-71, US-53) — so
+   * "you received a rating" discloses nothing whatsoever about who wrote it.
+   * There is no blocked person to hide, because the notification never names
+   * one. Filtering it would require storing the rater's id in the payload,
+   * which would put an attribution into the system purely to hide it again.
+   */
+  const isFromHidden = (n: Notification, viewerId: UserId): boolean => {
+    const blocks = ctx.blockIndexFor();
+    const state = ctx.store.read();
+
+    const requestId = n.payload['requestId'];
+    if (requestId !== undefined) {
+      const request = state.joinRequests.find((r) => String(r.id) === requestId);
+      if (request) return isHiddenFrom(viewerId, request.requesterId, blocks);
+    }
+
+    const activityId = n.payload['activityId'];
+    if (activityId !== undefined && n.kind === 'activity_cancelled') {
+      const activity = state.activities.find((a) => String(a.id) === activityId);
+      if (activity) return isHiddenFrom(viewerId, activity.authorId, blocks);
+    }
+
+    return false;
+  };
+
   return {
     async list(userId: UserId): Promise<Notification[]> {
       await ctx.delay();
       return ctx.store
         .read()
         .notifications.filter((n) => n.userId === userId)
+        /* U6 / BR-U6-30 — filtered before the sort and before return. */
+        .filter((n) => !isFromHidden(n, userId))
         .sort((x, y) => y.createdAt.localeCompare(x.createdAt));
     },
 
@@ -18,7 +56,9 @@ export function createNotificationRepository(ctx: MockContext): NotificationRepo
       await ctx.delay();
       return ctx.store
         .read()
-        .notifications.filter((n) => n.userId === userId && n.readAt === undefined).length;
+        .notifications.filter(
+          (n) => n.userId === userId && n.readAt === undefined && !isFromHidden(n, userId),
+        ).length;
     },
 
     async markRead(userId: UserId, ids: string[]): Promise<void> {

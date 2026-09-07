@@ -9,7 +9,7 @@ import type {
   UserId,
 } from '@core/domain';
 import type { ActivityFilters } from '@core/repositories';
-import { buildBlockIndex, filterVisibleActivities } from '@core/rules/visibility';
+import { isHiddenFrom, buildBlockIndex, filterVisibleActivities } from '@core/rules/visibility';
 import { projectActivity } from '@core/rules/projection';
 import { deriveState } from '@core/rules/activityLifecycle';
 import { projectProfile } from '@core/rules/projection';
@@ -74,9 +74,32 @@ export class MockContext {
     return buildBlockIndex(this.store.read().blocks);
   }
 
-  ratingSummary(userId: UserId): RatingSummary {
+  /**
+   * ⚠️ U6 / AR-05 — VIEWER-SCOPED. The aggregate excludes ratings written by
+   * anyone the VIEWER has blocked (in either direction).
+   *
+   * ⚠️ `viewerId` IS REQUIRED, NOT OPTIONAL, and that is the design decision.
+   * A defaulted viewer would let a forgotten call site silently return an
+   * UNFILTERED summary — a filter that fails silently is worse than one that
+   * fails loudly. Required means the compiler enumerates every call site, the
+   * same discipline `areaOf(neighborhoodId)` used in U3 to make a
+   * coordinate-derived area unwriteable.
+   *
+   * ⚠️ THIS IS NOW A FUNCTION OF (subject, viewer), SO IT MUST NOT BE
+   * MEMOIZED BY SUBJECT ID ALONE. Caching on the subject would serve one
+   * person's filtered average to somebody else — a cross-viewer leak.
+   *
+   * ⚠️ AR-05 is an ACCEPTED RISK, not an oversight: this makes blocking a way
+   * to suppress an unfavourable rating (rate 1 star → get blocked → the
+   * average rises, repeatable). Accepted for maximum separation. Round 2 must
+   * recompute the public aggregate server-side WITHOUT blocks applied.
+   */
+  ratingSummary(userId: UserId, viewerId: UserId | null): RatingSummary {
     const { ratings, attendance } = this.store.read();
-    const received = ratings.filter((r) => r.subjectId === userId);
+    const blocks = this.blockIndexFor();
+    const received = ratings.filter(
+      (r) => r.subjectId === userId && !isHiddenFrom(viewerId, r.raterId, blocks),
+    );
     const attended = attendance.filter((a) => a.participantId === userId && a.attended).length;
     const count = received.length;
 
@@ -97,8 +120,8 @@ export class MockContext {
    * For rendering an AUTHOR. Never null — a feed must not crash because one
    * author record is missing or incomplete.
    */
-  profileOf(userId: UserId): ProfileView {
-    return this.profileOrNull(userId) ?? this.missingProfile(userId);
+  profileOf(userId: UserId, viewerId: UserId | null): ProfileView {
+    return this.profileOrNull(userId, viewerId) ?? this.missingProfile(userId);
   }
 
   /**
@@ -109,14 +132,17 @@ export class MockContext {
    * fall back to the placeholder would publish «—» as a real profile for every
    * abandoned half-registration.
    */
-  profileOrNull(userId: UserId): ProfileView | null {
+  profileOrNull(userId: UserId, viewerId: UserId | null): ProfileView | null {
     const user = this.findUser(userId);
     if (!user) return null;
+
+    /* U6 / BR-U6-31 — a blocked user has no public profile for this viewer. */
+    if (isHiddenFrom(viewerId, userId, this.blockIndexFor())) return null;
 
     const venue = this.store.read().venues.find((v) => v.ownerUserId === userId);
     return projectProfile(
       user,
-      this.ratingSummary(userId),
+      this.ratingSummary(userId, viewerId),
       venue?.verificationStatus === 'approved',
     );
   }
@@ -193,7 +219,7 @@ export class MockContext {
 
     // 6. PROJECT — viewer-scoped views (INV-2, INV-3)
     const items = slice.map((activity) =>
-      projectActivity(activity, this.profileOf(activity.authorId), params.viewerId, now, {
+      projectActivity(activity, this.profileOf(activity.authorId, params.viewerId), params.viewerId, now, {
         viewerHasRequested: this.hasRequested(params.viewerId, activity.id),
         requestCount: this.requestCount(activity.id),
       }),

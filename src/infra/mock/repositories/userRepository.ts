@@ -15,14 +15,16 @@ export function createUserRepository(ctx: MockContext): UserRepository {
     /** INV-3/INV-4: returns a ProfileView, which structurally cannot carry
      *  `phone` or `telegramId`. The viewer parameter is required by the
      *  signature even though Round 1 does not vary the result by viewer —
-     *  U6 will, once blocking hides profiles. */
-    async getProfile(_viewerId: UserId | null, userId: UserId): Promise<ProfileView | null> {
+     *  U6 DOES: a blocked user has no public profile for this viewer. */
+    async getProfile(viewerId: UserId | null, userId: UserId): Promise<ProfileView | null> {
       await ctx.delay();
       /* Null for an unknown user AND for one who has not completed setup
        * (BR-U2-32). `profileOrNull` is the version that tells the truth;
        * `profileOf` exists only so a feed can render a missing author without
        * crashing. */
-      return ctx.profileOrNull(userId);
+      /* U6 / BR-U6-31 — `profileOrNull` now returns null for a blocked user,
+       * so the viewer is load-bearing rather than decorative. */
+      return ctx.profileOrNull(userId, viewerId);
     },
 
     /**

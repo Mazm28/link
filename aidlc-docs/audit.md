@@ -1877,3 +1877,29 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **§6 records six things the plan deliberately does NOT do** — no moderation console, no account suspension, no automatic action on report volume, no CR-08 Part B, no deletion on block, no schema change. Stated so a later session does not add them believing they were forgotten.
 
 ---
+
+## ✅ U6 Code Generation Part 1 APPROVED — Part 2 started
+**Timestamp**: 2026-08-09T06:00:00Z
+**User Input**: "approve"
+**AI Response**: "Plan approved. Executing all 27 steps."
+**Context**: CONSTRUCTION — U6 Code Generation Part 2 in progress.
+
+## U6 Part 2 — checkpoint 1 (steps 1–13: the filter)
+**Timestamp**: 2026-08-09T06:30:00Z
+**Context**: CONSTRUCTION — U6 Code Generation Part 2 in progress.
+
+**Done**: `ReportReason` union · `isHiddenFrom` · **all nine read paths now filter blocks**.
+
+**⚠️ THE REQUIRED-PARAMETER DISCIPLINE WORKED EXACTLY AS PLANNED.** Making `viewerId` required on `ratingSummary` produced **7 compile errors naming every call site**, so the refactor was enumerated by the compiler rather than by memory. A defaulted parameter would have left any missed site silently returning an UNFILTERED summary — the failure mode being invisible is what makes it dangerous.
+
+**⚠️ ONE PLACE MUST NOT FILTER, AND IT IS THE OBVIOUS TRAP**: `listBlocks` passes a **null viewer** deliberately. It is the one surface where a blocked person MUST remain visible — it is the list you unblock them from. Passing the real viewer would filter them out, the list would be permanently empty, and **unblocking would be unreachable**. Commented in place, because "why does this one skip the filter" is exactly the question a later reader will try to fix.
+
+**⚠️ `rating_received` NOTIFICATIONS ARE DELIBERATELY NOT FILTERED, and this is reasoned rather than skipped.** Their payload carries only an activity id, and ratings are NEVER ATTRIBUTED anywhere in the product (BR-U4-71, US-53) — so "you received a rating" discloses nothing about who wrote it. There is no blocked person to hide because the notification never names one. **Filtering it would require storing the rater's id in the payload — putting an attribution into the system purely to hide it again.** Recorded in the code so the gap reads as a decision.
+
+**Notification filtering is the first consumer to depend on the ids-only payload rule** (NFR-S1, BR-U4-92): the originating person is resolved through the store rather than read off the notification, which is precisely what that rule was for.
+
+**⚠️ THE U1 ORACLE CAUGHT THE CHANGE — THIRD TIME THIS SESSION.** P-U1-14 failed the moment `listRequestsForActivity` began filtering blocks, with a one-command counterexample (`block 01↔07`). **A deliberate behaviour change announcing itself, not a defect — the MODEL was updated, not the code.** The model already tracked blocks for duplicate-refusal; it simply had not applied them to visibility, because until U6 nothing did. The two earlier catches were CR-07's `'none'` refusal and the Telegram format rule.
+
+**Gates**: typecheck clean · lint clean · **290/290**.
+
+---

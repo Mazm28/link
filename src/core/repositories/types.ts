@@ -11,6 +11,7 @@ import type {
   NotificationKind,
   PromotionState,
   RecurrenceRule,
+  ReportReason,
   ReportSubjectKind,
   UserId,
   VenueId,
@@ -146,7 +147,8 @@ export interface VenuePublicView {
 
 export interface ReportInput {
   subjectKind: ReportSubjectKind;
-  reasonCode: string;
+  /** U6 / BR-U6-41 — narrowed from `string`. See `ReportReason`. */
+  reasonCode: ReportReason;
   detail?: string;
   evidenceUrls?: string[];
   relatedActivityId?: ActivityId;

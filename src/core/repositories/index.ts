@@ -216,7 +216,12 @@ export interface ConnectionRepository {
     comment?: string;
   }): Promise<Rating>;
 
-  getRatingSummary(userId: UserId): Promise<RatingSummary>;
+  /** ⚠️ U6 / AR-05 — VIEWER-SCOPED. The aggregate excludes ratings written by
+   *  anyone the viewer has blocked, so this is a function of (subject, viewer)
+   *  and MUST NOT be cached by subject id alone. `viewerId` is required, not
+   *  optional: a default would let a caller silently receive an unfiltered
+   *  summary, and a filter that fails silently is worse than one that fails. */
+  getRatingSummary(userId: UserId, viewerId: UserId | null): Promise<RatingSummary>;
 }
 
 export interface VenueRepository {

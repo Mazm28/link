@@ -264,7 +264,20 @@ describe('mock repositories — oracle and invariant properties', () => {
             actual.filter((r) => r.status === 'sent').map((r) => String(r.requester.id)),
           );
 
-          expect([...actualLive].sort()).toEqual([...model.live(activityId)].sort());
+          /* ⚠️ AMENDED BY U6 (BR-U6-30). The oracle caught this the moment
+           * `listRequestsForActivity` began filtering blocks — a DELIBERATE
+           * behaviour change announcing itself, which is the oracle's job.
+           * The MODEL was updated, not the code. (Third time this has
+           * happened: CR-07's `'none'` refusal and the Telegram format rule
+           * were the first two.)
+           *
+           * The model already tracked blocks for duplicate-refusal; it simply
+           * did not apply them to visibility, because until U6 nothing did. */
+          const expectedLive = [...model.live(activityId)].filter(
+            (requesterId) => !model.isBlocked(author, requesterId),
+          );
+
+          expect([...actualLive].sort()).toEqual(expectedLive.sort());
         }
       }),
       { numRuns: 30 },

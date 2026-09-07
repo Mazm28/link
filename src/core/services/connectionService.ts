@@ -178,8 +178,12 @@ export function createConnectionService(repository: ConnectionRepository) {
       return toResult(() => repository.submitRating(input));
     },
 
-    async getRatingSummary(userId: UserId): Promise<Result<RatingSummary, AppError>> {
-      return toResult(() => repository.getRatingSummary(userId));
+    /** ⚠️ U6 / AR-05 — viewer-scoped; see the repository interface. */
+    async getRatingSummary(
+      userId: UserId,
+      viewerId: UserId | null,
+    ): Promise<Result<RatingSummary, AppError>> {
+      return toResult(() => repository.getRatingSummary(userId, viewerId));
     },
   };
 }

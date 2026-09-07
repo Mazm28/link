@@ -316,14 +316,35 @@ export interface Rating {
   createdAt: string;
 }
 
+/**
+ * U6 / BR-U6-41 — the report taxonomy. Was `string` on `Report.reasonCode`
+ * with the note "Taxonomy is defined in U6"; this is that definition.
+ *
+ * ⚠️ `harvesting` IS DELIBERATELY SEPARATE FROM `fake_activity`. They look
+ * alike and mean different things: `fake_activity` is a post about nothing,
+ * `harvesting` is a post DESIGNED to extract contact details (AB-01). AR-02
+ * says to "monitor for harvesting patterns after launch", and monitoring needs
+ * a code it can count — folding the two together would hide the exact signal
+ * the accepted risk asks us to watch. Under CR-07 every requester must now
+ * disclose, so this is the highest-value code in the set.
+ *
+ * ⚠️ `other` is kept on purpose. A taxonomy with no escape hatch makes people
+ * pick the nearest wrong box, which corrupts the categories that matter.
+ */
+export type ReportReason =
+  | 'harassment'
+  | 'harvesting'
+  | 'fake_activity'
+  | 'spam'
+  | 'other';
+
 export interface Report {
   id: ReportId;
   reporterId: UserId;
   subjectKind: ReportSubjectKind;
   subjectUserId?: UserId;
   subjectActivityId?: ActivityId;
-  /** Taxonomy is defined in U6. */
-  reasonCode: string;
+  reasonCode: ReportReason;
   /**
    * Free text. Because there is no in-app chat (AR-04), this and
    * `evidenceUrls` are the ONLY evidence moderation will ever have about

@@ -18,17 +18,18 @@ import { ErrorCode, refusal } from '@core/errors';
 import type { ConnectionRepository } from '@core/repositories';
 import { deriveState } from '@core/rules/activityLifecycle';
 import { projectActivity } from '@core/rules/projection';
-import { canSendRequestTo } from '@core/rules/visibility';
+import { canSendRequestTo, isHiddenFrom } from '@core/rules/visibility';
 import { validateShareSelection } from '@core/rules/contactSharing';
 import { canRate, rateableParticipants } from '@core/rules/ratingEligibility';
 import { canSendToday, recordSend } from '@core/rules/requestQuota';
 import type { MockContext } from './context';
 
 export function createConnectionRepository(ctx: MockContext): ConnectionRepository {
-  const toRequestView = (request: JoinRequest): JoinRequestView => ({
+  /** U6 — the viewer is required because `profileOf` now filters by blocks. */
+  const toRequestView = (request: JoinRequest, viewerId: UserId | null): JoinRequestView => ({
     id: request.id,
     activityId: request.activityId,
-    requester: ctx.profileOf(request.requesterId),
+    requester: ctx.profileOf(request.requesterId, viewerId),
     // THE single INV-3 exception, and it is scoped twice over: only on a
     // request, and only when the caller is the poster of the activity that
     // request targets. Both scopes are applied by the callers below.
@@ -186,7 +187,12 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
       // INV-3 scope: contact details are returned only to the poster of this
       // activity. Anyone else asking gets nothing at all, not a redacted list.
       if (!activity || activity.authorId !== posterId) return [];
-      return state.joinRequests.filter((r) => r.activityId === activityId).map(toRequestView);
+      /* U6 / BR-U6-30 — a blocked requester's request is absent entirely. */
+      const blocks = ctx.blockIndexFor();
+      return state.joinRequests
+        .filter((r) => r.activityId === activityId)
+        .filter((r) => !isHiddenFrom(posterId, r.requesterId, blocks))
+        .map((r) => toRequestView(r, posterId));
     },
 
     async listIncomingRequests(posterId: UserId): Promise<JoinRequestView[]> {
@@ -195,10 +201,15 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
       const mine = new Set(
         state.activities.filter((a) => a.authorId === posterId).map((a) => a.id),
       );
+      /* U6 / BR-U6-30 — filtered BEFORE the sort and before projection
+       * (BR-U6-32). A blocked person's request disappears from the inbox
+       * entirely (answer Q2 `A`). */
+      const blocks = ctx.blockIndexFor();
       return state.joinRequests
         .filter((r) => mine.has(r.activityId))
+        .filter((r) => !isHiddenFrom(posterId, r.requesterId, blocks))
         .sort((x, y) => y.createdAt.localeCompare(x.createdAt))
-        .map(toRequestView);
+        .map((r) => toRequestView(r, posterId));
     },
 
     /** FR-35 — `SentRequestView` has no field for the poster's contact
@@ -208,17 +219,20 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
       const state = ctx.store.read();
       const now = ctx.now();
 
+      /* U6 / BR-U6-30 — a sent request whose POSTER is blocked disappears. */
+      const blocks = ctx.blockIndexFor();
       return state.joinRequests
         .filter((r) => r.requesterId === requesterId)
         .flatMap((request): SentRequestView[] => {
           const activity = state.activities.find((a) => a.id === request.activityId);
           if (!activity) return [];
+          if (isHiddenFrom(requesterId, activity.authorId, blocks)) return [];
           return [
             {
               id: request.id,
               activity: projectActivity(
                 activity,
-                ctx.profileOf(activity.authorId),
+                ctx.profileOf(activity.authorId, requesterId),
                 requesterId,
                 now,
                 {
@@ -316,7 +330,10 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
         attendance: state.attendance,
         existingRatings: state.ratings,
         now: ctx.now(),
-      }).map((id) => ctx.profileOf(id));
+      })
+        /* U6 / BR-U6-30 — never offer a blocked person to rate. */
+        .filter((id) => !isHiddenFrom(actorId, id, ctx.blockIndexFor()))
+        .map((id) => ctx.profileOf(id, actorId));
     },
 
     /**
@@ -385,9 +402,12 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
       return rating;
     },
 
-    async getRatingSummary(userId: UserId): Promise<RatingSummary> {
+    /** ⚠️ U6 / AR-05 — viewer-scoped. Ratings from anyone the viewer has
+     *  blocked are excluded. See `ctx.ratingSummary` for why this must never
+     *  be memoized by subject id alone. */
+    async getRatingSummary(userId: UserId, viewerId: UserId | null): Promise<RatingSummary> {
       await ctx.delay();
-      return ctx.ratingSummary(userId);
+      return ctx.ratingSummary(userId, viewerId);
     },
   };
 }

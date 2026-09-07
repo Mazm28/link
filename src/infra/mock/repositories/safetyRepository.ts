@@ -102,7 +102,11 @@ export function createSafetyRepository(ctx: MockContext): SafetyRepository {
       return ctx.store
         .read()
         .blocks.filter((b) => b.blockerId === userId)
-        .map((b) => ctx.profileOf(b.blockedId));
+        /* ⚠️ NULL VIEWER, DELIBERATELY. This is the one place a blocked
+         * person MUST stay visible: it is the list you unblock them from.
+         * Passing the real viewer would filter them out — the list would be
+         * permanently empty and unblocking would be unreachable. */
+        .map((b) => ctx.profileOf(b.blockedId, null));
     },
 
     async getBlockIndex(_userId: UserId | null): Promise<BlockIndex> {
