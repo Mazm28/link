@@ -5,8 +5,7 @@ import { BIO_MAX, NAME_MAX, type FieldErrors, type SetupDraft } from '@core/rule
 import { Input } from '@ui/Input';
 import { TextArea } from '@ui/TextArea';
 import { AvatarPresetPicker } from './AvatarPresetPicker';
-import { InterestSelector } from './InterestSelector';
-import { CitySelector } from './CitySelector';
+import { CitySelector, InterestSelector } from '@features/reference';
 
 /**
  * The six profile fields, shared by setup (US-02) and edit (US-03).

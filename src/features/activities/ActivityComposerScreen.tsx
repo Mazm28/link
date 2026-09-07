@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useRepositories } from '@app/RepositoryProvider';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@app/SessionProvider';
-import { NeighborhoodSelector } from '@features/identity';
+import { NeighborhoodSelector } from '@features/reference';
 import type { ActivityId, CategoryId, LocationPrecision, NeighborhoodId } from '@core/domain';
 import { t, tError } from '@core/i18n';
 import { CATEGORIES } from '@core/reference/taxonomy';

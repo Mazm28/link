@@ -5,13 +5,10 @@ export { ProfileEditScreen } from './ProfileEditScreen';
 export { AccountDeletionFlow } from './AccountDeletionFlow';
 export { SafetyGuidanceScreen } from './SafetyGuidanceScreen';
 
-/* Exported for U3's filter panel (US-21, US-22) — both were built with the
- * props that reuse needs rather than being adapted later. */
-export { CitySelector } from './CitySelector';
-export type { CitySelectorProps } from './CitySelector';
-export { NeighborhoodSelector } from './NeighborhoodSelector';
-export type { NeighborhoodSelectorProps } from './NeighborhoodSelector';
-export { InterestSelector } from './InterestSelector';
-export type { InterestSelectorProps } from './InterestSelector';
+/* ⚠️ The three reference-data selectors USED to be re-exported here, and that
+ * is what created the import cycle the knowledge graph found: it made
+ * `features/activities` depend on `features/identity`, and CR-05's embedded
+ * MyActivitiesScreen closed the loop. They now live in `@features/reference`,
+ * which depends on neither. Do not re-add them here. */
 
 export { useIdentityServices } from './useIdentityServices';

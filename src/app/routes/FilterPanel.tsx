@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@ui/Button';
-import { NeighborhoodSelector } from '@features/identity';
+import { NeighborhoodSelector } from '@features/reference';
 import { Chip } from '@ui/Chip';
 import { JalaliDatePicker } from '@ui/JalaliDatePicker';
 import { Sheet } from '@ui/Sheet';

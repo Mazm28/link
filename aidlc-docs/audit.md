@@ -1721,3 +1721,25 @@ this is a similar project. describe difference we have from them and suggest wha
 **`graphify-out/` added to `.gitignore`** — a build artifact, regenerable, and `graph.json` alone is 1.7 MB.
 
 ---
+
+## Import cycles FIXED — selectors moved to features/reference
+**Timestamp**: 2026-08-09T03:40:00Z
+**User Input**: "fix those import cycles"
+**AI Response**: "Both cycles broken by moving the three reference-data selectors out of features/identity. Verified by rebuilding the graph: 'Import Cycles: None detected.'"
+**Context**: CONSTRUCTION — U4 awaiting approval. Module structure changed; no production logic changed.
+
+**ROOT CAUSE, not the symptom.** `NeighborhoodSelector`, `CitySelector` and `InterestSelector` were built in `features/identity` because signup needed them first, then re-exported for U3's filter panel — **the identity barrel admitted it in a comment**: *"Exported for U3's filter panel (US-21, US-22)"*. That single line made `features/activities` depend on `features/identity`. CR-05 then closed the loop by giving `ProfileScreen` an embedded `MyActivitiesScreen`.
+
+**Checked before moving**: all three selectors import ONLY `core/domain`, `core/i18n`, `core/reference`, `core/rules/persianText` and `ui/` primitives. **Zero identity dependencies** — they know nothing about users, sessions or profiles. They were misfiled, not entangled.
+
+**They cannot go in `ui/`.** DEP-3 forbids `ui/` from importing `@core/reference/**`, and reading the city / neighborhood / taxonomy datasets is what these components ARE. `features/reference/` is the correct home and stays inside the approved `src/{app,core,infra,ui,features}/` structure.
+
+**The cheaper fix was rejected**: changing `ProfileScreen` to import `MyActivitiesScreen` by file path instead of through the barrel would have silenced the cycle detector while leaving `activities → identity` and `identity → activities` both standing. That is hiding the arrow, not removing it.
+
+**Guards against recurrence**: `features/reference/index.ts` carries the cycle diagram and states it must never import a sibling feature; `features/identity/index.ts` keeps a comment where the re-exports used to be, saying not to re-add them.
+
+**VERIFIED BY THE TOOL THAT FOUND THEM** — graph rebuilt from scratch: **"Import Cycles: None detected."** (was two.) 1093 nodes, 3524 edges.
+
+**Gates**: typecheck clean · lint clean · **290/290** · build 143.2 KB gzipped. `git mv` used, so the moves show as renames and the history follows the files.
+
+---

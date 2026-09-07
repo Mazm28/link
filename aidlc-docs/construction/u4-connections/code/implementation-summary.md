@@ -124,4 +124,33 @@ Fresh store, `localhost`, Vazirmatn rendering.
 
 ---
 
+## 8. Post-approval: two findings from the knowledge graph
+
+Both found by building a graph of the codebase and tracing its highest-betweenness node. **No production logic changed for either** — one was a missing test, the other a module placement.
+
+### 8.1 ⚠️ A rating-eligibility swap that 289 tests and the compiler both missed
+
+`UserId` bridges 15 of 61 communities and carries **15 distinct roles** — `viewerId`, `authorId`, `requesterId`, `posterId`, `actorId`, `subjectId`, `raterId`, `blockerId`, `blockedId`… Several are **adversarial pairs adjacent in one signature**, and being one branded type, the compiler cannot tell them apart.
+
+The *positional* pair turned out to be safe: `canSendRequestTo(viewerId, authorId, blocks)` is genuinely symmetric because `buildBlockIndex` links both directions, so transposing it is a no-op. That is INV-1 working as designed.
+
+The keyed pair was not covered. Transposing `actorId`/`subjectId` in `submitRating`'s call to `canRate` **typechecked cleanly and passed all 289 tests** — yet it lets the same person rate the same person twice for the same activity, because the already-rated lookup then searches `(activity, subject, rater)`. Verified empirically: correct code gives accepted/refused, the swap gives accepted/**accepted**. FR-44 and BR-U4-62, broken silently.
+
+**P-U4-01 could not have caught it.** It property-tests `canRate`, and `canRate` was never wrong. The gap was in the **wiring** between repository and rule — a seam every U4 test stepped over. Closed by a test at the `submitRating` level, verified to fail against the swap.
+
+### 8.2 Two import cycles, and where they came from
+
+```
+ActivityComposerScreen → identity/index → ProfileScreen → activities/index → ActivityComposerScreen
+FilterPanel → identity/index → ProfileScreen → activities/index → FeedScreen → FilterPanel
+```
+
+**Cause**: `NeighborhoodSelector`, `CitySelector` and `InterestSelector` were built in `features/identity` because signup needed them first, then re-exported for U3's filter panel — the identity barrel said so in a comment. That made `features/activities` depend on `features/identity`. **CR-05 closed the loop** by giving `ProfileScreen` an embedded `MyActivitiesScreen`.
+
+**Fix**: the three selectors moved to **`features/reference/`**. Nothing about them is identity-specific — they import only `core/domain`, `core/i18n`, `core/reference`, `core/rules/persianText` and `ui/` primitives, and know nothing about users, sessions or profiles. They cannot live in `ui/` because **DEP-3 forbids `ui/` from importing `@core/reference/**`**, which these read by definition.
+
+Verified with the same tool that found them: **"Import Cycles: None detected."** 290 tests, typecheck clean, lint clean, build 143.2 KB gzipped.
+
+---
+
 **End of implementation summary.**
