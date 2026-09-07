@@ -71,3 +71,4 @@ user-data/
 #
 # The actual control is that seed data is INVENTED. Keep it that way — a rule
 # here would only look like protection.
+graphify-out/

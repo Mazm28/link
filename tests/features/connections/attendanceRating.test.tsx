@@ -4,6 +4,7 @@ import { App } from '@app/App';
 import { createMockBackend } from '@infra/mock';
 import { deriveState } from '@core/rules/activityLifecycle';
 import { canRate } from '@core/rules/ratingEligibility';
+import type { ActivityId, UserId } from '@core/domain';
 
 /* ===========================================================================
  * US-50 / US-51 / ⚠️ US-52 — attendance and rating, at the screen level.
@@ -147,6 +148,62 @@ describe('⚠️ US-52 — the screens agree with canRate', () => {
         score: 5,
       }),
     ).rejects.toThrow();
+  });
+
+  it('⚠️ FR-44 — the same pair cannot be rated twice, THROUGH submitRating', async () => {
+    /* ⚠️ THIS TEST EXISTS BECAUSE THE GRAPH FOUND A HOLE, NOT BECAUSE THE RULE
+     * LOOKED RISKY.
+     *
+     * `UserId` is the highest-betweenness node in the codebase and plays 15
+     * distinct roles — actorId, subjectId, raterId, posterId, requesterId,
+     * blockerId, blockedId… Several of those are ADVERSARIAL PAIRS sitting
+     * next to each other in one signature, and the compiler cannot tell them
+     * apart: they are all the same branded type.
+     *
+     * Transposing `actorId`/`subjectId` in `submitRating`'s call to `canRate`
+     * typechecks cleanly and passed all 289 tests. It is not harmless: the
+     * already-rated lookup then searches (activity, subject, rater) instead of
+     * (activity, rater, subject), so a second rating of the same person for
+     * the same activity is ACCEPTED. Verified empirically — correct code gives
+     * accepted/refused, the swap gives accepted/ACCEPTED.
+     *
+     * P-U4-01 could never catch it: that property tests `canRate` itself, and
+     * `canRate` was never wrong. The defect lives in the WIRING between the
+     * repository and the rule, which no test crossed. This one does. */
+    const backend = createMockBackend();
+    const store = backend.store.read();
+    const now = new Date();
+
+    let pair: { rater: UserId; subject: UserId; activityId: ActivityId } | null = null;
+    for (const activity of store.activities.filter((a) => deriveState(a, now) === 'past')) {
+      for (const user of store.users) {
+        const rateable = await backend.repositories.connections.listRateableParticipants(
+          user.id,
+          activity.id,
+        );
+        const first = rateable[0];
+        if (first !== undefined) {
+          pair = { rater: user.id, subject: first.id, activityId: activity.id };
+          break;
+        }
+      }
+      if (pair !== null) break;
+    }
+
+    expect(pair).not.toBeNull(); // the seed must reach this state, or nothing is proven
+    if (pair === null) return;
+
+    const target = pair;
+    const submit = (score: number) =>
+      backend.repositories.connections.submitRating({
+        raterId: target.rater,
+        subjectId: target.subject,
+        activityId: target.activityId,
+        score,
+      });
+
+    await expect(submit(5)).resolves.toBeDefined();
+    await expect(submit(1)).rejects.toThrow();
   });
 
   it('BR-U4-64 — an out-of-range score is refused', async () => {

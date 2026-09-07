@@ -1666,3 +1666,58 @@ Adding the other two would have made the seed larger and the demo no more comple
 **Carried into later units**: FR-38's limit is a courtesy limit and must never be described as protection (Round 2 / US-34); **AR-02's risk is larger since CR-07 retired the "share nothing" mitigation**, so post-launch harvesting monitoring moves from advisable to necessary; blocking and reporting must extend to requests (U6); `attendance_due` notifications are modelled but nothing generates them on a schedule (Round 2).
 
 ---
+
+## Change Request — CR-08 raised (competitive comparison)
+**Timestamp**: 2026-09-04T00:00:00Z
+**User Input**: "https://apps.apple.com/us/app/amup/id6642675054
+this is a similar project. describe difference we have from them and suggest what we can learn from them before continue."
+**AI Response**: "Compared لینک against the AmUp store listing (limited public data: store description, 4.2.1 changelog, 2 ratings). Differences reported across market/platform/connection model/location/privacy enforcement. Three learnings proposed: activity expiry, clubs (recommended NOT copied), and a low-commitment question channel; map-first device-location discovery recommended against."
+**Context**: CONSTRUCTION — U4 awaiting approval. Competitive analysis, no code or artifact changes.
+
+---
+
+## Change Request — CR-08 opened
+**Timestamp**: 2026-09-04T00:00:00Z
+**User Input**: "open a change request for activity expiry and the Q&A channel"
+**AI Response**: "Created `change-requests/cr-08-join-window-and-public-questions.md`. Status RAISED — no design, no code, four questions unanswered."
+**Context**: CONSTRUCTION — U4 awaiting approval. CR-08 raised only; U4's approval gate is unaffected.
+
+**⚠️ THE EXPIRY GAP WAS OVERSTATED WHEN PROPOSED, AND THE CR SAYS SO.** Checking before writing showed expiry already exists and is enforced: `deriveState` derives `past` at Tehran-day granularity (BR-U1-17), and `activityService.ts:165` sets `excludePast: true` on **every** discovery read, so stale activities already leave the feed. `excludePast` is deliberately not a user-facing filter. What is actually left is narrower: joining stays open until the instant of start, so **a mandatory CR-07 contact disclosure can occur for a meeting that cannot happen**. That, not feed hygiene, is Part A's argument.
+
+**CR-08 Part B RE-ENTERS CR-06's TERRITORY AND THE CR DOCUMENTS THE BOUNDARY** (§4). CR-06 was private, two-party, post-request messaging; Part B is public, author-answered, pre-request. The distinction is load-bearing — no private stranger-to-stranger channel, and no disclosure required before asking a question. Q4 option `D` exists so that if the decision drifts toward private threads, CR-06 is **restored from `af85540`** rather than reinvented under a new number.
+
+**Part B is not free and §3.3 records the cost before the choice**: a new user-generated content surface with no moderation console until Round 3, INV-1/INV-4 obligations at the repository, and permanently public authorship. Q3 (contact details inside questions) decides whether Part B is safe at all — a public field that accepts phone numbers is a harvesting vector, and **AR-02 would need re-accepting a second time**, as CR-07 required the first.
+
+**No requirements, stories, code or schema were touched.** Next free ids recorded in the CR for when it is adopted: FR-73, US-93, store schema v4.
+
+---
+
+## Knowledge graph built · ⚠️ A REAL COVERAGE GAP FOUND AND CLOSED
+**Timestamp**: 2026-08-09T03:10:00Z
+**User Input**: "use graphify on this project" / "yes trace it"
+**AI Response**: "Code-only graph built (1092 nodes, 3522 edges, 61 communities). Tracing its highest-betweenness node found a genuine hole in U4's test coverage; closed with a new test."
+**Context**: CONSTRUCTION — U4 approved-pending; no production code changed.
+
+**The graph is INCOMPLETE and that is stated in the outputs.** All five semantic-extraction subagents were killed mid-run by a session limit, so **the 99 documentation files are absent** — no requirements, stories, business rules or change requests are in the graph. Only the 188 code files (AST, deterministic, zero tokens) are represented. The manifest deliberately stamped 188 and left **99 unstamped**, so `graphify --update` re-queues exactly the missing ones.
+
+**⚠️ THE GRAPH FOUND A DEFECT CLASS THAT 289 TESTS AND THE COMPILER BOTH MISSED.**
+
+`UserId` is the highest-betweenness node in the codebase (0.060, ~3× the next) and bridges 15 of 61 communities. Tracing it showed **15 distinct roles on one branded type** — `userId`(48), `viewerId`(17), `authorId`(11), `requesterId`(9), `posterId`(9), `subjectId`(5), `participantId`(5), `blockerId`(5), `blockedId`(5), `actorId`(5), `reporterId`(4), `raterId`(4)… Several are **ADVERSARIAL PAIRS adjacent in one signature**, and the compiler cannot tell them apart.
+
+**Checked rather than assumed.** The one *positional* pair — `canSendRequestTo(viewerId, authorId, blocks)` — turned out to be **genuinely symmetric**: `buildBlockIndex` links both directions, so `has(x,y) === has(y,x)` and a transposition is a no-op. That is INV-1 working as designed, not luck.
+
+**But the keyed pair was not protected.** Transposing `actorId`/`subjectId` in `submitRating`'s call to `canRate`:
+- **typechecks cleanly** (both are `UserId`)
+- **all 289 tests pass**
+
+**Verified empirically, not reasoned**: correct code gives `FIRST=accepted, SECOND=refused`; with the swap, `FIRST=accepted, SECOND=ACCEPTED`. The already-rated lookup searches `(activity, subject, rater)` instead of `(activity, rater, subject)`, so **the same person can rate the same person twice for the same activity** — FR-44 and BR-U4-62 broken.
+
+**Why P-U4-01 could never have caught it**: that property tests `canRate` itself, and **`canRate` was never wrong**. The defect lives in the WIRING between the repository and the rule — a seam no test crossed. Every U4 test either exercised the rule directly or the screen, and nothing asserted the repository passes its arguments in the right order.
+
+**Closed** with `⚠️ FR-44 — the same pair cannot be rated twice, THROUGH submitRating` in `attendanceRating.test.tsx`, verified to FAIL against the swap and pass against correct code. **290 tests** (was 289). Typecheck clean, lint clean. **No production code changed** — the code was already correct; only the coverage was missing.
+
+**Also surfaced, not fixed**: two import cycles through the barrel files, both created by CR-05's profile hub — `ActivityComposerScreen → identity/index → ProfileScreen → activities/index → ActivityComposerScreen`, and a 5-file variant through `FilterPanel`/`FeedScreen`. Nothing breaks today; it is the shape that makes a feature hard to extract later.
+
+**`graphify-out/` added to `.gitignore`** — a build artifact, regenerable, and `graph.json` alone is 1.7 MB.
+
+---
