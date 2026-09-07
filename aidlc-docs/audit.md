@@ -1809,3 +1809,23 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **NOT DONE**: no U6 functional-design artifacts. Designing a public content channel while its safety rule is in dispute would be work thrown away, and building it as answered would breach a contract invariant without anyone having said so out loud.
 
 ---
+
+## Clarifications resolved — INV-3 preserved, AR-05 recorded, CR-09 split out
+**Timestamp**: 2026-08-09T05:00:00Z
+**User Input**: "apply your suggestions"
+**AI Response**: "Applied CQ1 `A`, CQ2 `A`, CQ3 `B`. INV-3 stands, AR-05 recorded, CR-08 resolved, CR-09 raised. U6 Part 2 unblocked."
+**Context**: CONSTRUCTION — U6 Functional Design Part 1 COMPLETE. Part 2 may proceed.
+
+**⚠️ A NUMBERING SLIP OF MINE, CORRECTED BEFORE IT WAS ACTED ON.** My chat recommendation read *"1: A (build it, record AR-05), 2: B (separate CR), 3: A (reject contact details)"* — listed by CONTENT, but numbered against the wrong questions. Mapped to the file the recommendations are **CQ1 `A`** (reject contact details), **CQ2 `A`** (build + AR-05), **CQ3 `B`** (separate CR). Applied by content, which is unambiguous, and the slip was stated to the user rather than quietly resolved — "apply your suggestions" against mis-numbered options could have applied the opposite of what I argued for.
+
+**⛔ INV-3 STANDS. CR-08 Q3 revised `C` → `A`.** A question containing a phone number or Telegram handle is **refused at write time by the repository**, reusing `core/rules/phone.ts` so the check cannot drift from the one that already exists. Part B stays buildable; the invariant is untouched. Option `C` — amend INV-3 openly and re-accept AR-02 a third time — remained available and was not chosen.
+
+**⚠️ AR-05 RECORDED IN `requirements.md`, beside AR-01…AR-04.** *"Blocking suppresses a blocked person's rating from the subject's aggregate."* The user's U6 Q1 `A` stands and will be built; the cost now sits on the record rather than inside a design document nobody re-reads. The entry states the vector plainly — rate 1 star → get blocked → average rises, repeatable — names it as **the US-52 abuse guard defeated from the opposite end** (US-52 stops a rating being manufactured by a non-attendee; this lets one be un-manufactured by an attendee), and carries a Round-2 mitigation: **recompute the aggregate server-side with blocks NOT applied**, so the public score stops being suppressible while viewer-facing separation stays. Until then **the vector is live and unmitigated**, and the monitoring signature is recorded: accounts whose block count is disproportionate to their activity count.
+
+**CR-08 RESOLVED** — Part A adopted as `joinsCloseAt` only; Part B adopted, contact details refused at write time, sequenced after U6 so reporting exists on day one.
+
+**CR-09 RAISED — open-ended activities, split out of CR-08 Q2.** CR-08 itself called this *"scope growth wearing item 1's clothes"*, and the audit confirms it: `startsAt` is load-bearing in FOUR approved rules. The one that makes it a design job rather than a nullable column is **`canRate`** — an activity with no date can never become `past`, so **rating never opens and attending one earns nobody any reputation**. That is a hole in US-52's model, not a variation of it. Five questions recorded; nothing depends on it.
+
+**U6 PART 2 IS NOW UNBLOCKED** — U6 Q5 `C` required CR-08 answered first, and it is.
+
+---

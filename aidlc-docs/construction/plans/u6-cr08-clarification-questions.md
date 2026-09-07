@@ -47,7 +47,7 @@ D) **Drop Part B entirely** — the one-way-door problem in CR-08 §3.1 is accep
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -74,7 +74,7 @@ C) **Build `A` as answered, no risk record** — treat it as an ordinary product
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -104,4 +104,4 @@ C) **Out of scope** — `startsAt` stays mandatory (CR-08's option A).
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B
