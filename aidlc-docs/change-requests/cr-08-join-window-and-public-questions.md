@@ -110,14 +110,14 @@ CR-06 proposed **a message thread on each join request**: private, two-party, po
 - **C)** Reject — joining until start is correct, and the useless-disclosure case in §2.2 is acceptable
 - **D)** Defer to Round 2
 
-[Answer]:
+[Answer]:A
 
 **Q2 — Part A, open-ended activities (§2.2 item 2)?**
 - **A)** Out of scope for this CR — `startsAt` stays mandatory
 - **B)** In scope — design activities with no start time
 - **C)** Separate CR
 
-[Answer]:
+[Answer]:B
 
 **Q3 — Part B, contact details inside questions?**
 This decides whether Part B is safe at all.
@@ -125,7 +125,7 @@ This decides whether Part B is safe at all.
 - **B)** Strip and warn
 - **C)** Allow — the channel is public and people can say what they want
 
-[Answer]:
+[Answer]:C
 
 **Q4 — Part B, scope and timing?**
 - **A)** Adopt as §3.2 — public, author-answered only, and **sequenced after U6** so reporting exists on day one
@@ -133,4 +133,4 @@ This decides whether Part B is safe at all.
 - **C)** Reject — the one-way-door problem in §3.1 is accepted as a consequence of CR-07
 - **D)** This is CR-06 in disguise; withdraw CR-08 Part B and re-open CR-06 instead (see §4)
 
-[Answer]:
+[Answer]:A

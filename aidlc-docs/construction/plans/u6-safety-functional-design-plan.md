@@ -92,7 +92,7 @@ Not cosmetic: US-73's notes call the guidance screen **"the product's primary co
 
 ## 4. Questions
 
-Answer each after the `[Answer]:` tag. Pick the last option and describe if none fit.
+Answer each after the `[Answer]: A` tag. Pick the last option and describe if none fit.
 
 ---
 
@@ -109,7 +109,7 @@ D) **Activities only** — leave it exactly as it is; US-72's literal wording is
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -124,7 +124,7 @@ C) **It stays unchanged** — the disclosure happened; blocking is about the fut
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -139,7 +139,7 @@ C) **Accept a pasted URL** to an image the reporter hosts elsewhere.
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -152,7 +152,7 @@ B) **Say it was recorded, without promising review** (recommended) — accurate 
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B
 
 ---
 
@@ -167,7 +167,7 @@ C) **Answer CR-08 first**, before U6 proceeds.
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C
 
 ---
 

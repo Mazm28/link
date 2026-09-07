@@ -1782,3 +1782,30 @@ US-72's literal wording covers activities — "absent from every feed, search re
 **⚠️ CR-08 SURFACED — RAISED, UNANSWERED, AND IT PREDATES THIS SESSION.** `change-requests/cr-08-join-window-and-public-questions.md` (2026-09-04, from a competitive comparison against AmUp) carries **four unanswered questions** and states it touches U6. Its Part B — a public, author-answered question channel — re-enters withdrawn CR-06's territory. Raised as U6 Q5 rather than silently ignored or silently absorbed.
 
 ---
+
+## U6 answered (1A 2A 3A 4B 5C) · CR-08 answered (1A 2B 3C 4A) — ⛔ ONE ANSWER BREAKS INV-3
+**Timestamp**: 2026-08-09T04:30:00Z
+**User Input**: "1- A / 2- A / 3- A / 4- B / 5- C" (U6), plus CR-08's four tags filled in the file: Q1 `A`, Q2 `B`, Q3 `C`, Q4 `A`
+**AI Response**: "Seven of nine recorded as final. Created u6-cr08-clarification-questions.md — one hard conflict with a binding invariant, one abuse vector, one scope expansion. No artifacts generated."
+**Context**: CONSTRUCTION — U6 Functional Design Part 1, blocked on clarification.
+
+**Recorded as final**: U6 Q2 `A` (a blocked person's delivered request disappears) · U6 Q3 `A` (free-text reports only) · U6 Q4 `B` (told "recorded", not "will be reviewed" — accurate, since nothing reads reports until Round 3) · U6 Q5 `C` (CR-08 first) · CR-08 Q1 `A` (`joinsCloseAt`) · CR-08 Q4 `A` (Part B sequenced after U6).
+
+**⛔ CR-08 Q3 `C` VIOLATES INV-3. NOT BUILT.**
+INV-3, verbatim from `src/core/repositories/index.ts`: *"No read returns another user's contact details, **except as `sharedContact` on a JoinRequestView addressed to the viewer**."* The exception is singular, named, and scoped to ONE viewer. Allowing contact details inside public questions creates a **second exception scoped to nobody** — a question holding a phone number is returned by a questions read to EVERY viewer.
+
+**This is categorically different from the decisions this project has already made.** CR-07 changed a REQUIREMENT and re-accepted a RISK. This changes an **INVARIANT** — and `aidlc-state.md` calls the five invariants *"the mechanism carrying the safety requirements into Round 2"*, the things Round 2's server is built to reproduce. INV-3 is also the one U4 verified on the wire (9 contact values in the store, 0 reaching the DOM).
+
+**What it enables, concretely**: under CR-07 sharing is already mandatory and AR-02's harvesting risk is at its highest recorded level. A public channel accepting contact details turns harvesting from *"post a fake activity and collect what requesters disclose to me"* into *"post a fake activity and let people publish their numbers to everyone, including me."* **The bad actor no longer needs the requests at all.** Plainer version: someone answering at 2am with their number, meaning it for one host, has published it to every stranger reading that activity — and to Round 2's search index.
+
+Offered four routes including `C` — allow it, but **amend INV-3 openly** and re-accept AR-02 a third time. Buildable if chosen; **not buildable silently**.
+
+**⚠️ U6 Q1 `A` MAKES BLOCKING A RATING-DELETION TOOL.** The user chose "everything two-way", explicitly including *"accepts that a blocked person's past rating disappears from your score"*. Exercisable in about four seconds: someone rates you 1 star → you block them → your public average rises. **Ratings become opt-out**, so the score measures who you have not blocked rather than how you behave — manufacturing the rating signal from the opposite end to the one US-52 guards. Precedent applied rather than re-arguing: CR-07 removed an AR-02 mitigation and AR-02 was formally re-accepted; offered the same here as **AR-05**, so the decision stands and the cost sits on the record beside AR-01…AR-04.
+
+**⚠️ CR-08 Q2 `B` IS LARGER THAN IT LOOKS** — and CR-08's own text calls it *"scope growth wearing item 1's clothes"*. `startsAt` is load-bearing in four approved places: `deriveState` (BR-U1-17), `excludePast` on every discovery read, ranking's recency term (BR-U3-60), and `canRate`'s *"the activity date has passed"*. **That last one means an open-ended activity is permanently un-rateable** — attending one earns nobody any reputation. Not re-arguing the decision; making the size visible before designing it.
+
+**A PROCESS DEFECT OF MY OWN, TWICE.** The script that writes answers into a question file matched the literal string `[Answer]:` inside every *"Other (please describe after [Answer]: tag below)"* placeholder, consuming answers meant for the real tags and shifting the rest — so U6 Q2 briefly read `C` when the user said `A`. It did the same thing to CR-07 earlier and was patched by hand both times. Repaired by targeting only lines that START with `[Answer]:`. Recorded because a tool that silently mis-records a user's answer is worse than one that fails.
+
+**NOT DONE**: no U6 functional-design artifacts. Designing a public content channel while its safety rule is in dispute would be work thrown away, and building it as answered would breach a contract invariant without anyone having said so out loud.
+
+---
