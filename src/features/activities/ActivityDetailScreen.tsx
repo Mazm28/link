@@ -14,6 +14,7 @@ import { ErrorState } from '@ui/ErrorState';
 import { RatingStars } from '@ui/RatingStars';
 import { Skeleton } from '@ui/Skeleton';
 import { JoinRequestSheet } from '@features/connections';
+import { SafetyMenu } from '@features/safety';
 import { Button } from '@ui/Button';
 import { ActivityMap } from './ActivityMap';
 import { useActivityService } from './useActivityServices';
@@ -100,6 +101,20 @@ export function ActivityDetailScreen() {
       </dl>
 
       <p className="whitespace-pre-line text-sm leading-7 text-fg">{data.description}</p>
+
+      {/* U6 — report or block the host, or report the activity itself.
+          Absent on your own activity (BR-U6-47). */}
+      <div className="flex justify-end gap-1">
+        <SafetyMenu
+          subject={{
+            kind: 'activity',
+            activityId: data.id,
+            title: data.title,
+            authorId: data.author.id,
+            authorName: data.author.displayName,
+          }}
+        />
+      </div>
 
       {canJoin && (
         <div>

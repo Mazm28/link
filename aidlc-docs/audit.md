@@ -1903,3 +1903,26 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **Gates**: typecheck clean · lint clean · **290/290**.
 
 ---
+
+## U6 Code Generation — Part 2 (Generation) COMPLETE
+**Timestamp**: 2026-08-09T07:15:00Z
+**AI Response**: "All 27 steps executed. Typecheck clean, lint clean, 305/305, build 144.1 KB gzipped. Block/unblock loop verified in the browser."
+**Context**: CONSTRUCTION — U6 Code Generation Part 2 complete, awaiting approval. **Last unit in the plan.**
+
+**305 tests, up from 290.** Schema stayed v3 — no new entity, no new field, no migration, exactly as designed.
+
+**⚠️ VERIFIED ON THE WIRE**: feed **19 → 17** after blocking زهرا (her two upcoming activities), absent from the inbox and sent list, **present in the blocked list** (the one place she must remain visible), **store counts unchanged** — activities 25, requests 19, attendance 12, ratings 10, notifications 8 — and **19 again after unblocking**, with 0 blocks remaining.
+
+**⚠️ ONE OF MY OWN BROWSER CHECKS WAS MEASURING NOTHING, AND IT IS RECORDED.** The first assertion looked for the blocked person's NAME in the feed. **Feed cards render titles, not author names**, so it would have returned `false` whether the filter worked or not — the same class of error as U3's P-U3-02 (comparing `"[object Object]"` to itself) and U4's negative assertion against a blank page. Third instance this project has caught. The meaningful signal is the card count and the titles.
+
+**⚠️ P-U6-01 VERIFIED AGAINST TWO BROKEN FILTERS** before being kept: `isHiddenFrom` always false → 3 failures; **one-directional block** → 2 failures; restored → 6 pass. The second is the valuable catch — a **half-applied block**, which `visibility.ts` itself warns is *"worse than no block at all, because the person who asked for protection believes they have it."* Precisely the defect that ships green without this check.
+
+**⚠️ BLOCKING WAS UNREACHABLE FROM AN ACTIVITY — found by a component test, not review.** The first `SafetyMenu` offered report on an activity but not block, so from an activity you could report the post and had **no way to stop seeing its host** — which is exactly where someone decides that. Fixed; the activity subject now carries the author's name.
+
+**THE U1 ORACLE CAUGHT THE VISIBILITY CHANGE — third time this session** (after CR-07's `'none'` refusal and the Telegram format rule). One-command counterexample. The MODEL was updated, not the code.
+
+**Three places deliberately do not filter, each commented in place**: `listBlocks` (null viewer — else unblocking is unreachable) · `rating_received` notifications (ratings are never attributed, so the notification names nobody; filtering would require storing a rater id purely to hide it) · the block confirmation's copy (mentioning AR-05 would advertise the vector).
+
+**Carried forward**: ⚠️ **AR-05 is live and unmitigated** — Round 2 must recompute the aggregate server-side with blocks NOT applied · ⚠️ **P-U6-01 is bounded by U5's deferral** and must be extended when U5 lands, or the claim silently becomes false · reports stay write-only until Round 3 · CR-08 Part B next · CR-09 unanswered.
+
+---

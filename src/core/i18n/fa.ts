@@ -477,6 +477,61 @@ export const fa = {
   'notifications.attendanceDue': 'تأیید حضور برای یکی از فعالیت‌هایت مانده است.',
   'notifications.ratingReceived': 'امتیاز تازه‌ای گرفتی.',
 
+  /* ================================================= U6 — Safety ========= */
+
+  /* ------------------------------------------------------ report (US-70/71) */
+  'safety.menu': 'گزینه‌های بیشتر',
+  'report.title': 'گزارش',
+  'report.reasonLabel': 'دلیل',
+  'report.reasonHarassment': 'آزار و اذیت',
+  /* ⚠️ BR-U4-42 / AB-01 — the AR-02 monitoring signal. Deliberately its own
+   * reason, not folded into "فعالیت جعلی": one is a post about nothing, the
+   * other is a post designed to extract contact details. */
+  'report.reasonHarvesting': 'جمع‌آوری اطلاعات تماس',
+  'report.reasonFakeActivity': 'فعالیت جعلی',
+  'report.reasonSpam': 'هرزنامه',
+  'report.reasonOther': 'موارد دیگر',
+  'report.detailLabel': 'چه اتفاقی افتاد؟',
+  /* ⚠️ AR-04 — the app holds no record of Telegram or phone contact, so this
+   * free text is the ONLY evidence moderation will ever have. The prompt says
+   * why it matters rather than treating it as an optional extra. */
+  'report.detailHint':
+    'اگر این اتفاق در تلگرام یا تماس تلفنی رخ داده، لطفاً اینجا توضیح بده — برنامه هیچ سابقه‌ای از آن ندارد.',
+  'report.submit': 'ثبت گزارش',
+  /* ⚠️ BR-U6-44 — "RECORDED", never "will be reviewed". Nothing reads reports
+   * until Round 3's console; promising a review two rounds away is a lie whose
+   * first victim is whoever reported something serious and heard nothing. */
+  'report.done': 'گزارش تو ثبت شد.',
+  'report.doneDetail': 'این گزارش همراه با جزئیاتش نگه داشته می‌شود.',
+
+  /* --------------------------------------------------------- block (US-72) */
+  'block.action': 'مسدود کردن',
+  'block.title': 'مسدود کردن {{name}}',
+  /* ⚠️ BR-U6-12 — people ask whether the other person is told, and the answer
+   * changes whether they feel safe doing it. ⚠️ BR-U6-35 — the second line is
+   * the same honesty BR-U4-42 required of withdrawal: a block cannot recall a
+   * phone number that was already sent, and no copy may imply it can.
+   *
+   * ⚠️ DELIBERATELY ABSENT: that their rating stops counting toward your score
+   * (AR-05). Stating it would advertise the vector — "block your critics to
+   * raise your average". The copy describes what a person will experience; the
+   * behaviour is recorded in requirements.md AR-05, not sold as a feature. */
+  'block.explain':
+    'پس از مسدود کردن، دیگر فعالیت‌ها، درخواست‌ها و اعلان‌های یکدیگر را نمی‌بینید. این کار به او اطلاع داده نمی‌شود.',
+  'block.contactWarning': 'اطلاعات تماسی که قبلاً فرستاده شده پس گرفته نمی‌شود.',
+  'block.confirm': 'مسدود کن',
+  'block.done': 'مسدود شد.',
+  'block.unblock': 'رفع مسدودی',
+  'block.unblockDone': 'رفع مسدودی انجام شد.',
+  'block.listTitle': 'کاربران مسدودشده',
+  'block.listEmptyTitle': 'کسی را مسدود نکرده‌ای',
+  'block.listEmptyBody': 'اگر کسی را مسدود کنی، اینجا پیدایش می‌کنی.',
+
+  /* ------------------------------------------- safety guidance (US-73 crit 4) */
+  /* ⚠️ BR-U6-50/51 — renders AFTER both disclosure lines, outside the notice,
+   * visually subordinate, and is NOT a dismiss control. See GuidanceLink. */
+  'safety.guidanceLink': 'راهنمای ایمنی را بخوان',
+
 } as const;
 
 export type MessageKey = keyof typeof fa;

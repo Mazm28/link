@@ -9,6 +9,7 @@ import { Sheet } from '@ui/Sheet';
 import { TextArea } from '@ui/TextArea';
 import { ContactShareSelector } from './ContactShareSelector';
 import { DisclosureNotice } from './DisclosureNotice';
+import { GuidanceLink } from '@features/safety';
 import { useConnectionService } from './useConnectionServices';
 
 /**
@@ -148,6 +149,13 @@ export function JoinRequestSheet({
             below the fold. It renders as soon as a selection exists, because
             that is the moment there is something to disclose. */}
         {selection !== null && <DisclosureNotice />}
+
+        {/* ⚠️ US-73 criterion 4, via U6 (BR-U6-50/51).
+            AFTER both disclosure lines and OUTSIDE the notice box. Putting it
+            inside, or above as "read this first", is what WEAKENS the
+            disclosure — and stories.md says a weakened disclosure invalidates
+            AR-02's acceptance. It is not a dismiss control. */}
+        {selection !== null && <GuidanceLink />}
 
         <div className="flex items-center gap-3">
           <Button

@@ -57,6 +57,15 @@ export function ProfileScreen() {
           {t('profile.editInfo')}
         </Link>
         <p className="text-xs text-fg-muted">{t('profile.editInfoHint')}</p>
+
+        {/* U6 / BR-U6-21 — the only route to unblocking. */}
+        <Link
+          to="/profile/blocked"
+          className="mt-3 inline-block text-sm text-brand underline"
+          data-testid="profile-blocked-link"
+        >
+          {t('block.listTitle')}
+        </Link>
       </Card>
 
       <div className="flex flex-col gap-2">

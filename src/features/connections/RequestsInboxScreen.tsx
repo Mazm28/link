@@ -12,6 +12,7 @@ import { Card } from '@ui/Card';
 import { EmptyState } from '@ui/EmptyState';
 import { ErrorState } from '@ui/ErrorState';
 import { Skeleton } from '@ui/Skeleton';
+import { SafetyMenu } from '@features/safety';
 import { RatingSummaryBadge } from './RatingSummaryBadge';
 import { useConnectionService } from './useConnectionServices';
 
@@ -154,6 +155,18 @@ export function RequestsInboxScreen() {
                               {request.status === 'withdrawn' && (
                                 <Badge variant="warning" label={t('sent.stateWithdrawn')} />
                               )}
+                              {/* U6 — the requester is a stranger who now has
+                                  your activity and you have their contact
+                                  detail. This is exactly where report and
+                                  block need to be. */}
+                              <SafetyMenu
+                                subject={{
+                                  kind: 'user',
+                                  userId: request.requester.id,
+                                  name: request.requester.displayName,
+                                  relatedActivityId: request.activityId,
+                                }}
+                              />
                             </div>
 
                             <span className="text-xs text-fg-muted">

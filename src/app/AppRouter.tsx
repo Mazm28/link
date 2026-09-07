@@ -5,6 +5,7 @@ import {
   SentRequestsScreen,
 } from '@features/connections';
 import { NotificationsScreen } from '@features/notifications';
+import { BlockedUsersScreen } from '@features/safety';
 import {
   AccountDeletionFlow,
   ProfileEditScreen,
@@ -73,6 +74,7 @@ export function AppRouter() {
                 <Route path="/profile" element={<ProfileScreen />} />
                 <Route path="/profile/edit" element={<ProfileEditScreen />} />
                 <Route path="/profile/delete" element={<AccountDeletionFlow />} />
+                <Route path="/profile/blocked" element={<BlockedUsersScreen />} />
                 {/* U1's demo, kept behind an explicit path. It is the only
                     surface exercising a few U1 primitives, and its tests are
                     still the ones that cover them. */}

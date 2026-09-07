@@ -2,7 +2,7 @@
 
 ## ▶️ RESUME INSTRUCTIONS (read first in a new session)
 
-**Where we are**: **U1, U2, U3 and U4 are COMPLETE and APPROVED**. **U5 is DEFERRED by user choice; U6 Safety and Trust is in functional design.** The full connection loop works: request → disclosure → inbox → attendance → rating. The app signs a user in, sets up a profile, shows safety guidance, posts **and edits** activities with a location-precision choice, finds them by feed, search, filter, category and **map**, and shows a profile hub and a requests inbox — all in Persian, **now in Vazirmatn rather than a fallback face**. **290 passing tests**, clean typecheck and lint, production build 143.2 KB gzipped.
+**Where we are**: **U1, U2, U3 and U4 are COMPLETE and APPROVED**. **U5 is DEFERRED by user choice; U6 Safety and Trust is in functional design.** The full connection loop works: request → disclosure → inbox → attendance → rating. The app signs a user in, sets up a profile, shows safety guidance, posts **and edits** activities with a location-precision choice, finds them by feed, search, filter, category and **map**, and shows a profile hub and a requests inbox — all in Persian, **now in Vazirmatn rather than a fallback face**. **305 passing tests**, clean typecheck and lint, production build 144.1 KB gzipped.
 
 **⚠️ A FRESH SESSION MUST READ THIS FIRST — the tree once diverged from the record.** On 2026-08-08, resuming found three days of undocumented, untested, uncommitted work in the workspace: 16 modified and 3 new files, no audit entry, no state entry, no CR document, and a suite still green at exactly the 228 recorded at U3 completion because it did not know the code existed. It is now adopted as **CR-05** (`change-requests/cr-05-navigation-and-requests.md`) and tested. **Record a test count at every gate** — 228 → 228 across three days of visible feature work was detectable in one line.
 
@@ -22,7 +22,7 @@
 
 **🔀 CR-01 is now FULLY LIVE** — `aidlc-docs/change-requests/cr-01-location-filters-and-map.md`. **A** (the neighborhood filter) is wired in `FilterPanel`, shown only once a city is chosen; **B** (filters on the right) shipped in CR-02; **C** (a second city) shipped as 25 cities — adopted first as city-first navigation, then **amended by CR-05 to city-as-filter**; **D** (the activity map) was un-deferred 2026-08-05 and is designed in U3 under INV-5. Nothing from CR-01 remains deferred.
 
-**Next action**: approve the **U6 Code Generation plan** (Part 1), then execute it. U6 is the LAST unit in the current plan.
+**Next action**: approve **U6 Code Generation**. That closes the last unit in the current plan — after which the remaining work is **Build and Test**, then U5 (deferred), CR-08 Part B, and CR-09.
 
 **⚠️ AR-05 IS NEW AND LIVE** — `requirements.md`. Blocking excludes a blocked person's rating from the subject's aggregate (U6 Q1 `A`), so **blocking can suppress an unfavourable rating**: rate 1 star → get blocked → average rises, repeatable. Accepted deliberately for maximum separation. **Round 2 must recompute the aggregate server-side with blocks NOT applied.** Until then the vector is live and unmitigated.
 
@@ -146,7 +146,7 @@ Build sequence: **U1 → U2 → U3 → { U4, U5 } → U6**. Critical path: U1→
 - [x] **U4** Code Generation — Part 1 APPROVED · Part 2 COMPLETE · **APPROVED 2026-08-09** (45/45 steps, **290 tests passing**; two post-approval graph findings folded in, neither changing production logic)
 - [ ] **U5** Venue Dashboard — ⚠️ **DEFERRED by user choice 2026-08-09**, not cancelled. Off the critical path; 5 stories (US-60…64) unbuilt, `features/venues/` empty
 - [x] **U6** Functional Design — COMPLETE and **APPROVED 2026-08-09** (4 artifacts, 27 rules, 5 PBT properties; **AR-05 recorded**, CR-08 resolved, CR-09 split out)
-- [ ] **U6** Code Generation — **IN PROGRESS** (Part 1 Planning, 2026-08-09)
+- [x] **U6** Code Generation — Part 1 APPROVED · Part 2 **COMPLETE 2026-08-09** (27/27 steps, **305 tests passing**; awaiting approval)
 - [ ] U4–U6 Code Generation — **EXECUTE** per unit (always)
 - [ ] Build and Test — **EXECUTE** once after all units
 
