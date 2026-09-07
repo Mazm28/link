@@ -57,9 +57,9 @@ export function MyActivitiesScreen({ embedded = false }: { embedded?: boolean } 
                 <div key={a.id} className="flex flex-col gap-1">
                   <ActivityCard activity={a} />
                   {/* BR-U3-31/32 — an UPCOMING activity is fully editable. A
-                    * past one takes description edits only and a cancelled one
-                    * none, so offering the link there would promise something
-                    * the service refuses. */}
+                   * past one takes description edits only and a cancelled one
+                   * none, so offering the link there would promise something
+                   * the service refuses. */}
                   {a.derivedState === 'upcoming' && (
                     <Link
                       to={`/activity/${a.id}/edit`}

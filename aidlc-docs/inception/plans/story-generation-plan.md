@@ -13,6 +13,7 @@
 This plan defines **how** user stories and personas will be produced for Link. It is methodology only — no stories are written until you approve the approach.
 
 It contains two things:
+
 1. **Questions** (Section A) — 8 decisions about story format and structure
 2. **Execution checklist** (Section C) — the exact steps I will follow once approved
 
@@ -23,9 +24,10 @@ Answer the questions with a letter after each `[Answer]:` tag. I've marked a rec
 # SECTION A — Questions
 
 ## Question 1
+
 **Story breakdown approach.** How should stories be organized?
 
-A) **Persona-based, with journeys inside each persona** *(my recommendation)* — group by Activity Poster / Activity Seeker / Venue Owner / Moderator, and within each, follow that persona's workflow. Fits this project because the requirements are already persona-shaped and the contact-exchange flow is asymmetric between poster and seeker — organizing this way makes that asymmetry impossible to overlook.
+A) **Persona-based, with journeys inside each persona** _(my recommendation)_ — group by Activity Poster / Activity Seeker / Venue Owner / Moderator, and within each, follow that persona's workflow. Fits this project because the requirements are already persona-shaped and the contact-exchange flow is asymmetric between poster and seeker — organizing this way makes that asymmetry impossible to overlook.
 
 B) **User journey-based** — organize by end-to-end flows (discover → request → meet → rate) that cross personas. Reads well as a narrative but splits each persona's work across many sections.
 
@@ -37,12 +39,13 @@ E) **Hybrid: epics by feature area, stories written per persona inside each** �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 2
+
 **Acceptance criteria format.**
 
-A) **Given / When / Then (Gherkin-style)** *(my recommendation)* — explicit precondition, action, expected outcome. Best fit here because the safety rules depend on state: *"Given an activity with approximate precision, When a non-requester views it, Then the exact address is absent from the response."* That converts directly into both the property-based tests and the example-based tests the PBT extension requires.
+A) **Given / When / Then (Gherkin-style)** _(my recommendation)_ — explicit precondition, action, expected outcome. Best fit here because the safety rules depend on state: _"Given an activity with approximate precision, When a non-requester views it, Then the exact address is absent from the response."_ That converts directly into both the property-based tests and the example-based tests the PBT extension requires.
 
 B) **Checklist of verifiable statements** — lighter and faster to read, but preconditions tend to go unstated, which is exactly where the state-dependent safety rules would slip.
 
@@ -52,12 +55,13 @@ D) **Given/When/Then for complex or safety-critical stories, checklist for simpl
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 3
+
 **Story granularity.** How large should a single story be?
 
-A) **One story per user-visible capability** *(my recommendation)* — e.g. "send a join request with a chosen contact detail" is one story, not three. Roughly 25–40 stories total. Each is independently demonstrable, which suits a solo/small team.
+A) **One story per user-visible capability** _(my recommendation)_ — e.g. "send a join request with a chosen contact detail" is one story, not three. Roughly 25–40 stories total. Each is independently demonstrable, which suits a solo/small team.
 
 B) **Fine-grained** — split every field, state, and validation into its own story. 70+ stories. Precise but tedious, and the relationships between them get lost.
 
@@ -65,12 +69,13 @@ C) **Coarse-grained** — one story per feature area. Roughly 10–12 stories. F
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 4
+
 **Language.** The app UI is Persian, but requirements and code are in English.
 
-A) **English stories, with Persian UI strings quoted where the exact wording matters** *(my recommendation)* — consistent with the requirements document and code comments (NFR-A5), and lets me specify the actual Persian copy for critical text like the contact-sharing disclosure (FR-32).
+A) **English stories, with Persian UI strings quoted where the exact wording matters** _(my recommendation)_ — consistent with the requirements document and code comments (NFR-A5), and lets me specify the actual Persian copy for critical text like the contact-sharing disclosure (FR-32).
 
 B) **Persian stories** — natural for Persian-speaking stakeholders and users, but diverges from the rest of the documentation.
 
@@ -78,12 +83,13 @@ C) **Bilingual** — story title and narrative in both languages. Most inclusive
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 5
+
 **Scope of stories.** Requirements cover 3 rounds (Round 1 web frontend, Round 2 backend, Round 3 admin console).
 
-A) **All rounds, clearly tagged by round** *(my recommendation)* — complete picture, and Round 2/3 stories stay thin. Prevents Round-1 design decisions that later block the backend or the moderation console.
+A) **All rounds, clearly tagged by round** _(my recommendation)_ — complete picture, and Round 2/3 stories stay thin. Prevents Round-1 design decisions that later block the backend or the moderation console.
 
 B) **Round 1 only** — tightest focus, but risks designing the mock data layer in a way that fights the Round-2 API.
 
@@ -91,12 +97,13 @@ C) **Round 1 in full detail, Rounds 2 and 3 as placeholder epics only** — midd
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 6
+
 **Negative and abuse stories.** Given AR-01 (no age restriction) and AR-02 (contact details sent with no approval gate), should stories explicitly cover misuse?
 
-A) **Yes — include explicit abuse/misuse stories** *(my recommendation)* — e.g. "As a bad actor, I post a fake activity to harvest phone numbers" paired with the controls that limit it. SECURITY-11 already requires at least one documented misuse case, and this is where the safety features get justified rather than just listed.
+A) **Yes — include explicit abuse/misuse stories** _(my recommendation)_ — e.g. "As a bad actor, I post a fake activity to harvest phone numbers" paired with the controls that limit it. SECURITY-11 already requires at least one documented misuse case, and this is where the safety features get justified rather than just listed.
 
 B) **Yes, but as a separate "Safety and Abuse Scenarios" section** rather than mixed into persona stories — keeps the happy-path stories clean and gives safety its own reviewable home.
 
@@ -104,25 +111,27 @@ C) **No** — keep stories to intended use only; handle abuse at design time.
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 7
+
 **Persona depth.**
 
-A) **Moderate depth** *(my recommendation)* — for each persona: goals, motivations, context of use, technical comfort, frustrations with current alternatives, and which stories they own. Roughly half a page each. Enough to guide UX decisions without inventing fiction.
+A) **Moderate depth** _(my recommendation)_ — for each persona: goals, motivations, context of use, technical comfort, frustrations with current alternatives, and which stories they own. Roughly half a page each. Enough to guide UX decisions without inventing fiction.
 
 B) **Lightweight** — name, role, one-line goal. Fast, but too thin to settle UX arguments.
 
-C) **Rich, with named example characters, ages, occupations, and day-in-the-life narratives** — vivid and good for pitching, but largely invented detail. *(Note: if you choose this, I'd want to keep the invented specifics clearly marked as illustrative, so nobody later mistakes them for research.)*
+C) **Rich, with named example characters, ages, occupations, and day-in-the-life narratives** — vivid and good for pitching, but largely invented detail. _(Note: if you choose this, I'd want to keep the invented specifics clearly marked as illustrative, so nobody later mistakes them for research.)_
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 8
+
 **Story metadata.** What should each story carry besides narrative and acceptance criteria?
 
-A) **Priority (Must/Should/Could) + requirement trace + round tag** *(my recommendation)* — keeps stories tied to the approved requirements and to a delivery round. No estimates, since there is no team to estimate for yet.
+A) **Priority (Must/Should/Could) + requirement trace + round tag** _(my recommendation)_ — keeps stories tied to the approved requirements and to a delivery round. No estimates, since there is no team to estimate for yet.
 
 B) **The above plus effort estimates** (story points or t-shirt sizes) — useful only if you plan to sequence work formally; premature for a solo build.
 
@@ -132,9 +141,7 @@ D) **The above plus a dependency field** naming which stories must precede this 
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
-
----
+[Answer]: ---
 
 ## Shortcut
 
@@ -144,21 +151,19 @@ If you agree with every recommendation above, write `all recommended` here and l
 
 ## Anything to add?
 
-[Additional Notes]: 
-
----
+[Additional Notes]: ---
 
 # SECTION B — Story Breakdown Approaches Considered
 
 Documented for the audit trail, per the stage rules.
 
-| Approach | Benefit | Trade-off | Fit for Link |
-|---|---|---|---|
-| **Persona-based** | Each user type's complete experience is visible in one place; asymmetric flows between personas become obvious | Shared functionality can be described twice from two angles | **Strong** — requirements are already persona-shaped; poster/seeker asymmetry is a real implementation risk |
-| **User journey-based** | Natural narrative; reveals gaps between steps in a flow | A single persona's work is scattered across journeys | Moderate — the discover→request→meet→rate journey is valuable and can be captured as a cross-cutting section |
-| **Feature-based** | Maps directly to requirements sections and future code modules | Loses the user's perspective, which is the point of stories | Moderate — better suited to Application Design than to stories |
-| **Domain-based** | Good for systems with distinct bounded contexts | Link is one modest domain; would be artificial | Weak |
-| **Epic-based hierarchy** | Suits backlog tooling and large teams | Structural overhead with no reader benefit at this size | Weak — single maintainer |
+| Approach                 | Benefit                                                                                                        | Trade-off                                                   | Fit for Link                                                                                                 |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Persona-based**        | Each user type's complete experience is visible in one place; asymmetric flows between personas become obvious | Shared functionality can be described twice from two angles | **Strong** — requirements are already persona-shaped; poster/seeker asymmetry is a real implementation risk  |
+| **User journey-based**   | Natural narrative; reveals gaps between steps in a flow                                                        | A single persona's work is scattered across journeys        | Moderate — the discover→request→meet→rate journey is valuable and can be captured as a cross-cutting section |
+| **Feature-based**        | Maps directly to requirements sections and future code modules                                                 | Loses the user's perspective, which is the point of stories | Moderate — better suited to Application Design than to stories                                               |
+| **Domain-based**         | Good for systems with distinct bounded contexts                                                                | Link is one modest domain; would be artificial              | Weak                                                                                                         |
+| **Epic-based hierarchy** | Suits backlog tooling and large teams                                                                          | Structural overhead with no reader benefit at this size     | Weak — single maintainer                                                                                     |
 
 **Recommended**: Persona-based primary organization, with a cross-cutting section for the end-to-end journey and a separate section for safety/abuse scenarios. This captures the main benefit of the journey approach without fragmenting each persona's work.
 

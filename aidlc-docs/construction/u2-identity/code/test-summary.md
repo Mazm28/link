@@ -10,12 +10,12 @@
 
 The story map assigned U2 **zero** properties. That was reassessed at Functional Design; four were identified, and **two of them found real defects**.
 
-| ID | Property | File | Outcome |
-|---|---|---|---|
-| **P-U2-01** | `normalizePhone` is idempotent, and every accepted spelling maps to one canonical string | `tests/core/rules/phone.pbt.test.ts` | **Found a defect** — see §3.1 |
-| **P-U2-02** | An absent patch key never changes its field; a present key always does | `tests/core/rules/profilePatch.pbt.test.ts` | **Found a defect** — see §3.2 |
-| **P-U2-03** | ⚠️ After `deleteAccount(u)`, no personal field of `u` is reachable through **any** read path, and no join request from `u` carries a contact detail | `tests/infra/deletion.pbt.test.ts` | Passed |
-| **P-U2-04** | Anything the setup validator accepts satisfies every completion rule | `tests/core/rules/profileValidation.pbt.test.ts` | Passed |
+| ID          | Property                                                                                                                                            | File                                             | Outcome                       |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------- |
+| **P-U2-01** | `normalizePhone` is idempotent, and every accepted spelling maps to one canonical string                                                            | `tests/core/rules/phone.pbt.test.ts`             | **Found a defect** — see §3.1 |
+| **P-U2-02** | An absent patch key never changes its field; a present key always does                                                                              | `tests/core/rules/profilePatch.pbt.test.ts`      | **Found a defect** — see §3.2 |
+| **P-U2-03** | ⚠️ After `deleteAccount(u)`, no personal field of `u` is reachable through **any** read path, and no join request from `u` carries a contact detail | `tests/infra/deletion.pbt.test.ts`               | Passed                        |
+| **P-U2-04** | Anything the setup validator accepts satisfies every completion rule                                                                                | `tests/core/rules/profileValidation.pbt.test.ts` | Passed                        |
 
 **P-U2-03 enumerates read paths from the repository INTERFACES**, not from the screens that exist today. When U3–U6 add a read path it is covered without editing the property — the difference between a regression test and a snapshot of what someone thought to check (PBT-10).
 
@@ -25,12 +25,12 @@ The story map assigned U2 **zero** properties. That was reassessed at Functional
 
 ## 2. Example and Component Tests
 
-| File | Tests | Covers |
-|---|---|---|
-| `tests/core/rules/identityRules.test.ts` | 13 | Phone spellings incl. Persian/Arabic-Indic digits, OTP, onboarding state machine, field validation, both regressions |
-| `tests/infra/authRepository.test.ts` | 9 | Identical known/unknown responses, silent account creation, incomplete-profile invisibility, INV-3 |
-| `tests/features/identity/signIn.test.tsx` | 6 | Inline sign-in, **phone absent from the DOM**, generic error, first-run routing, Persian countdown |
-| `tests/features/identity/onboarding.test.tsx` | 6 | Setup validation, no-geolocation copy, telegram privacy label, guidance shown once, deletion confirmation |
+| File                                          | Tests | Covers                                                                                                               |
+| --------------------------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------- |
+| `tests/core/rules/identityRules.test.ts`      | 13    | Phone spellings incl. Persian/Arabic-Indic digits, OTP, onboarding state machine, field validation, both regressions |
+| `tests/infra/authRepository.test.ts`          | 9     | Identical known/unknown responses, silent account creation, incomplete-profile invisibility, INV-3                   |
+| `tests/features/identity/signIn.test.tsx`     | 6     | Inline sign-in, **phone absent from the DOM**, generic error, first-run routing, Persian countdown                   |
+| `tests/features/identity/onboarding.test.tsx` | 6     | Setup validation, no-geolocation copy, telegram privacy label, guidance shown once, deletion confirmation            |
 
 **Modified**: `tests/app/repository-swap.test.tsx` (auth stub, two new `UserRepository` methods), `tests/infra/LocalStore.test.ts` (`session` slot), `tests/app/shell.test.tsx` (the gate's skeleton now precedes the demo's), `tests/generators/domain.ts` (`avatarId`, and the U2 fields generated **present and absent** so incomplete profiles are actually exercised).
 

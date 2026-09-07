@@ -38,15 +38,15 @@ interface Activity {
   title: string;
   description: string;
   categoryIds: string[];
-  startsAt: string;              // ISO-8601 UTC; Jalali only at display
+  startsAt: string; // ISO-8601 UTC; Jalali only at display
   neighborhoodId: NeighborhoodId;
   locationPrecision: LocationPrecision;
-  exactAddress?: string;         // stored; disclosed per INV-2
-  capacity?: number;             // informational only (FR-14)
+  exactAddress?: string; // stored; disclosed per INV-2
+  capacity?: number; // informational only (FR-14)
   imageUrl?: string;
   status: ActivityStatus;
   recurrence?: RecurrenceRule;
-  promotion: PromotionState;     // inert in Round 1 (FR-56)
+  promotion: PromotionState; // inert in Round 1 (FR-56)
   createdAt: string;
 }
 
@@ -72,10 +72,10 @@ interface ProfileView {
 }
 
 interface RatingSummary {
-  average: number | null;        // null when below display threshold
+  average: number | null; // null when below display threshold
   count: number;
   activitiesAttended: number;
-  isNewMember: boolean;          // true below threshold (US-53)
+  isNewMember: boolean; // true below threshold (US-53)
 }
 ```
 
@@ -95,7 +95,7 @@ function projectActivity(
   activity: Activity,
   author: ProfileView,
   viewerId: UserId | null,
-  now: Date
+  now: Date,
 ): ActivityView;
 
 /** Convenience for collections; applies projectActivity elementwise. */
@@ -103,7 +103,7 @@ function projectActivities(
   activities: Activity[],
   authors: Map<UserId, ProfileView>,
   viewerId: UserId | null,
-  now: Date
+  now: Date,
 ): ActivityView[];
 ```
 
@@ -119,15 +119,11 @@ function isMutuallyUnblocked(a: UserId, b: UserId, blocks: BlockIndex): boolean;
 function filterVisibleActivities(
   activities: Activity[],
   viewerId: UserId | null,
-  blocks: BlockIndex
+  blocks: BlockIndex,
 ): Activity[];
 
 /** Whether the viewer may send a join request to this author. */
-function canSendRequestTo(
-  viewerId: UserId,
-  authorId: UserId,
-  blocks: BlockIndex
-): boolean;
+function canSendRequestTo(viewerId: UserId, authorId: UserId, blocks: BlockIndex): boolean;
 ```
 
 **Property (PBT)**: for any activity set and any block set, no returned activity has an author blocked in either direction.
@@ -137,9 +133,15 @@ function canSendRequestTo(
 ```ts
 type RatingEligibility =
   | { allowed: true }
-  | { allowed: false; reason:
-        'activity_not_past' | 'not_confirmed_attendee'
-      | 'already_rated' | 'self_rating' | 'not_participant' };
+  | {
+      allowed: false;
+      reason:
+        | 'activity_not_past'
+        | 'not_confirmed_attendee'
+        | 'already_rated'
+        | 'self_rating'
+        | 'not_participant';
+    };
 
 /** Decide whether actor may rate subject for this activity.
  *  Allowed ONLY when the activity date has passed AND the actor is
@@ -172,15 +174,17 @@ function rateableParticipants(input: {
 ```ts
 type ShareValidation =
   | { valid: true; resolved: SharedContact }
-  | { valid: false; reason: 'no_phone_on_file' | 'no_telegram_on_file'
-                          | 'invalid_telegram_format' };
+  | {
+      valid: false;
+      reason: 'no_phone_on_file' | 'no_telegram_on_file' | 'invalid_telegram_format';
+    };
 
 /** Resolve a share selection against what the user actually has.
  *  NEVER falls back to a different channel than the one selected. */
 function validateShareSelection(
   selection: SharedContact['kind'],
   user: User,
-  providedTelegramId?: string
+  providedTelegramId?: string,
 ): ShareValidation;
 
 /** Whether the mandatory disclosure must be shown for this selection. */
@@ -198,11 +202,13 @@ function rankFeed(
   activities: ActivityView[],
   viewer: { neighborhoodId: NeighborhoodId; interestIds: string[] },
   mode: FeedMode,
-  graph: NeighborhoodGraph
+  graph: NeighborhoodGraph,
 ): ActivityView[];
 
 function neighborhoodDistance(
-  a: NeighborhoodId, b: NeighborhoodId, graph: NeighborhoodGraph
+  a: NeighborhoodId,
+  b: NeighborhoodId,
+  graph: NeighborhoodGraph,
 ): number;
 
 function interestMatchScore(activityCategoryIds: string[], viewerInterestIds: string[]): number;
@@ -234,7 +240,9 @@ function matchesQuery(activity: ActivityView, rawQuery: string): boolean;
 function deriveState(activity: Activity, now: Date): 'upcoming' | 'past' | 'cancelled';
 function isJoinable(activity: Activity, now: Date): boolean;
 function needsAttendanceConfirmation(
-  activity: Activity, attendance: Attendance[], now: Date
+  activity: Activity,
+  attendance: Attendance[],
+  now: Date,
 ): boolean;
 ```
 
@@ -253,7 +261,7 @@ function toPersianDigits(input: string | number): string;
 ```ts
 function toJalali(date: Date): JalaliDate;
 function fromJalali(j: JalaliDate): Date;
-function formatJalali(date: Date, pattern: string): string;   // Persian months + digits
+function formatJalali(date: Date, pattern: string): string; // Persian months + digits
 ```
 
 **Property (PBT)**: round-trip — `fromJalali(toJalali(d))` equals `d` to day precision.
@@ -271,7 +279,7 @@ interface UserRepository {
   getCurrentUser(): Promise<User | null>;
   getProfile(viewerId: UserId | null, userId: UserId): Promise<ProfileView | null>;
   updateProfile(userId: UserId, patch: ProfilePatch): Promise<User>;
-  deleteAccount(userId: UserId): Promise<void>;   // anonymizes authored activities
+  deleteAccount(userId: UserId): Promise<void>; // anonymizes authored activities
 }
 ```
 
@@ -302,8 +310,10 @@ interface ActivityRepository {
 ```ts
 interface ConnectionRepository {
   sendJoinRequest(input: {
-    requesterId: UserId; activityId: ActivityId;
-    note?: string; sharedContact: SharedContact;
+    requesterId: UserId;
+    activityId: ActivityId;
+    note?: string;
+    sharedContact: SharedContact;
   }): Promise<JoinRequest>;
 
   withdrawRequest(requesterId: UserId, requestId: RequestId): Promise<JoinRequest>;
@@ -316,14 +326,18 @@ interface ConnectionRepository {
   listSentRequests(requesterId: UserId): Promise<SentRequestView[]>;
 
   confirmAttendance(input: {
-    posterId: UserId; activityId: ActivityId;
+    posterId: UserId;
+    activityId: ActivityId;
     confirmations: Array<{ participantId: UserId; attended: boolean }>;
   }): Promise<Attendance[]>;
 
   listRateableParticipants(actorId: UserId, activityId: ActivityId): Promise<ProfileView[]>;
   submitRating(input: {
-    raterId: UserId; subjectId: UserId; activityId: ActivityId;
-    score: number; comment?: string;
+    raterId: UserId;
+    subjectId: UserId;
+    activityId: ActivityId;
+    score: number;
+    comment?: string;
   }): Promise<Rating>;
   getRatingSummary(userId: UserId): Promise<RatingSummary>;
 }
@@ -342,7 +356,11 @@ interface VenueRepository {
 
   // Round 3 — admin console
   listPendingApplications(adminId: UserId): Promise<Venue[]>;
-  setVerificationStatus(adminId: UserId, venueId: string, status: VerificationStatus): Promise<Venue>;
+  setVerificationStatus(
+    adminId: UserId,
+    venueId: string,
+    status: VerificationStatus,
+  ): Promise<Venue>;
 }
 ```
 
@@ -351,19 +369,26 @@ interface VenueRepository {
 ```ts
 interface SafetyRepository {
   reportUser(input: {
-    reporterId: UserId; subjectUserId: UserId; reason: ReportReason;
-    detail?: string; evidenceUrls?: string[]; relatedActivityId?: ActivityId;
+    reporterId: UserId;
+    subjectUserId: UserId;
+    reason: ReportReason;
+    detail?: string;
+    evidenceUrls?: string[];
+    relatedActivityId?: ActivityId;
   }): Promise<Report>;
 
   reportActivity(input: {
-    reporterId: UserId; activityId: ActivityId;
-    reason: ReportReason; detail?: string; evidenceUrls?: string[];
+    reporterId: UserId;
+    activityId: ActivityId;
+    reason: ReportReason;
+    detail?: string;
+    evidenceUrls?: string[];
   }): Promise<Report>;
 
   blockUser(blockerId: UserId, blockedId: UserId): Promise<Block>;
   unblockUser(blockerId: UserId, blockedId: UserId): Promise<void>;
   listBlocks(userId: UserId): Promise<ProfileView[]>;
-  getBlockIndex(userId: UserId): Promise<BlockIndex>;   // used by rules
+  getBlockIndex(userId: UserId): Promise<BlockIndex>; // used by rules
 
   // Round 3 — admin console
   listReports(adminId: UserId, status?: 'open' | 'resolved'): Promise<Report[]>;
@@ -390,6 +415,7 @@ interface ReferenceDataRepository {
 ## 4. `core/services` — Orchestration
 
 ### 4.1 `authService`
+
 ```ts
 requestCode(phone: string): Promise<{ sent: true }>;
 verifyCode(phone: string, code: string): Promise<Session>;
@@ -398,6 +424,7 @@ getSession(): Session | null;
 ```
 
 ### 4.2 `profileService`
+
 ```ts
 completeSetup(userId: UserId, input: ProfileSetupInput): Promise<User>;
 updateProfile(userId: UserId, patch: ProfilePatch): Promise<User>;
@@ -405,6 +432,7 @@ deleteAccount(userId: UserId): Promise<void>;
 ```
 
 ### 4.3 `activityService`
+
 ```ts
 /** Validates draft, requires an explicit precision choice, then persists. */
 createActivity(authorId: UserId, draft: ActivityDraft): Promise<Activity>;
@@ -414,6 +442,7 @@ getFeed(params: FeedParams): Promise<Page<ActivityView>>;
 ```
 
 ### 4.4 `connectionService` — highest safety sensitivity
+
 ```ts
 /** Validates the share selection, checks blocks and duplicates,
  *  persists the request, and creates the poster's notification.
@@ -428,6 +457,7 @@ submitRating(input: SubmitRatingInput): Promise<Rating>;
 ```
 
 ### 4.5 `venueService`
+
 ```ts
 registerVenue(userId: UserId, application: VenueApplication): Promise<Venue>;
 publishVenueActivity(venueId: string, draft: VenueActivityDraft): Promise<Activity>;
@@ -435,6 +465,7 @@ getDashboardSummary(venueId: string): Promise<VenueDashboardSummary>;
 ```
 
 ### 4.6 `safetyService`
+
 ```ts
 reportUser(input: ReportUserInput): Promise<Report>;
 reportActivity(input: ReportActivityInput): Promise<Report>;
@@ -444,6 +475,7 @@ unblockUser(blockerId: UserId, blockedId: UserId): Promise<void>;
 ```
 
 ### 4.7 `notificationService`
+
 ```ts
 listNotifications(userId: UserId): Promise<Notification[]>;
 getUnreadCount(userId: UserId): Promise<number>;
@@ -483,16 +515,16 @@ useReportUser(): UseMutationResult<Report, Error, ReportUserInput>;
 
 Explicitly **not** decided here:
 
-| Deferred | Unit |
-|---|---|
-| Ranking weights and the neighborhood-distance algorithm | U3 |
-| Field validation limits (title length, description length, capacity bounds) | U3 |
-| Rating display threshold for "new member" | U4 |
-| Rate-limit thresholds and windows | U4 (Round 2) |
-| Recurrence expansion rules and horizon | U5 |
-| Report reason taxonomy | U6 |
-| Neighborhood adjacency graph construction | U1 |
-| Exact Persian copy for all strings except the US-31 disclosure, already fixed | all |
+| Deferred                                                                      | Unit         |
+| ----------------------------------------------------------------------------- | ------------ |
+| Ranking weights and the neighborhood-distance algorithm                       | U3           |
+| Field validation limits (title length, description length, capacity bounds)   | U3           |
+| Rating display threshold for "new member"                                     | U4           |
+| Rate-limit thresholds and windows                                             | U4 (Round 2) |
+| Recurrence expansion rules and horizon                                        | U5           |
+| Report reason taxonomy                                                        | U6           |
+| Neighborhood adjacency graph construction                                     | U1           |
+| Exact Persian copy for all strings except the US-31 disclosure, already fixed | all          |
 
 ---
 

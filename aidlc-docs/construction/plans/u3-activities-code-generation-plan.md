@@ -14,18 +14,18 @@
 
 ### 1.1 Stories
 
-| Story | Title | Steps |
-|---|---|---|
-| **US-10** | Create an activity | 12, 20, 21, 30 |
+| Story        | Title                                    | Steps                   |
+| ------------ | ---------------------------------------- | ----------------------- |
+| **US-10**    | Create an activity                       | 12, 20, 21, 30          |
 | **US-11** ⚠️ | **Location precision — SAFETY-CRITICAL** | 4, 5, 9, 22, 23, 38, 39 |
-| **US-12** | Edit or cancel | 13, 21, 30 |
-| **US-13** | My activities | 31 |
-| **US-20** | Combined feed | 10, 14, 26 |
-| **US-21** | Neighborhood feed | 10, 26 |
-| **US-22** | Interest feed | 10, 26 |
-| **US-23** | Search and filter | 11, 27, 28 |
-| **US-24** | Category browse | 29 |
-| **US-25** | Detail | 32 |
+| **US-12**    | Edit or cancel                           | 13, 21, 30              |
+| **US-13**    | My activities                            | 31                      |
+| **US-20**    | Combined feed                            | 10, 14, 26              |
+| **US-21**    | Neighborhood feed                        | 10, 26                  |
+| **US-22**    | Interest feed                            | 10, 26                  |
+| **US-23**    | Search and filter                        | 11, 27, 28              |
+| **US-24**    | Category browse                          | 29                      |
+| **US-25**    | Detail                                   | 32                      |
 
 ### 1.2 Dependencies
 
@@ -140,17 +140,17 @@ The three implementations this rules out — circle on the true point, jittered 
 
 ## 4. Definition of Done — U3
 
-| # | Criterion | Verified by |
-|---|---|---|
-| 1 | An activity can be posted only after choosing a precision | 22, 30, 43 |
-| 2 | ⚠️ A neighborhood-precision activity **never** exposes its address or coordinate to anyone but its author, on any surface | **38, 39** |
-| 3 | ⚠️ Its map area is **identical** to every other approximate activity in that neighborhood | **38** |
-| 4 | Feed, search, filter, and category browse all work and are city-scoped | 26–29, 42 |
-| 5 | Ranking is deterministic, set-preserving, and leaks no withheld field | 40 |
-| 6 | Feed modes fall back visibly when their input is missing | 26, 43 |
-| 7 | Past activities are absent from discovery, present on the author's profile | 42, 43 |
-| 8 | The map renders with **no API key and no network** | 25, 44 |
-| 9 | Demoable in Persian at 375px | 44 |
+| #   | Criterion                                                                                                                 | Verified by |
+| --- | ------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| 1   | An activity can be posted only after choosing a precision                                                                 | 22, 30, 43  |
+| 2   | ⚠️ A neighborhood-precision activity **never** exposes its address or coordinate to anyone but its author, on any surface | **38, 39**  |
+| 3   | ⚠️ Its map area is **identical** to every other approximate activity in that neighborhood                                 | **38**      |
+| 4   | Feed, search, filter, and category browse all work and are city-scoped                                                    | 26–29, 42   |
+| 5   | Ranking is deterministic, set-preserving, and leaks no withheld field                                                     | 40          |
+| 6   | Feed modes fall back visibly when their input is missing                                                                  | 26, 43      |
+| 7   | Past activities are absent from discovery, present on the author's profile                                                | 42, 43      |
+| 8   | The map renders with **no API key and no network**                                                                        | 25, 44      |
+| 9   | Demoable in Persian at 375px                                                                                              | 44          |
 
 Items 2 and 3 are the unit. Everything else is the product around them.
 
@@ -158,13 +158,13 @@ Items 2 and 3 are the unit. Everything else is the product around them.
 
 ## 5. Risks
 
-| Risk | Mitigation |
-|---|---|
-| **77 neighborhood coordinates are hand-authored and will be approximate** | Stated openly. **INV-5 means accuracy is not a safety property**: the circle *is* the neighborhood, so an imprecise centre yields an imprecise circle, never a leak. Accuracy affects usefulness, not safety |
-| A tile-free map is hard to make legible | Circles and pins are drawn on a plain projected canvas with neighborhood labels — enough to answer "roughly where", which is all an approximate view should answer |
-| Schema v3 resets existing dev data | Intended, per U1 Q8 `A`. Seeded activities gain coordinates, so a reset is required to see the map at all |
-| Retiring `FoundationDemo` may break U1/U2 tests that assert on it | Step 37 checks first; `shell.test.tsx` and the date-filter tests reference demo test-ids |
-| The show-past toggle is referenced by existing tests | Step 35 removes the control; step 42 updates `dateFilter.test.tsx` and `dateRangeUi.test.tsx` |
+| Risk                                                                      | Mitigation                                                                                                                                                                                                   |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **77 neighborhood coordinates are hand-authored and will be approximate** | Stated openly. **INV-5 means accuracy is not a safety property**: the circle _is_ the neighborhood, so an imprecise centre yields an imprecise circle, never a leak. Accuracy affects usefulness, not safety |
+| A tile-free map is hard to make legible                                   | Circles and pins are drawn on a plain projected canvas with neighborhood labels — enough to answer "roughly where", which is all an approximate view should answer                                           |
+| Schema v3 resets existing dev data                                        | Intended, per U1 Q8 `A`. Seeded activities gain coordinates, so a reset is required to see the map at all                                                                                                    |
+| Retiring `FoundationDemo` may break U1/U2 tests that assert on it         | Step 37 checks first; `shell.test.tsx` and the date-filter tests reference demo test-ids                                                                                                                     |
+| The show-past toggle is referenced by existing tests                      | Step 35 removes the control; step 42 updates `dateFilter.test.tsx` and `dateRangeUi.test.tsx`                                                                                                                |
 
 **The coordinate authoring is the one to watch.** It is 77 rows of data that no test can validate for correctness — only for presence and plausibility. A property test can check that every neighborhood has a centre inside Tehran's bounding box; it cannot check that یوسف‌آباد's centre is actually in یوسف‌آباد.
 

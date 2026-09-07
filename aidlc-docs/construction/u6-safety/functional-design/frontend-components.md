@@ -9,13 +9,13 @@
 
 Small, deliberately. U6's work is the filter, not the screens.
 
-| Component | Route / host | Story | Status |
-|---|---|---|---|
-| `ReportSheet` | opens from profile, activity, request | US-70, US-71 | **New** |
-| `BlockConfirmation` | opens from the same places | ⚠️ US-72 | **New** |
-| `BlockedUsersScreen` | `/profile/blocked` | US-72 | **New** |
-| `SafetyMenu` | overflow control on profile / activity / request cards | US-70, US-71, US-72 | **New** |
-| `GuidanceLink` | inside `JoinRequestSheet` | ⚠️ US-73 criterion 4 | **New** — §5 |
+| Component            | Route / host                                           | Story                | Status       |
+| -------------------- | ------------------------------------------------------ | -------------------- | ------------ |
+| `ReportSheet`        | opens from profile, activity, request                  | US-70, US-71         | **New**      |
+| `BlockConfirmation`  | opens from the same places                             | ⚠️ US-72             | **New**      |
+| `BlockedUsersScreen` | `/profile/blocked`                                     | US-72                | **New**      |
+| `SafetyMenu`         | overflow control on profile / activity / request cards | US-70, US-71, US-72  | **New**      |
+| `GuidanceLink`       | inside `JoinRequestSheet`                              | ⚠️ US-73 criterion 4 | **New** — §5 |
 
 ---
 
@@ -58,13 +58,13 @@ A single overflow control («…») hosting **گزارش** and **مسدود کر
 └─────────────────────────────────────────────┘
 ```
 
-| Rule | Constraint |
-|---|---|
-| BR-U6-41 | Five reasons, no more. `موارد دیگر` is kept — a taxonomy with no escape hatch makes people pick the nearest wrong box |
+| Rule     | Constraint                                                                                                                                                   |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| BR-U6-41 | Five reasons, no more. `موارد دیگر` is kept — a taxonomy with no escape hatch makes people pick the nearest wrong box                                        |
 | BR-U6-42 | **جمع‌آوری اطلاعات تماس** offered on both users and activities. This is the AR-02 monitoring signal, and under CR-07 it is the most valuable code in the set |
-| BR-U6-43 | ⚠️ **Free text only.** No file input. The prompt explains *why* it matters (AR-04) rather than treating it as an optional extra |
-| BR-U6-43 | ⚠️ **No evidence upload control** — not disabled, **absent**. An input that silently discards what someone attaches is worse than not offering one |
-| BR-U6-46 | Reporting does **not** block. The confirmation may *offer* blocking; it must not perform it |
+| BR-U6-43 | ⚠️ **Free text only.** No file input. The prompt explains _why_ it matters (AR-04) rather than treating it as an optional extra                              |
+| BR-U6-43 | ⚠️ **No evidence upload control** — not disabled, **absent**. An input that silently discards what someone attaches is worse than not offering one           |
+| BR-U6-46 | Reporting does **not** block. The confirmation may _offer_ blocking; it must not perform it                                                                  |
 
 ### 3.1 ⚠️ What the confirmation says
 
@@ -86,12 +86,12 @@ Blocking is instant and reversible, so the dialog is short — but it must be **
 >
 > ⚠️ اطلاعات تماسی که قبلاً فرستاده شده پس گرفته نمی‌شود.
 
-| Rule | Why it is in the copy |
-|---|---|
-| BR-U6-12 | *"They are not told"* — people ask, and the answer affects whether they feel safe doing it |
-| BR-U6-35 | ⚠️ *"Contact details already sent are not recalled"* — the same honesty BR-U4-42 required of withdrawal. A block that seemed to un-send a phone number would be a false promise about the one thing that cannot be undone |
+| Rule     | Why it is in the copy                                                                                                                                                                                                     |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BR-U6-12 | _"They are not told"_ — people ask, and the answer affects whether they feel safe doing it                                                                                                                                |
+| BR-U6-35 | ⚠️ _"Contact details already sent are not recalled"_ — the same honesty BR-U4-42 required of withdrawal. A block that seemed to un-send a phone number would be a false promise about the one thing that cannot be undone |
 
-**Not mentioned**: that their rating stops counting toward your score (AR-05). Stating it would advertise the vector — *"block your critics to raise your average"* — and the copy's job is to describe what a person will experience, not to publish an exploit. The behaviour is recorded in `requirements.md` AR-05 and in the design; it is not surfaced as a feature.
+**Not mentioned**: that their rating stops counting toward your score (AR-05). Stating it would advertise the vector — _"block your critics to raise your average"_ — and the copy's job is to describe what a person will experience, not to publish an exploit. The behaviour is recorded in `requirements.md` AR-05 and in the design; it is not surfaced as a feature.
 
 ### 4.2 `BlockedUsersScreen` — `/profile/blocked`
 
@@ -107,7 +107,7 @@ Empty state: an honest one saying nobody is blocked, not a promotional explanati
 
 US-73 criterion 4, unmet since U4 built the join sheet:
 
-> *"Given I am about to send a first join request, When the sheet opens, Then a link to safety guidance is present alongside the disclosure (US-31)."*
+> _"Given I am about to send a first join request, When the sheet opens, Then a link to safety guidance is present alongside the disclosure (US-31)."_
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -135,18 +135,18 @@ Therefore:
 - **Not a dismiss control**, and clicking it does not close or collapse the notice
 - Opens guidance **without losing the sheet's state** — a person who reads the guidance and returns must not have to re-enter their note and re-choose a channel
 
-`DisclosureNotice` itself is **not modified**. Its header already says *do not "improve" this component*, and adding a link inside it would be the first such improvement.
+`DisclosureNotice` itself is **not modified**. Its header already says _do not "improve" this component_, and adding a link inside it would be the first such improvement.
 
 ---
 
 ## 6. Data flow
 
-| Component | Reads | Writes |
-|---|---|---|
-| `SafetyMenu` | `useSession` (to hide on own content) | — |
-| `ReportSheet` | — | `reportUser` / `reportActivity` |
-| `BlockConfirmation` | — | `blockUser` |
-| `BlockedUsersScreen` | `listBlocks` | `unblockUser` |
-| `GuidanceLink` | — | — |
+| Component            | Reads                                 | Writes                          |
+| -------------------- | ------------------------------------- | ------------------------------- |
+| `SafetyMenu`         | `useSession` (to hide on own content) | —                               |
+| `ReportSheet`        | —                                     | `reportUser` / `reportActivity` |
+| `BlockConfirmation`  | —                                     | `blockUser`                     |
+| `BlockedUsersScreen` | `listBlocks`                          | `unblockUser`                   |
+| `GuidanceLink`       | —                                     | —                               |
 
 **No component filters blocks itself.** Every surface receives already-filtered data from the repository (BR-U6-32) — a component that filtered would be a second implementation of the invariant, and the one nobody property-tests.

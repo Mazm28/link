@@ -34,14 +34,14 @@ this project already hit once, at U3 step P-U3-02, where a property test compare
 
 ## 2. The six changes
 
-| # | Change | Kind |
-|---|---|---|
-| 1 | City browsing defaults to **all cities** | **Requirement amendment** — see §3 |
-| 2 | Activity editing at `/activity/:id/edit` | New capability |
-| 3 | `/profile` becomes a hub; the form moves to `/profile/edit` | New screen |
-| 4 | `/requests` renders a real inbox | **Crosses into U4** — see §4 |
-| 5 | `ActivityMap` takes a `height` | Cosmetic |
-| 6 | Signatures narrowed to `Pick<...>` | Refactor |
+| #   | Change                                                      | Kind                               |
+| --- | ----------------------------------------------------------- | ---------------------------------- |
+| 1   | City browsing defaults to **all cities**                    | **Requirement amendment** — see §3 |
+| 2   | Activity editing at `/activity/:id/edit`                    | New capability                     |
+| 3   | `/profile` becomes a hub; the form moves to `/profile/edit` | New screen                         |
+| 4   | `/requests` renders a real inbox                            | **Crosses into U4** — see §4       |
+| 5   | `ActivityMap` takes a `height`                              | Cosmetic                           |
+| 6   | Signatures narrowed to `Pick<...>`                          | Refactor                           |
 
 ---
 
@@ -65,8 +65,8 @@ abstract. What it did not survive was contact with the seed data: Round-1 conten
 entirely Tehran, so a viewer who switched cities — or, worse, posted while switched — met a feed
 with one activity in it and reasonably concluded the app was broken.
 
-The audit already recorded this risk on 2026-08-05T03:10Z and proposed a mitigation: *seed a
-second city so the feature is demonstrable rather than theoretical.* That mitigation treated the
+The audit already recorded this risk on 2026-08-05T03:10Z and proposed a mitigation: _seed a
+second city so the feature is demonstrable rather than theoretical._ That mitigation treated the
 symptom. Seeding content to make a default scope look populated is scaffolding built to hold up a
 decision, and it is the decision that was wrong.
 
@@ -74,9 +74,9 @@ decision, and it is the decision that was wrong.
 
 BR-U3-50 and BR-U3-51 are **rewritten**, not marked as departed from:
 
-| | Before | After |
-|---|---|---|
-| BR-U3-50 | Feed, search and browse are scoped to one city | Scoped to one city **only when a viewer chooses one**; unscoped otherwise |
+|          | Before                                            | After                                                                                                        |
+| -------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| BR-U3-50 | Feed, search and browse are scoped to one city    | Scoped to one city **only when a viewer chooses one**; unscoped otherwise                                    |
 | BR-U3-51 | Active city defaults to `homeCityId`, then Tehran | Active city defaults to **all cities**; `composeCityId` is the posting fallback and keeps the old precedence |
 
 **What is preserved deliberately**: switching the city still does not write to the profile. That
@@ -102,7 +102,7 @@ Connections**, the unit `aidlc-state.md` flags as carrying the highest safety se
 Adopted rather than reverted, per answer Q1 `A` — but **as a provisional surface, not as delivered
 work**. Clarified by the user at the approval gate on 2026-08-08:
 
-> *"what we built is a mocked version and must be rebuilt in U4"*
+> _"what we built is a mocked version and must be rebuilt in U4"_
 
 This reverses what an earlier draft of this document said. **U4 does NOT inherit this screen — U4
 rebuilds it**, through its own functional-design stage with its own safety review. What is in the
@@ -174,23 +174,23 @@ deliberately lacks.
 
 ## 6. Verification
 
-| Gate | Result |
-|---|---|
-| `npm run typecheck` | Clean |
-| `npm run lint` | Clean — 0 errors, 0 warnings |
-| `npm test` | **250 passed** (was 228; **22 added**, 34 files) |
-| `npm run build` | 137.9 KB gzipped total (104.68 KB app + 26.39 KB vendor + 6.81 KB CSS) |
-| Browser verification | ✅ done — see §6.4 |
+| Gate                 | Result                                                                 |
+| -------------------- | ---------------------------------------------------------------------- |
+| `npm run typecheck`  | Clean                                                                  |
+| `npm run lint`       | Clean — 0 errors, 0 warnings                                           |
+| `npm test`           | **250 passed** (was 228; **22 added**, 34 files)                       |
+| `npm run build`      | 137.9 KB gzipped total (104.68 KB app + 26.39 KB vendor + 6.81 KB CSS) |
+| Browser verification | ✅ done — see §6.4                                                     |
 
 ### 6.1 Tests added — 21 across 4 files
 
-| File | Covers |
-|---|---|
-| `tests/core/rules/ranking.pbt.test.ts` | **P-U3-07** (BR-U3-54) + a guard that Tehran proximity still works |
-| `tests/app/cityFilter.test.tsx` | Unscoped feed, chosen city still narrows, the sentinel round-trip, and no profile write |
-| `tests/features/connections/requestsInbox.test.tsx` | **INV-3 scoping** at the repository boundary and on the wire, FR-35, US-33 |
-| `tests/features/activities/activityEdit.test.tsx` | Prefill, BR-U3-14's author-only fields, `/create` not inheriting, BR-U3-31/32 link visibility |
-| `tests/features/identity/profileHub.test.tsx` | Hub vs form routing, **FR-02 on the owner's own profile**, single `<h1>` |
+| File                                                | Covers                                                                                        |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `tests/core/rules/ranking.pbt.test.ts`              | **P-U3-07** (BR-U3-54) + a guard that Tehran proximity still works                            |
+| `tests/app/cityFilter.test.tsx`                     | Unscoped feed, chosen city still narrows, the sentinel round-trip, and no profile write       |
+| `tests/features/connections/requestsInbox.test.tsx` | **INV-3 scoping** at the repository boundary and on the wire, FR-35, US-33                    |
+| `tests/features/activities/activityEdit.test.tsx`   | Prefill, BR-U3-14's author-only fields, `/create` not inheriting, BR-U3-31/32 link visibility |
+| `tests/features/identity/profileHub.test.tsx`       | Hub vs form routing, **FR-02 on the owner's own profile**, single `<h1>`                      |
 
 ### 6.2 Two defects found by these tests, neither by review
 
@@ -201,7 +201,7 @@ second was unreachable, which is why BR-U3-53 recorded the question as closed; C
 feed asks it on every pass. A Mashhad activity scored 0 at full weight while a Yazd one had its
 weight redistributed — so **the city with better reference data ranked worse**.
 
-*Verified the test catches it*: with the fix reverted, P-U3-07 fails after 2 generated cases
+_Verified the test catches it_: with the fix reverted, P-U3-07 fails after 2 generated cases
 (`expected +0 to be 1`). A property test that passes against both the broken and the fixed
 implementation is worth nothing, and this project has already shipped one — P-U3-02, which
 compared `"[object Object]"` to itself.
@@ -216,10 +216,10 @@ Now degrades to `kind: 'none'`.
 ### 6.3 One test was wrong and was corrected rather than accommodated
 
 The first version of the FR-35 test asserted that `SentRequestView` carries **no** `sharedContact`
-field, reading the type's comment — *"HAS NO FIELD FOR THE POSTER'S CONTACT DETAILS"* — as a
+field, reading the type's comment — _"HAS NO FIELD FOR THE POSTER'S CONTACT DETAILS"_ — as a
 blanket prohibition. It failed. The field is deliberately present and holds **the requester's
 own** detail, shown back so they can see what they disclosed; what the type lacks is a field for
-the *poster's* contact, which is where FR-35's asymmetry actually lives.
+the _poster's_ contact, which is where FR-35's asymmetry actually lives.
 
 Had the test been "made to pass" by deleting the field, US-30 would have lost a feature to a
 misreading. The assertion now checks the real claim: every value on a sent request belongs to the
@@ -255,19 +255,19 @@ already existed and passed throughout. Mounting fresh at `/create` was never the
 test that re-mounts the app at every route **cannot observe a bug whose cause is not remounting**.
 The new test drives a real click on the nav link, and it fails against the unkeyed router.
 
-| Check | Result |
-|---|---|
-| Font rendering, ZWNJ | ✅ Vazirmatn active, ZWNJ alters width |
-| Console errors | None |
-| City switcher default | «همه‌ی شهرها» |
-| Requests inbox | 6 requests, blank «تلگرام: » gone after reseed |
-| Profile hub | Summary + link, one `<h1>`, **no phone number in the DOM** |
-| Edit → create leak | ✅ fixed, re-verified in the browser |
-| 375px, six routes | No horizontal overflow on any |
+| Check                 | Result                                                     |
+| --------------------- | ---------------------------------------------------------- |
+| Font rendering, ZWNJ  | ✅ Vazirmatn active, ZWNJ alters width                     |
+| Console errors        | None                                                       |
+| City switcher default | «همه‌ی شهرها»                                              |
+| Requests inbox        | 6 requests, blank «تلگرام: » gone after reseed             |
+| Profile hub           | Summary + link, one `<h1>`, **no phone number in the DOM** |
+| Edit → create leak    | ✅ fixed, re-verified in the browser                       |
+| 375px, six routes     | No horizontal overflow on any                              |
 
 **Not verified visually.** Screenshot capture timed out repeatedly against the preview pane, so
-every check above is from the DOM, the network log and computed styles. Layout *aesthetics* are
-therefore unconfirmed; layout *overflow* is confirmed by measurement.
+every check above is from the DOM, the network log and computed styles. Layout _aesthetics_ are
+therefore unconfirmed; layout _overflow_ is confirmed by measurement.
 
 **Known limitation, not fixed**: `SCHEMA_VERSION` is unchanged at 3, so an existing browser keeps
 its persisted store — including the blank-Telegram rows. The seed fix only takes effect on a fresh
@@ -278,13 +278,13 @@ discard any activities created by hand while testing, so it is left as your call
 
 ## 7. Artifacts Amended
 
-| Artifact | Change |
-|---|---|
-| `u3-activities/functional-design/business-rules.md` | BR-U3-50/51 rewritten (§3.3) |
-| `u3-activities/functional-design/business-logic-model.md` | Active-city derivation |
-| `u3-activities/functional-design/frontend-components.md` | `CitySwitcher`, `ProfileScreen`, `RequestsInboxScreen` |
-| `aidlc-state.md` | CR-05, amended rules, US-40 pulled forward |
-| Code | 16 modified, 3 new — enumerated in §2 |
+| Artifact                                                  | Change                                                 |
+| --------------------------------------------------------- | ------------------------------------------------------ |
+| `u3-activities/functional-design/business-rules.md`       | BR-U3-50/51 rewritten (§3.3)                           |
+| `u3-activities/functional-design/business-logic-model.md` | Active-city derivation                                 |
+| `u3-activities/functional-design/frontend-components.md`  | `CitySwitcher`, `ProfileScreen`, `RequestsInboxScreen` |
+| `aidlc-state.md`                                          | CR-05, amended rules, US-40 pulled forward             |
+| Code                                                      | 16 modified, 3 new — enumerated in §2                  |
 
 ---
 
@@ -292,7 +292,7 @@ discard any activities created by hand while testing, so it is left as your call
 
 Three days of work reached the tree with no audit entry, no state update, and no tests, and the
 green suite gave no signal because it did not know the code existed. The audit trail is not
-bureaucracy here: it is the only thing that distinguishes *approved* from *merely present*, and an
+bureaucracy here: it is the only thing that distinguishes _approved_ from _merely present_, and an
 approval granted over an unrecorded diff records an agreement to something nobody wrote down.
 
 **The cheap mitigation**: a test count is a fact worth recording at every gate. 228 → 228 across

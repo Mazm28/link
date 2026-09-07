@@ -8,6 +8,7 @@ The following question is automatically included in the Requirements Analysis cl
 
 ```markdown
 ## Question: Resiliency Extensions
+
 Should the resiliency baseline be applied to this project?
 
 **What this extension is.** Enabling it applies a set of **directional, design-time best practices** for building resilient systems, derived from the **AWS Well-Architected Framework (Reliability Pillar)** and resilience-review guidance. It steers requirements, design, and code toward fault tolerance, high availability, observability, and recoverability — covering 15 practice areas across business goals, change management, observability, high availability, disaster recovery, and continuous improvement.
@@ -22,5 +23,5 @@ B) No — skip the resiliency baseline (suitable for PoCs, prototypes, and exper
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```

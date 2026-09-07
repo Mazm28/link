@@ -219,10 +219,16 @@ export class MockContext {
 
     // 6. PROJECT — viewer-scoped views (INV-2, INV-3)
     const items = slice.map((activity) =>
-      projectActivity(activity, this.profileOf(activity.authorId, params.viewerId), params.viewerId, now, {
-        viewerHasRequested: this.hasRequested(params.viewerId, activity.id),
-        requestCount: this.requestCount(activity.id),
-      }),
+      projectActivity(
+        activity,
+        this.profileOf(activity.authorId, params.viewerId),
+        params.viewerId,
+        now,
+        {
+          viewerHasRequested: this.hasRequested(params.viewerId, activity.id),
+          requestCount: this.requestCount(activity.id),
+        },
+      ),
     );
 
     return {
@@ -242,9 +248,9 @@ export class MockContext {
   }
 
   requestCount(activityId: Activity['id']): number {
-    return this.store.read().joinRequests.filter(
-      (r) => r.activityId === activityId && r.status === 'sent',
-    ).length;
+    return this.store
+      .read()
+      .joinRequests.filter((r) => r.activityId === activityId && r.status === 'sent').length;
   }
 }
 
@@ -255,5 +261,3 @@ function defaultOrder(activities: Activity[]): Activity[] {
     (x, y) => new Date(x.startsAt).getTime() - new Date(y.startsAt).getTime(),
   );
 }
-
-

@@ -60,9 +60,7 @@ export const arbPersianText = fc
  *  carrying a ZWNJ inside a word the way «پیاده‌روی» does. */
 export const arbPersianTitle = fc
   .array(persianWord, { minLength: 1, maxLength: 5 })
-  .chain((words) =>
-    fc.constantFrom('‌', ' ').map((sep) => words.join(sep)),
-  );
+  .chain((words) => fc.constantFrom('‌', ' ').map((sep) => words.join(sep)));
 
 /** Persian text plus arbitrary Unicode, so the properties also hold for the
  *  inputs no one designed for — pasted content, corrupted encodings. */

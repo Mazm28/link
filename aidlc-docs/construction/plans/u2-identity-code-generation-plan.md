@@ -14,14 +14,14 @@
 
 ### 1.1 Stories Implemented
 
-| Story | Title | Steps |
-|---|---|---|
-| **US-01** | Sign in with phone and OTP | 4, 5, 8, 9, 14, 15, 16, 22, 23 |
-| **US-02** | Set up my profile | 6, 10, 17, 18, 19, 24 |
-| **US-03** | Manage my profile and account | 6, 10, 20, 21, 25, 26 |
-| **US-73** | Read safety guidance | 11, 27 |
+| Story     | Title                         | Steps                          |
+| --------- | ----------------------------- | ------------------------------ |
+| **US-01** | Sign in with phone and OTP    | 4, 5, 8, 9, 14, 15, 16, 22, 23 |
+| **US-02** | Set up my profile             | 6, 10, 17, 18, 19, 24          |
+| **US-03** | Manage my profile and account | 6, 10, 20, 21, 25, 26          |
+| **US-73** | Read safety guidance          | 11, 27                         |
 
-*(Per-criterion mapping in §5.)*
+_(Per-criterion mapping in §5.)_
 
 ### 1.2 Dependencies
 
@@ -142,18 +142,18 @@ DEP-1 … DEP-4 are unchanged and still fail the build. Two are load-bearing for
 
 ## 3. Definition of Done — U2
 
-| # | Criterion | Verified by |
-|---|---|---|
-| 1 | A user signs in with a phone and any 5-digit code | Step 34, 35 |
-| 2 | An unknown number creates an account and lands on setup, indistinguishably | Step 15, 35 |
-| 3 | The phone number appears nowhere in the UI | Step 35 — asserted against the DOM |
-| 4 | Setup requires ≥1 interest and a neighborhood, with Persian errors | Step 24, 32 |
-| 5 | Safety guidance shows once, then stays reachable | Step 27, 35 |
-| 6 | Profile edits appear on already-published activities | Step 25, 35 |
-| 7 | Deletion anonymizes and revokes shared contacts | Step 26, **33** |
-| 8 | All four property tests pass | Steps 32, 33 |
-| 9 | ESLint boundaries still clean — no `features/` → `infra/` import | Step 36 |
-| 10 | Demoable in a browser in Persian | Step 36 |
+| #   | Criterion                                                                  | Verified by                        |
+| --- | -------------------------------------------------------------------------- | ---------------------------------- |
+| 1   | A user signs in with a phone and any 5-digit code                          | Step 34, 35                        |
+| 2   | An unknown number creates an account and lands on setup, indistinguishably | Step 15, 35                        |
+| 3   | The phone number appears nowhere in the UI                                 | Step 35 — asserted against the DOM |
+| 4   | Setup requires ≥1 interest and a neighborhood, with Persian errors         | Step 24, 32                        |
+| 5   | Safety guidance shows once, then stays reachable                           | Step 27, 35                        |
+| 6   | Profile edits appear on already-published activities                       | Step 25, 35                        |
+| 7   | Deletion anonymizes and revokes shared contacts                            | Step 26, **33**                    |
+| 8   | All four property tests pass                                               | Steps 32, 33                       |
+| 9   | ESLint boundaries still clean — no `features/` → `infra/` import           | Step 36                            |
+| 10  | Demoable in a browser in Persian                                           | Step 36                            |
 
 Item 3 and item 7 are the two that matter: they are the ones checked against behaviour rather than argued for in a document.
 
@@ -161,12 +161,12 @@ Item 3 and item 7 are the two that matter: they are the ones checked against beh
 
 ## 4. Risks
 
-| Risk | Mitigation |
-|---|---|
-| The `avatarId` rename touches 8 files including two test helpers | Steps 1–3 first, then the compiler finds every site. `strict` makes this mechanical |
-| `SessionProvider` currently reads `getCurrentUser` directly; U2 adds a session layer beneath it | Step 29 keeps `SessionProvider`'s public shape unchanged so U3–U6 need no revision |
-| The store schema changes, so existing dev data resets | Intended — U1 Q8 `A` resets to seed on mismatch. Seeded users need `profileCompletedAt` backfilled in Step 14, or every seeded user appears incomplete |
-| P-U2-03 could pass by only checking paths that exist today | Step 33 enumerates read paths from the repository interfaces, so a new path added in U3 is covered without editing the property |
+| Risk                                                                                            | Mitigation                                                                                                                                             |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The `avatarId` rename touches 8 files including two test helpers                                | Steps 1–3 first, then the compiler finds every site. `strict` makes this mechanical                                                                    |
+| `SessionProvider` currently reads `getCurrentUser` directly; U2 adds a session layer beneath it | Step 29 keeps `SessionProvider`'s public shape unchanged so U3–U6 need no revision                                                                     |
+| The store schema changes, so existing dev data resets                                           | Intended — U1 Q8 `A` resets to seed on mismatch. Seeded users need `profileCompletedAt` backfilled in Step 14, or every seeded user appears incomplete |
+| P-U2-03 could pass by only checking paths that exist today                                      | Step 33 enumerates read paths from the repository interfaces, so a new path added in U3 is covered without editing the property                        |
 
 **The seed backfill in Step 14 is the one easy to miss.** Every seeded user predates `profileCompletedAt`; without a backfill they all read as incomplete, `getProfile` returns `null` for all of them, and the entire feed empties. It would look like a catastrophic regression and be a one-line omission.
 
@@ -174,25 +174,25 @@ Item 3 and item 7 are the two that matter: they are the ones checked against beh
 
 ## 5. Story Traceability
 
-| Story | Criterion | Step |
-|---|---|---|
-| US-01 | Valid number → code screen, code "sent" | 15, 22 |
-| | Wrong code → generic Persian error, stays on screen | 15, 23 |
-| | Malformed number rejected before any request | 8, 22 |
-| | First sign-in → setup, not feed | 11, 29 |
-| | Phone never displayed | 23, 35 |
-| | No phone/OTP in logs or analytics | 9, 15, 18 |
-| US-02 | Name, avatar, bio, interests, neighborhood | 24 |
-| | Real Tehran neighborhoods, **no location permission** | 20 |
-| | Blocked without ≥1 interest and a neighborhood | 10, 24 |
-| | Lands on a ranked feed | 29, 30 |
-| US-03 | Edits reflected everywhere, incl. published activities | 25, 35 |
-| | Explicit confirmation → anonymize → sign out | 26, 16 |
-| | Activity survives with an anonymized author | 16, 33 |
-| US-73 | Shown once after setup | 27, 29 |
-| | States the four points | 13, 27 |
-| | Always reachable | 30, 31 |
-| | Linked from the join sheet | *U4 — route provided here* |
+| Story | Criterion                                              | Step                       |
+| ----- | ------------------------------------------------------ | -------------------------- |
+| US-01 | Valid number → code screen, code "sent"                | 15, 22                     |
+|       | Wrong code → generic Persian error, stays on screen    | 15, 23                     |
+|       | Malformed number rejected before any request           | 8, 22                      |
+|       | First sign-in → setup, not feed                        | 11, 29                     |
+|       | Phone never displayed                                  | 23, 35                     |
+|       | No phone/OTP in logs or analytics                      | 9, 15, 18                  |
+| US-02 | Name, avatar, bio, interests, neighborhood             | 24                         |
+|       | Real Tehran neighborhoods, **no location permission**  | 20                         |
+|       | Blocked without ≥1 interest and a neighborhood         | 10, 24                     |
+|       | Lands on a ranked feed                                 | 29, 30                     |
+| US-03 | Edits reflected everywhere, incl. published activities | 25, 35                     |
+|       | Explicit confirmation → anonymize → sign out           | 26, 16                     |
+|       | Activity survives with an anonymized author            | 16, 33                     |
+| US-73 | Shown once after setup                                 | 27, 29                     |
+|       | States the four points                                 | 13, 27                     |
+|       | Always reachable                                       | 30, 31                     |
+|       | Linked from the join sheet                             | _U4 — route provided here_ |
 
 ---
 

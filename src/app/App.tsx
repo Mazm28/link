@@ -62,21 +62,21 @@ export function App({ repositories }: AppProps = {}) {
                 <SessionProvider>
                   <CityProvider>
                     <FeedFilterProvider>
-                    <BrowserRouter>
-                      <AppRouter />
-                      {backend ? (
-                        <DevMenu
-                          onReset={() => backend.reset()}
-                          latencyEnabled={latency}
-                          onToggleLatency={(enabled) => {
-                            setMockLatencyEnabled(enabled);
-                            setLatency(enabled);
-                          }}
-                          schemaMismatch={diagnostics?.didResetOnVersionMismatch ?? false}
-                          memoryFallback={diagnostics?.usingMemoryFallback ?? false}
-                        />
-                      ) : null}
-                    </BrowserRouter>
+                      <BrowserRouter>
+                        <AppRouter />
+                        {backend ? (
+                          <DevMenu
+                            onReset={() => backend.reset()}
+                            latencyEnabled={latency}
+                            onToggleLatency={(enabled) => {
+                              setMockLatencyEnabled(enabled);
+                              setLatency(enabled);
+                            }}
+                            schemaMismatch={diagnostics?.didResetOnVersionMismatch ?? false}
+                            memoryFallback={diagnostics?.usingMemoryFallback ?? false}
+                          />
+                        ) : null}
+                      </BrowserRouter>
                     </FeedFilterProvider>
                   </CityProvider>
                 </SessionProvider>

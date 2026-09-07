@@ -18,7 +18,10 @@ type Predicate = (activity: Activity) => boolean;
 
 /** Each entry is one filter TYPE. Absent filters produce no predicate at all,
  *  so an empty filter set is the identity. */
-function predicatesFor(filters: ActivityFilters, state: (a: Activity) => DerivedActivityState): Predicate[] {
+function predicatesFor(
+  filters: ActivityFilters,
+  state: (a: Activity) => DerivedActivityState,
+): Predicate[] {
   const predicates: Predicate[] = [];
 
   if (filters.cityId !== undefined) {

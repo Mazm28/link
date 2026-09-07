@@ -5,14 +5,14 @@
 
 ## Recorded as final — no action needed
 
-| Q | Answer | Effect |
-|---|---|---|
-| U6 Q2 | `A` | A blocked person's already-delivered request **disappears** from your inbox |
-| U6 Q3 | `A` | Reports are **free text only** in Round 1; `evidenceUrls` stays empty |
-| U6 Q4 | `B` | The reporter is told the report was **recorded**, with no promise of review |
-| U6 Q5 | `C` | CR-08 answered before U6 proceeds — done, and that is what this file is about |
-| CR-08 Q1 | `A` | Optional author-set `joinsCloseAt`, defaults to `startsAt`, gates the join action only |
-| CR-08 Q4 | `A` | Part B is public, author-answered, **sequenced after U6** so reporting exists on day one |
+| Q        | Answer | Effect                                                                                   |
+| -------- | ------ | ---------------------------------------------------------------------------------------- |
+| U6 Q2    | `A`    | A blocked person's already-delivered request **disappears** from your inbox              |
+| U6 Q3    | `A`    | Reports are **free text only** in Round 1; `evidenceUrls` stays empty                    |
+| U6 Q4    | `B`    | The reporter is told the report was **recorded**, with no promise of review              |
+| U6 Q5    | `C`    | CR-08 answered before U6 proceeds — done, and that is what this file is about            |
+| CR-08 Q1 | `A`    | Optional author-set `joinsCloseAt`, defaults to `startsAt`, gates the join action only   |
+| CR-08 Q4 | `A`    | Part B is public, author-answered, **sequenced after U6** so reporting exists on day one |
 
 ---
 
@@ -20,21 +20,22 @@
 
 Your answer: **C) Allow — the channel is public and people can say what they want.**
 
-CR-08's own text says of that question: *"This decides whether Part B is safe at all."*
+CR-08's own text says of that question: _"This decides whether Part B is safe at all."_
 
 **INV-3, quoted verbatim from `src/core/repositories/index.ts`:**
 
 > **INV-3** No read returns another user's contact details, **except as `sharedContact` on a JoinRequestView addressed to the viewer.**
 
-The exception is singular, named, and scoped to one viewer. A public questions channel that permits contact details creates a **second exception that is scoped to nobody** — a question containing a phone number is returned by a questions read to *every* viewer of that activity.
+The exception is singular, named, and scoped to one viewer. A public questions channel that permits contact details creates a **second exception that is scoped to nobody** — a question containing a phone number is returned by a questions read to _every_ viewer of that activity.
 
-**Why this is different from the other decisions in this project.** CR-07 changed a *requirement* and re-accepted a *risk* — both legitimate, both recorded. This changes an **invariant**, and `aidlc-state.md` calls the five invariants *"the mechanism carrying the safety requirements into Round 2."* They are the things Round 2's server is built to reproduce. INV-3 is also the one U4 verified on the wire: 9 contact values in the store, 0 reaching the DOM.
+**Why this is different from the other decisions in this project.** CR-07 changed a _requirement_ and re-accepted a _risk_ — both legitimate, both recorded. This changes an **invariant**, and `aidlc-state.md` calls the five invariants _"the mechanism carrying the safety requirements into Round 2."_ They are the things Round 2's server is built to reproduce. INV-3 is also the one U4 verified on the wire: 9 contact values in the store, 0 reaching the DOM.
 
-**What it enables concretely.** Under CR-07 sharing is already mandatory, so AR-02's harvesting risk is at its highest recorded level. A public channel that accepts contact details turns harvesting from *"post a fake activity and collect what requesters disclose to me"* into *"post a fake activity and let people publish their numbers to everyone, including me."* The bad actor no longer needs the requests at all.
+**What it enables concretely.** Under CR-07 sharing is already mandatory, so AR-02's harvesting risk is at its highest recorded level. A public channel that accepts contact details turns harvesting from _"post a fake activity and collect what requesters disclose to me"_ into _"post a fake activity and let people publish their numbers to everyone, including me."_ The bad actor no longer needs the requests at all.
 
 There is also a plainer version: someone answering a question at 2am with their number, to one host they trust, has published it to every stranger reading that activity — and to Round 2's search index.
 
 ### Clarification Question 1
+
 How should Part B handle contact details?
 
 A) **Reject at write time** (CR-08's own option A, recommended) — a question containing a phone number or Telegram handle is refused by the repository, reusing `core/rules/phone.ts` so the check cannot drift from the one that already exists. INV-3 stands untouched.
@@ -53,7 +54,7 @@ E) Other (please describe after [Answer]: tag below)
 
 ## ⚠️ Blocker 2 — U6 Q1 `A` makes blocking a way to delete a bad rating
 
-Your answer: **A) Everything two-way**, explicitly including *"accepts that a blocked person's past rating disappears from your score."*
+Your answer: **A) Everything two-way**, explicitly including _"accepts that a blocked person's past rating disappears from your score."_
 
 Recorded, and buildable. But the consequence deserves one concrete sentence before it is built, because it is exercisable by anyone in about four seconds:
 
@@ -64,6 +65,7 @@ Repeat as needed. **Ratings become opt-out**, which makes the score a measure of
 This project has a precedent for exactly this situation: CR-07 removed one of AR-02's mitigations, and rather than absorbing it, AR-02 was **formally re-accepted on the reduced set**. Same pattern applies here.
 
 ### Clarification Question 2
+
 How should this be recorded and built?
 
 A) **Build `A` as answered, and record a new accepted risk AR-05** — "blocking can suppress an unfavourable rating" — with its own mitigation note for Round 2 (e.g. the aggregate is recomputed server-side and blocks do not affect it). Your decision stands; the cost is on the record where AR-01…AR-04 are.
@@ -82,18 +84,19 @@ D) Other (please describe after [Answer]: tag below)
 
 Your answer: **B) In scope — design activities with no start time.**
 
-CR-08 itself flags this one: *"Item 2 is scope growth wearing item 1's clothes."* I am not re-arguing the decision — I am making sure the size is visible, because `startsAt` is load-bearing in four approved places:
+CR-08 itself flags this one: _"Item 2 is scope growth wearing item 1's clothes."_ I am not re-arguing the decision — I am making sure the size is visible, because `startsAt` is load-bearing in four approved places:
 
-| Depends on `startsAt` | Consequence if it becomes optional |
-|---|---|
-| `deriveState` (BR-U1-17) | The three-state model has no answer for an activity with no date |
-| `excludePast: true` on every discovery read | Nothing to compare — such activities never expire from the feed |
-| Ranking's `recency` term (BR-U3-60) | The 0.20-weight term has no input; BR-U3-61 drops it, so these rank differently from everything else |
-| `canRate` — *"the activity date has passed"* | **Rating can never open** for an activity with no date |
+| Depends on `startsAt`                        | Consequence if it becomes optional                                                                   |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `deriveState` (BR-U1-17)                     | The three-state model has no answer for an activity with no date                                     |
+| `excludePast: true` on every discovery read  | Nothing to compare — such activities never expire from the feed                                      |
+| Ranking's `recency` term (BR-U3-60)          | The 0.20-weight term has no input; BR-U3-61 drops it, so these rank differently from everything else |
+| `canRate` — _"the activity date has passed"_ | **Rating can never open** for an activity with no date                                               |
 
 That last row is the one to notice: an open-ended activity would be permanently un-rateable, so attending one earns nobody any reputation.
 
 ### Clarification Question 3
+
 Still in scope?
 
 A) **Yes, in scope** — I design it, and the four consequences above get explicit rules (most likely: open-ended activities are excluded from ranking's recency term and are never rateable, both stated rather than emergent).

@@ -5,6 +5,7 @@ This file is an append-only audit trail of every user input and AI action during
 ---
 
 ## Initial User Request
+
 **Timestamp**: 2026-07-30T02:00:42Z
 **User Input**: "i want to make a mobile app for people so they can find people when they want to hangout or do a certain activity. for instance you want to play d&d but you have a short of passionate friends about it so you post about it and people can connect to you through that post and be friend with you.
 also it can suggest activities or cafes can add their daily activities, like " we going to have a movie night"."
@@ -14,12 +15,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Workspace Detection
+
 **Timestamp**: 2026-07-30T02:00:42Z
 **User Input**: N/A (automatic stage, no user input)
 **AI Response**: "Scanned workspace root `/home/mohammadali/Desktop/link`. Found only `CLAUDE.md` and `.aidlc-rule-details/` (AI-DLC rules). No source code files, no build files (no package.json, pom.xml, build.gradle, etc.), no `aidlc-docs/aidlc-state.md`. Determination: **Greenfield** project, `brownfield = false`. Reverse Engineering stage will be SKIPPED. Created `aidlc-docs/aidlc-state.md`. Next stage: Requirements Analysis."
 **Context**: INCEPTION PHASE - Workspace Detection complete
 
 **Findings**:
+
 - Existing Code: No
 - Programming Languages: None found
 - Build System: None found
@@ -31,6 +34,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — Intent Analysis
+
 **Timestamp**: 2026-07-30T02:00:42Z
 **User Input**: N/A (analysis of initial request logged above)
 **AI Response**: "Performed intent analysis on the initial request. Request Clarity: **Vague/Incomplete** (clear product vision, but missing platform, tech stack, scale, safety model, and scope boundaries). Request Type: **New Project** (greenfield). Scope Estimate: **System-wide / Cross-system** (mobile client + backend + data layer + notifications + maps). Complexity Estimate: **Complex** (multi-persona social platform with realtime chat, geospatial discovery, recommendations, and real-world safety concerns from strangers meeting in person). Requirements Depth selected: **Comprehensive** — justified by greenfield system-wide scope, multiple user personas, and the physical-safety risk inherent in a stranger-meetup product. Created `aidlc-docs/inception/requirements/requirement-verification-questions.md` with 21 clarifying questions across 5 sections plus 3 extension opt-in questions."
@@ -39,6 +43,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — Awaiting User Answers
+
 **Timestamp**: 2026-07-30T02:00:42Z
 **User Input**: N/A (gate — awaiting user)
 **AI Response**: "Presented question file to user and STOPPED per Step 6 GATE. Will not proceed to Step 7 (requirements document generation) until all [Answer]: tags are filled and validated for contradictions/ambiguities."
@@ -47,12 +52,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — User Answers Received
+
 **Timestamp**: 2026-07-30T02:10:00Z
 **User Input**: "done"
 **AI Response**: "Read `requirement-verification-questions.md`. All 21 requirement questions plus 3 extension opt-in questions answered. Ran mandatory contradiction/ambiguity analysis per question-format-guide.md. Detected 5 contradictions and 5 ambiguities that materially change scope and tech stack. Created `requirements-clarification-questions.md`. NOT proceeding to Step 7."
 **Context**: INCEPTION PHASE - Requirements Analysis, Step 6 answer validation
 
 **Answers recorded (raw)**:
+
 - Q1: `A` — all three features (user activity posts, suggestions, café/venue posts)
 - Q2: `C` — clickable demo / UI only, fake data, no real backend
 - Q3: `D seperate dashboard is fine` — users + venue owners + moderators/admins, separate venue dashboard
@@ -82,9 +89,11 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — Contradictions Detected
+
 **Timestamp**: 2026-07-30T02:10:00Z
 **User Input**: N/A (AI analysis)
 **AI Response**: "Detected the following blocking issues and created `aidlc-docs/inception/requirements/requirements-clarification-questions.md` with 10 clarification questions:
+
 1. CONTRADICTION — Q2 (`C`, UI-only demo, no real backend) vs Q15 (choose a backend), Q17 (SMS auth), Q9 (admin review workflow), Q10 (identity verification/ratings/moderation), Q19 (`B`, public startup launch), and all three extensions enabled as blocking constraints. A UI-only mockup cannot have a backend, SMS auth, or a meaningful security/resiliency posture.
 2. CONTRADICTION — Original request (`mobile app`) vs Q13 (`X web version for now`) while Q14 still asks AI to choose a mobile framework.
 3. CONTRADICTION — Q10 (`D`, maximum safety posture, no exact user location) vs Q5 (`X`, automatically send requester's phone number / Telegram ID to a stranger poster). Auto-disclosing personal contact details to unvetted strangers is the largest privacy/safety exposure in the product.
@@ -95,17 +104,19 @@ also it can suggest activities or cafes can add their daily activities, like " w
 8. AMBIGUITY — Q21 (`persian`): Persian-only or Persian + English; RTL layout confirmation.
 9. AMBIGUITY — Q4/Q5 exact join mechanic: does the poster approve, and is contact exchange one-way or mutual.
 10. AMBIGUITY — Q3 (`D`, separate venue dashboard) scope within the first round of work."
-**Context**: INCEPTION PHASE - Requirements Analysis, contradiction detection per question-format-guide.md
+    **Context**: INCEPTION PHASE - Requirements Analysis, contradiction detection per question-format-guide.md
 
 ---
 
 ## Requirements Analysis — Round 2 Answers Received
+
 **Timestamp**: 2026-07-30T02:20:00Z
 **User Input**: "done"
 **AI Response**: "Read `requirements-clarification-questions.md`. All 11 clarification questions answered. All 5 contradictions resolved. Loaded full rule files for the three opted-in extensions per Step 5.1 deferred loading: `security-baseline.md`, `resiliency-baseline.md`, `property-based-testing.md`. Discovered RESILIENCY-02, -03, -04, -08, -15 contain mandatory User Decision Points that explicitly forbid the model from deciding on the user's behalf. Created round-3 question file `requirements-final-questions.md`. NOT proceeding to Step 7."
 **Context**: INCEPTION PHASE - Requirements Analysis, Step 6 round 2 validation
 
 **Round 2 answers recorded (raw)**:
+
 - CQ1 (deliverable): `A` — UI first with real architecture; real screens, realistic mock data behind a swappable data layer; no backend/SMS this round
 - CQ2 (extensions): `A` — keep all three extensions enabled, apply to what exists now, fully enforce once backend arrives
 - CQ3 (platform): `A` — responsive web app now, real mobile apps later with code reuse
@@ -120,6 +131,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - [Additional Notes]: (empty)
 
 **Resolutions applied**:
+
 1. RESOLVED (C1) — Deliverable is now unambiguous: round 1 = responsive Persian RTL web frontend + swappable mock data layer. Backend is round 2. Extensions remain enabled and apply to artifacts that exist.
 2. RESOLVED (C2) — Web-first, React chosen partly so mobile apps can reuse code later.
 3. RESOLVED (C3) — Contact exchange is **requester-consented**: the requester explicitly selects which contact detail to share at the moment of requesting. This addresses the original objection (non-consensual automatic disclosure). Residual risk recorded: no approval gate means details reach an unvetted stranger immediately. Mitigation required: explicit in-UI disclosure at the point of sharing. User decision accepted — will NOT be re-litigated.
@@ -132,14 +144,17 @@ also it can suggest activities or cafes can add their daily activities, like " w
 10. RESOLVED (A10) — Scope is user app + venue dashboard.
 
 **NEW GAP DETECTED (round 2)**:
+
 - Q10 (`D`) requires user-to-user ratings, but CQ5 removed the attendee roster, so the app cannot know who attended and therefore who may rate whom. Raised as Question 8 in round 3.
 
 **NEW SOFT TENSION (round 2, non-blocking)**:
+
 - CQ2 (`A`, Resiliency enabled — framework derived from AWS Well-Architected) vs CQ9 (`A`, Iran — AWS unavailable). Resolution: apply RESILIENCY rules as vendor-neutral reliability principles against Iranian providers. Documented, not blocking.
 
 ---
 
 ## Requirements Analysis — Round 3 Questions Created
+
 **Timestamp**: 2026-07-30T02:20:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Created `aidlc-docs/inception/requirements/requirements-final-questions.md` with 9 questions (Q0 shortcut + Q1-Q7 resiliency-mandated + Q8 ratings gap). Round 3 is required because RESILIENCY-02/-03/-04/-08/-15 define User Decision Points that state the model MUST ask and MUST NOT decide on the user's behalf. A Q0 shortcut is offered allowing the user to formally defer Q1-Q7 to the backend round, since round 1 builds no infrastructure — a logged deferral is a valid user decision under the rule. Presented to user and STOPPED."
@@ -148,12 +163,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — Round 3 Answers Received
+
 **Timestamp**: 2026-07-30T02:30:00Z
 **User Input**: "done"
 **AI Response**: "Read `requirements-final-questions.md`. All 9 questions answered. No contradictions detected in round 3. Step 6 GATE passed. Generated `aidlc-docs/inception/requirements/requirements.md` at comprehensive depth. Updated `aidlc-state.md` with extension configuration and key decisions."
 **Context**: INCEPTION PHASE - Requirements Analysis, Step 6 round 3 validation → Step 7
 
 **Round 3 answers recorded (raw)**:
+
 - FQ0 (shortcut): `B` — answer infrastructure questions now rather than deferring
 - FQ1 (RTO/RPO + DR): `A` — RPO/RTO in hours, Backup & Restore strategy
 - FQ2 (regional topology): `A` — single region, multi-zone
@@ -166,6 +183,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - [Additional Notes]: (empty)
 
 **Round 3 analysis**:
+
 - No contradictions. FQ1 `A` / FQ2 `A` / FQ6 `A` are mutually consistent (low-cost posture matching a pre-launch single-city product). FQ3 `C` and FQ7 `C` are permitted by RESILIENCY-03 and RESILIENCY-15 provided exemption rationale is documented — rationale recorded as NFR-R4 and NFR-R8.
 - FQ4: user explicitly overrode the AI-raised concern about GitHub Actions accessibility from Iran. Recorded as the user's informed decision (NFR-R5).
 - FQ8 `B` RESOLVES the round-2 ratings gap by reintroducing a lightweight post-hoc attendance confirmation (poster taps to confirm attendees). This adds FR-40 through FR-45 and makes ratings abuse-resistant without an approval gate or live roster.
@@ -174,12 +192,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — Requirements Document Generated
+
 **Timestamp**: 2026-07-30T02:30:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Created `aidlc-docs/inception/requirements/requirements.md` — comprehensive depth. Contents: intent analysis, problem statement, product vision, 3 derived design principles, round scope with explicit deferrals, 4 personas, 47 functional requirements across 8 areas (FR-01..FR-72), 40 non-functional requirements across 7 categories (localization, usability, performance, architecture, security, resiliency, testing), technology decisions with rationale for the two `D` answers, full extension compliance matrices for all 40 SECURITY/RESILIENCY/PBT rules, 4 accepted risks, 7 stated assumptions, full traceability matrix mapping all 44 answers to requirements, and 10 Round-1 success criteria. Content validated per content-validation.md: no ASCII diagrams used (avoided in favour of tables to eliminate alignment risk), no Mermaid diagrams in this artifact, markdown tables verified, no unescaped special characters."
 **Context**: INCEPTION PHASE - Requirements Analysis, Step 7
 
 **Extension compliance evaluated at Requirements stage**:
+
 - SECURITY: 0 blocking findings. 8 rules compliant or compliant-scoped; 7 rules N/A for a frontend-only round and explicitly captured as Round-2 obligations (not waived). SECURITY-11 misuse case documented (contact harvesting via fake activity posts).
 - RESILIENCY: 0 blocking findings. 8 rules compliant (including all user decision points); 6 N/A and captured; RESILIENCY-14 deferred to NFR Design per the rule's own stage assignment.
 - PBT: 0 blocking findings. PBT-09 satisfied (fast-check selected for TypeScript). 11 candidate properties pre-identified for PBT-01 at Functional Design, including two safety-critical invariants (exact address never leaks for approximate-precision activities; only confirmed attendees can rate).
@@ -187,6 +207,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — Approval Requested
+
 **Timestamp**: 2026-07-30T02:30:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Presented Requirements Analysis completion message with review-required and what's-next options. User Stories stage assessed as REQUIRED (new user-facing product, 4 distinct personas, complex acceptance criteria around safety and rating eligibility, multiple user journeys) — therefore the optional 'Add User Stories' option was NOT included, and the stated next stage is User Stories. Awaiting explicit approval before proceeding."
@@ -195,6 +216,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Requirements Analysis — APPROVED
+
 **Timestamp**: 2026-07-30T02:40:00Z
 **User Input**: "i approve this requirements"
 **AI Response**: "Requirements Analysis approved by user with no requested changes. Marked stage complete in aidlc-state.md. Proceeding to User Stories stage (assessed as REQUIRED). Loading `inception/user-stories.md`."
@@ -203,6 +225,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Part 1 Step 1: Assessment
+
 **Timestamp**: 2026-07-30T02:40:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Performed mandatory intelligent assessment per user-stories.md Step 1. Created `aidlc-docs/inception/plans/user-stories-assessment.md`. Result: **EXECUTE = Yes**. Satisfies 5 of 6 High Priority indicators (new user features, multi-persona system with 4 personas, complex business logic, full UX definition, cross-team product intent) and 5 of 6 complexity factors (scope, ambiguity, high risk, testing required, multiple valid options). No skip criteria apply. Three specific justifications recorded: (1) safety requirements FR-11/FR-31/FR-32/FR-45/FR-62 need testable acceptance criteria to feed the enabled PBT extension; (2) the contact-exchange flow is deliberately asymmetric between poster and requester and is easy to implement incorrectly; (3) the post-hoc attendance-confirmation rating lifecycle (FR-40..FR-45) is the newest and least-examined part of the spec."
@@ -211,6 +234,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Part 1 Steps 2-7: Story Plan Created
+
 **Timestamp**: 2026-07-30T02:40:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Created `aidlc-docs/inception/plans/story-generation-plan.md` containing: Section A with 8 embedded questions using [Answer]: tags (breakdown approach, acceptance criteria format, granularity, language, round scope, negative/abuse stories, persona depth, story metadata) each with an X/Other option and a marked recommendation, plus an `[All Recommended]` shortcut; Section B documenting all 5 story breakdown approaches with trade-offs and fit assessment per Step 5; Section C a 5-phase execution checklist with 41 unchecked steps; Section D the mandatory artifacts list per Step 4; Section E explicit out-of-scope items per Step 11. Presented to user and STOPPED per Step 8 — will not begin Part 2 Generation until all answers received, analyzed for ambiguity per Step 9, and the plan is explicitly approved per Step 13."
@@ -219,6 +243,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Plan Approval Prompt
+
 **Timestamp**: 2026-07-30T02:40:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Logged approval prompt per Step 12 before requesting approval. Prompt asks the user to answer the 8 questions in Section A of `story-generation-plan.md` (or use the `[All Recommended]` shortcut) and then explicitly approve the story approach before generation begins."
@@ -227,12 +252,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Part 1 Step 8: Answers Collected
+
 **Timestamp**: 2026-07-30T02:50:00Z
 **User Input**: "done"
 **AI Response**: "Read `story-generation-plan.md`. User used the `[All Recommended]` shortcut rather than answering individually. Performed mandatory Step 9 ambiguity analysis. Result: NO ambiguities, NO contradictions, NO follow-up questions required — Step 10 not triggered."
 **Context**: INCEPTION PHASE - User Stories, Part 1 Steps 8-9
 
 **Answers recorded (raw)**:
+
 - Q1 (breakdown approach): via shortcut → `A` — Persona-based, with journeys nested inside each persona
 - Q2 (acceptance criteria format): via shortcut → `A` — Given / When / Then (Gherkin-style)
 - Q3 (granularity): via shortcut → `A` — one story per user-visible capability, approx. 25-40 stories
@@ -245,6 +272,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - `[Additional Notes]`: (empty)
 
 **Step 9 ambiguity analysis (mandatory)**:
+
 - Vague/hedging language ("mix of", "somewhere between", "not sure", "depends", "maybe", "probably"): NONE PRESENT
 - Undefined criteria or terms: NONE — the shortcut maps to 8 fully specified options already written in the plan
 - Contradictory answers: NONE — all 8 recommendations were authored as a mutually consistent set
@@ -257,6 +285,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Part 1 Step 12/13: Plan Approval Requested
+
 **Timestamp**: 2026-07-30T02:50:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Logged approval prompt per Step 12. Presented the 8 resolved format decisions and requested explicit approval of the story approach per Step 13. Part 2 (Generation) will NOT begin until approval is given. Note: the user has answered the planning questions but has not yet issued an explicit approval statement for the plan itself, and Step 13 requires approval to be clear and unambiguous."
@@ -265,6 +294,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Part 1 Step 14: Plan APPROVED
+
 **Timestamp**: 2026-07-30T03:00:00Z
 **User Input**: "approve"
 **AI Response**: "Story generation plan approved by user with no requested changes. Approval is clear and unambiguous per Step 13. Proceeding to Part 2 (Generation)."
@@ -273,6 +303,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## CORRECTION — Functional Requirement Count
+
 **Timestamp**: 2026-07-30T03:00:00Z
 **User Input**: N/A (AI self-correction)
 **AI Response**: "During Part 2 Phase 1 context loading, verified the functional requirement inventory programmatically. The correct count is **53** unique FR IDs in `requirements.md`, not 47. The figure 47 was an AI miscount stated in three places: the audit entry timestamped 2026-07-30T02:30:00Z, `user-stories-assessment.md` line 22, and `story-generation-plan.md` step 4.3. **`requirements.md` itself was never wrong** — it contains 53 correctly numbered requirements; only the summaries miscounted them. Corrected `user-stories-assessment.md` and `story-generation-plan.md` in place. The earlier audit entry is left unmodified because audit.md is append-only; this entry is the correction of record. Coverage verification in `stories.md` §13 uses the corrected figure of 53."
@@ -281,16 +312,19 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Part 2: Generation Complete
+
 **Timestamp**: 2026-07-30T03:00:00Z
 **User Input**: N/A (AI action, executing approved plan)
 **AI Response**: "Executed all steps of the approved story generation plan. Marked all 46 checkboxes in Sections C and D as [x] in the same interaction as the work, per the plan-level checkbox enforcement rule. Updated plan status header. Updated aidlc-state.md."
 **Context**: INCEPTION PHASE - User Stories, Part 2 Steps 15-18
 
 **Artifacts produced**:
+
 1. `aidlc-docs/inception/user-stories/personas.md` — 4 personas at moderate depth (P1 Activity Poster, P2 Activity Seeker, P3 Venue Owner, P4 Moderator/Admin). Each covers who they are, goals, motivations, context of use, technical comfort, frustrations, what the product must get right for them, and stories owned. All invented specifics explicitly marked [illustrative] with a header stating no user research was conducted. Includes a 40-row persona-to-story map and three cross-persona observations (privacy asymmetry, badge-as-sole-retention-mechanism, cold-start dependence on venues).
 2. `aidlc-docs/inception/user-stories/stories.md` — 39 user stories in 10 persona-organized sections, plus an end-to-end journey section, a safety/abuse section with 5 scenarios, a full requirement coverage table, and an INVEST verification section.
 
 **Generation decisions applied (from approved plan)**:
+
 - Persona-based organization with journeys nested (Q1 `A`)
 - Given/When/Then acceptance criteria throughout (Q2 `A`)
 - One story per user-visible capability — 39 stories, within the 25-40 target (Q3 `A`)
@@ -301,6 +335,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - Priority + requirement trace + round tag on every story; no estimates (Q8 `A`)
 
 **Quality verification results (Phase 4)**:
+
 - All 53 functional requirements covered by at least one story; zero deliberate omissions
 - All 39 stories trace to at least one requirement ID; zero untraced stories (no scope creep)
 - 4 stories flagged safety-critical: US-11 (location precision), US-31 (contact disclosure), US-52 (rating eligibility), US-72 (block visibility)
@@ -310,10 +345,12 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - Mermaid diagram in §11 validated (alphanumeric node IDs, no special characters in labels, <br/> only) with text alternative provided per content-validation.md
 
 **Gaps surfaced during generation (recorded, not silently resolved)**:
+
 - **Venue approval stranding**: FR-51 requires manual admin approval, but the admin console is Round 3 while venue signup is Round 1. Real venue registrations would have no approver in Round 2. Recorded in personas.md P3 "Important constraint" and stories.md US-61 notes. Must be closed during Round 2 planning.
 - **Round-1 data model obligations for Round 3**: report records must be stored with full context from Round 1 (FR-63), and `suspended`/`unpublished` states must exist in the model from Round 1, or Round 3 requires a data migration. Recorded in personas.md P4 and stories.md US-82 notes.
 
 **Extension compliance for User Stories stage**:
+
 - SECURITY: **Compliant, 0 blocking findings.** SECURITY-11 satisfied with 5 documented misuse cases (exceeds the "at least one" requirement). SECURITY-08 authorization rules expressed as testable criteria with explicit server-side enforcement statements in US-12, US-34, US-52, US-72. SECURITY-12 in US-01/US-04. SECURITY-13 auditable moderation in US-80/US-82.
 - RESILIENCY: **N/A at this stage, 0 blocking findings.** Rules govern deployed infrastructure; satisfied at Requirements. RESILIENCY-14 correctly still deferred to NFR Design.
 - PBT: **On track, 0 blocking findings.** PBT-01 formally executes at Functional Design; 7 invariants pre-expressed in property form here.
@@ -321,6 +358,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — Step 19: Approval Prompt
+
 **Timestamp**: 2026-07-30T03:00:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Logged approval prompt per Step 19 before presenting. Presenting the standard User Stories completion message with REVIEW REQUIRED and WHAT'S NEXT sections. Awaiting explicit approval before proceeding to Workflow Planning."
@@ -329,6 +367,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## User Stories — APPROVED
+
 **Timestamp**: 2026-07-30T03:10:00Z
 **User Input**: "Approve & Continue"
 **AI Response**: "User Stories approved with no requested changes. Marked stage complete in aidlc-state.md per Step 23. Proceeding to Workflow Planning (ALWAYS EXECUTE). Loading `inception/workflow-planning.md` and `common/ascii-diagram-standards.md`."
@@ -337,12 +376,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Workflow Planning — Execution Plan Created
+
 **Timestamp**: 2026-07-30T03:10:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Loaded all prior context per Step 1: requirements.md, requirement-verification-questions.md and both clarification rounds, stories.md, personas.md. Reverse-engineering artifacts N/A (greenfield). Performed Step 2 scope and impact analysis, Step 3 phase determination, Step 6 workflow visualization, Step 7 execution plan document, Step 8 state tracking update. Created `aidlc-docs/inception/plans/execution-plan.md`."
 **Context**: INCEPTION PHASE - Workflow Planning, Steps 1-8
 
 **Change impact assessment**:
+
 - User-facing changes: YES, total — all 33 Round-1 stories are user-facing, no internal-only component
 - Structural changes: YES, foundational — establishes repository abstraction, shared domain types, pure logic modules, routing, role gating
 - Data model changes: YES — defines 7 core entities plus neighborhood reference data, with 2 forward-compatibility obligations (FR-56 inert promotion field; suspended/unpublished states for Round 3)
@@ -350,12 +391,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - NFR impact: YES, significant — localization touches every screen; performance targets assume constrained Iranian mobile networks
 
 **Risk assessment (deliberately split rather than a single misleading level)**:
+
 - Engineering/delivery risk: **Medium** — greenfield, no production, no users, nothing to break
 - Rollback complexity: **Easy** — nothing deployed in Round 1
 - Testing complexity: **Moderate to Complex** — PBT is blocking; 7 invariants must hold universally; RTL/bidi adds surface
 - Product/safety risk: **High** — in-person stranger meetings, contact disclosure with no approval gate (AR-02), no age restriction (AR-01), 4 safety-critical stories. Planning consequence: Functional Design kept in scope for every unit touching a safety invariant.
 
 **Phase determination (Step 3)**:
+
 - Application Design: **EXECUTE** — all components new; repository interface is the Round-2 contract; pure business-logic modules required by NFR-A4 and the PBT extension; user-app vs venue-dashboard boundary needs defining (AS-05 puts them in one app behind role gating)
 - Units Generation: **EXECUTE** — 33 stories across 7 functional areas with genuine sequencing constraints; proposed 6-unit decomposition documented in plan §4
 - Functional Design: **EXECUTE per unit** — two independent reasons: real non-CRUD business logic, AND PBT-01 is formally assigned to this stage as a blocking obligation
@@ -376,6 +419,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Workflow Planning — Approval Prompt
+
 **Timestamp**: 2026-07-30T03:10:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Presenting the Workflow Planning completion message per Step 9, including execute/skip recommendations with rationale, the 'Add Skipped Stages' option (since 4 stages are marked SKIP), and emphasis on the user's control to override any recommendation. Awaiting explicit approval before proceeding to Application Design."
@@ -384,6 +428,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Workflow Planning - Approval
+
 **Timestamp**: 2026-07-30T03:20:00Z
 **AI Prompt**: "Ready to proceed with this plan?"
 **User Response**: "Approve & Continue"
@@ -393,6 +438,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Application Design — Steps 1-6: Design Plan Created
+
 **Timestamp**: 2026-07-30T03:20:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Executed Step 1 context analysis against approved requirements.md and stories.md. Created `aidlc-docs/inception/plans/application-design-plan.md` per Steps 2-5, containing 8 embedded design questions with [Answer]: tags and X/Other options, the mandatory design artifacts list per Step 3, a 5-phase execution checklist, and an `[All Recommended]` shortcut consistent with the mechanism the user used successfully at the User Stories stage. Presented to user and STOPPED per Step 7 — will not generate design artifacts until all answers are received and analyzed for ambiguity per Step 8."
@@ -401,12 +447,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Application Design — Steps 7-9: Answers Collected and Analyzed
+
 **Timestamp**: 2026-07-30T03:30:00Z
 **User Input**: "done"
 **AI Response**: "Read `application-design-plan.md`. User again used the `[All Recommended]` shortcut. All 8 design questions resolve to option `A`. Performed mandatory Step 8 ambiguity analysis: NO vague responses, NO undefined terms, NO contradictions, NO merged options without decision rules, NO missing design details. Step 9 follow-up questions NOT required. Proceeding to Step 10 artifact generation."
 **Context**: INCEPTION PHASE - Application Design, Steps 7-9
 
 **Answers recorded (raw)**:
+
 - `[All Recommended]`: "all recommended" → resolves to:
 - Q1 code organization: `A` — feature-first with shared core
 - Q2 repository granularity: `A` — six per-aggregate interfaces
@@ -421,12 +469,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Application Design — Step 10: Artifacts Generated
+
 **Timestamp**: 2026-07-30T03:30:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Generated all 5 mandatory design artifacts and marked all 33 checkboxes in Sections B and C of the plan as [x] in the same interaction as the work, per plan-level checkbox enforcement. Updated plan status header. Updated aidlc-state.md."
 **Context**: INCEPTION PHASE - Application Design, Step 10
 
 **Artifacts produced** (all in `aidlc-docs/inception/application-design/`):
+
 1. `components.md` — 5-layer architecture; 10 domain entities and 4 viewer-scoped view types; 9 pure rule modules; 6 repository interfaces with 4 contract invariants; 7 services; 16 UI primitives; 38 feature components across 6 modules; 11 app-layer composition components. Each component mapped to its Construction unit.
 2. `component-methods.md` — TypeScript-shaped signatures for all rule functions, all 6 repository interfaces, all 7 services, and representative feature hooks. Includes an explicit "Deferred to Functional Design" table listing 8 items NOT decided at this stage, per the stage rule that detailed business rules belong to Functional Design.
 3. `services.md` — 4 named orchestration patterns (Validate-Rule-Persist, Scoped Read, Cascade Invalidate, Derive-Don't-Store); per-service definitions; the 7-step `sendJoinRequest` sequence specified explicitly given its safety sensitivity; core-loop sequence diagram with text alternative.
@@ -436,6 +486,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 **Central design decision recorded**: safety rules are enforced **where data is produced (repository boundary)**, not where it is displayed. Four contract invariants (INV-1 blocking, INV-2 address projection, INV-3 contact confidentiality, INV-4 viewer-scoped reads) bind every repository implementation in every round. Consequence: `core/rules` is imported by BOTH `infra/mock` and (in Round 2) the server, so each safety rule has exactly one implementation and cannot drift between client and server. The mock additionally becomes the oracle model for the real API under PBT-05.
 
 **Structural enforcement achieved for all 4 safety-critical stories**:
+
 - US-11: `ActivityView.exactAddress` omitted (not blanked) by `projectActivity` at the repository boundary — components have no code path to a withheld address
 - US-31: `DisclosureNotice` a required child of `JoinRequestSheet`; nothing pre-selected in `ContactShareSelector`
 - US-52: `canRate()` discriminated result checked by `connectionService` before every write, independent of UI state
@@ -443,6 +494,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - Bonus: FR-35 one-way disclosure and NFR-S1 contact confidentiality guaranteed by type shape (`SentRequestView` and `ProfileView` have no field for the relevant data)
 
 **Verification performed (Phase 5)**:
+
 - All 53 functional requirements map to a component, service, or interface method
 - All 10 relevant NFRs verified against specific design elements
 - Dependency graph verified acyclic (`core/domain` is a sink, `app/` is a source)
@@ -450,6 +502,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - Forward compatibility confirmed for all 6 deferred capabilities (backend, admin console, paid promotion, push, recommendations, native mobile)
 
 **Extension compliance**:
+
 - SECURITY: **Compliant, 0 blocking findings** — SECURITY-11 (isolated security logic + documented defense in depth: precision enforced at write AND read), SECURITY-08 (INV-4 viewer-scoped reads; client explicitly marked not the security boundary), SECURITY-05 (validation at service boundaries), SECURITY-15 (typed failures, fail-closed writes, global error boundary)
 - RESILIENCY: **N/A at this stage, 0 blocking findings** — infrastructure-governing; RESILIENCY-01 already satisfied at Requirements
 - PBT: **On track, 0 blocking findings** — design makes properties expressible by giving every safety rule a pure total function; 11 property candidates now have named functions to attach to; PBT-05 oracle testing enabled by shared interface
@@ -457,6 +510,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Application Design — Step 11: Approval Prompt
+
 **Timestamp**: 2026-07-30T03:30:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Logged approval prompt per Step 11 before presenting. Presenting the Application Design completion message per Step 12. The optional 'Add Units Generation' line is NOT included because Units Generation is already EXECUTE in the approved execution plan. Awaiting explicit approval per Step 13 before proceeding to Units Generation."
@@ -465,6 +519,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Application Design — APPROVED
+
 **Timestamp**: 2026-07-30T03:40:00Z
 **User Input**: "Approve & Continue"
 **AI Response**: "Application Design approved with no requested changes. Marked stage complete in aidlc-state.md per Step 15. Proceeding to Units Generation (EXECUTE per approved execution plan). Loaded `inception/units-generation.md` and `construction/code-generation.md` (the latter referenced by units-generation.md Step 2 for greenfield code organization patterns)."
@@ -473,6 +528,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Units Generation — Part 1 Steps 1-5: Unit of Work Plan Created
+
 **Timestamp**: 2026-07-30T03:40:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Created `aidlc-docs/inception/plans/unit-of-work-plan.md` per Steps 1-4, containing 8 embedded questions covering all 6 mandatory question categories (Story Grouping, Dependencies, Team Alignment, Technical Considerations, Business Domain, Code Organization), the 3 mandatory unit artifacts per Step 2, a 5-phase execution checklist, and an `[All Recommended]` shortcut. Presented to user and STOPPED per Step 6."
@@ -483,12 +539,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Units Generation — Part 1 Steps 6-8: Answers Collected and Analyzed
+
 **Timestamp**: 2026-07-30T03:50:00Z
 **User Input**: "done"
 **AI Response**: "Read `unit-of-work-plan.md`. User wrote `all recommended` in the `[Additional Notes]:` tag rather than the `[All Recommended]:` tag. Intent is unambiguous — the phrase is the exact shortcut string defined in the adjacent Shortcut section, and the user has used this identical mechanism successfully at both the User Stories and Application Design stages. Interpreted as invoking the shortcut. Recorded here for transparency rather than re-asking, which would be pedantic given zero ambiguity of intent. Performed mandatory Step 7 ambiguity analysis: NO vague responses, NO undefined terms, NO contradictions, NO merged options, NO missing decomposition details. Step 8 follow-up questions NOT required."
 **Context**: INCEPTION PHASE - Units Generation, Part 1 Steps 6-8
 
 **Answers recorded (raw)**:
+
 - `[All Recommended]`: (blank)
 - `[Additional Notes]`: "all recommended" → interpreted as the shortcut, resolving to:
 - Q1 decomposition: `A` — keep 6 units as proposed
@@ -505,6 +563,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Units Generation — Part 1 Steps 9-10: Plan Approval Requested
+
 **Timestamp**: 2026-07-30T03:50:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Logged approval prompt per Step 10 before asking. Asking the Step 9 approval question: 'Unit of work plan complete. Review the plan in aidlc-docs/inception/plans/unit-of-work-plan.md. Ready to proceed to generation?' Part 2 (Generation) will NOT begin until the user confirms."
@@ -513,6 +572,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Units Generation — Part 1 APPROVED
+
 **Timestamp**: 2026-07-30T03:50:00Z
 **AI Prompt**: "Unit of work plan complete. Review the plan in aidlc-docs/inception/plans/unit-of-work-plan.md. Ready to proceed to generation?"
 **User Response**: "aproved"
@@ -522,12 +582,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## CORRECTION — User Story Count
+
 **Timestamp**: 2026-07-30T04:00:00Z
 **User Input**: N/A (AI self-correction)
 **AI Response**: "During Part 2 Phase 4 story mapping, verified the story inventory programmatically before building the map. Correct counts are **40 total stories** and **35 stories with Round-1 work**, not the 39 and 33 previously recorded. Breakdown by round tag: 32 tagged Round 1, 2 tagged Round 1 (capture) / 3 (review), 1 tagged Round 1 (mocked) / 2 (real SMS) — total 35 with Round-1 work; 2 tagged Round 2 only (US-04, US-34); 3 tagged Round 3 only (US-80, US-81, US-82). **`stories.md` content was never wrong** — all 40 stories were present and correctly written; only the summary figures miscounted them. This is the second count error of this kind in the session (the first was 47 vs 53 functional requirements), so counts are now verified programmatically rather than by inspection before being stated."
 **Context**: CONSTRUCTION-adjacent — INCEPTION PHASE, Units Generation Part 2, data integrity correction
 
 **Corrections applied to live documents**:
+
 - `inception/user-stories/stories.md` §14 — "all 39 stories checked" → 40; "39 stories across 53 requirements" → 40; "All 39 stories trace" → 40
 - `aidlc-state.md` — User Stories stage line: 39 stories → 40 stories
 - `inception/plans/execution-plan.md` §1.2 and §3 — "33 Round-1 stories" → 35 (2 occurrences); "39 stories, 4 personas" → 40
@@ -537,24 +599,28 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Units Generation — Part 2: Generation Complete
+
 **Timestamp**: 2026-07-30T04:00:00Z
 **User Input**: N/A (AI action, executing approved plan)
 **AI Response**: "Executed all steps of the approved unit of work plan. Marked all 33 checkboxes in Sections B and C as [x] in the same interaction as the work, per plan-level checkbox enforcement. Updated plan status header. Updated aidlc-state.md with the full unit table, build sequence, and the code-organization override."
 **Context**: INCEPTION PHASE - Units Generation, Part 2 Steps 12-15
 
 **Artifacts produced** (all in `aidlc-docs/inception/application-design/`):
+
 1. `unit-of-work.md` — decomposition model (monolith; 1 service, 6 modules); **code organization strategy documented per the greenfield requirement**, including the explicit recorded override of `code-generation.md`'s `src/{unit-name}/` pattern with rationale and a unit-to-directory mapping table; per-unit definitions covering purpose, responsibilities, owned directories, exposed interfaces, stories, safety-critical stories, property-based tests introduced, risk, and definition of done; unit summary table; out-of-scope stories with the Round-1 data-model obligations they create.
 2. `unit-of-work-dependency.md` — dependency matrix (verified acyclic, strictly lower-triangular); dependency graph with text alternative; build sequence and critical path; per-constraint ordering rationale; integration points; shared resources and contention; 7 cross-unit verification checkpoints; per-unit risk table.
 3. `unit-of-work-story-map.md` — all 40 stories mapped; 35 Round-1 stories assigned to exactly one unit each; 5 non-Round-1 stories explicitly recorded as unassigned with target round and rationale; safety-critical story ownership analysis; requirement coverage by unit; property-based test distribution; validation checklist.
 
 **Key decomposition decisions recorded**:
+
 - 6 units confirmed; U4 Connections kept whole (10 stories) because request → disclosure → inbox → attendance → rating is one continuous state machine, and rating eligibility is untestable without request and attendance data together
-- U6 Safety built LAST — deliberate: US-72 requires blocked users absent from *every* feed, search, and listing, which is only testable once all of them exist. Building it last converts the check from sampling to verification.
+- U6 Safety built LAST — deliberate: US-72 requires blocked users absent from _every_ feed, search, and listing, which is only testable once all of them exist. Building it last converts the check from sampling to verification.
 - U5 Venue Dashboard identified as the only unit off the critical path, and therefore the only safe scope cut
 - Each of the 4 safety-critical stories verified to sit in a unit that can FULLY verify it, not merely implement it — this is the stated justification for the build order
 - U1 flagged as highest-leverage risk: its repository interface is also Round 2's API contract, so an error costs twice. Mitigation: repository swap test runs immediately after U1, before U2 begins.
 
 **Validation performed (Phase 5)**:
+
 - All 35 Round-1 stories assigned to exactly one unit; zero double-assignments; zero orphans
 - Every Application Design component belongs to exactly one unit
 - All 53 functional requirements accounted for: 48 in Round-1 units, 2 in Round 2, FR-63/FR-64 split across Round-1 capture and Round-3 review
@@ -563,6 +629,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - 5 data-model obligations from deferred stories assigned to specific Round-1 units so Rounds 2-3 need no migration
 
 **Extension compliance**:
+
 - SECURITY: **Compliant, 0 blocking findings** — SECURITY-11 defense in depth preserved in the decomposition: no unit boundary separates a safety rule from the data it guards; each safety-critical story is owned by a unit that can verify it end to end
 - RESILIENCY: **N/A at this stage, 0 blocking findings** — decomposition of a frontend monolith raises no reliability rules
 - PBT: **On track, 0 blocking findings** — all 11 property candidates distributed across U1, U3, U4, U6 with owning units identified; fast-check setup assigned to U1; PBT-01 formally executes per unit at Functional Design
@@ -570,6 +637,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Units Generation — Step 16: Approval Prompt
+
 **Timestamp**: 2026-07-30T04:00:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Presenting the Units Generation completion message per Step 16. Awaiting explicit approval per Step 17 before proceeding to the CONSTRUCTION PHASE, beginning with U1 Foundation and Localization Functional Design."
@@ -578,6 +646,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Units Generation — APPROVED
+
 **Timestamp**: 2026-07-30T04:10:00Z
 **User Input**: "approve and continue"
 **AI Response**: "Units Generation approved with no requested changes. Marked stage complete in aidlc-state.md per Step 19. **INCEPTION PHASE COMPLETE** — all 7 stages resolved (Workspace Detection, Reverse Engineering SKIPPED, Requirements Analysis, User Stories, Workflow Planning, Application Design, Units Generation). Transitioning to CONSTRUCTION PHASE, beginning the per-unit loop with U1 Foundation and Localization. Loading `construction/functional-design.md`."
@@ -586,6 +655,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Functional Design — Steps 1-4: Plan Created
+
 **Timestamp**: 2026-07-30T04:10:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Executed Step 1 unit context analysis against `unit-of-work.md` and `unit-of-work-story-map.md` for U1. Created `aidlc-docs/construction/plans/u1-foundation-functional-design-plan.md` per Steps 2-4 with 9 embedded questions covering the applicable question categories (Domain Model, Business Rules, Data Flow, Error Handling, Business Scenarios, Frontend Components), a 6-phase execution checklist, and an `[All Recommended]` shortcut. Presented to user and STOPPED per Step 5."
@@ -598,6 +668,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Functional Design — Step 5: Answers Collected and Analyzed
+
 **Timestamp**: 2026-07-30T04:20:00Z
 **User Input**: "done"
 **AI Response**: "Read `u1-foundation-functional-design-plan.md`. User invoked the `[All Recommended]` shortcut. All 9 questions resolve to option `A`. Mandatory Step 5 ambiguity analysis: NO vague responses, NO undefined terms, NO contradictions, NO merged options, NO missing design details. No clarification file required. Proceeding to Step 6 artifact generation."
@@ -608,18 +679,21 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Functional Design — Step 6: Artifacts Generated
+
 **Timestamp**: 2026-07-30T04:20:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Generated all 4 functional design artifacts in `aidlc-docs/construction/u1-foundation/functional-design/`. Marked all 33 checklist steps [x] in the same interaction as the work, per plan-level checkbox enforcement. Updated plan status header."
 **Context**: CONSTRUCTION PHASE - U1 Functional Design, Step 6
 
 **Artifacts produced**:
+
 1. `domain-entities.md` — prefixed branded ID strategy with rationale; 12 enumerations including the `suspended`/`unpublished` Round-1 obligations; 10 entities with complete field tables, types, constraints and notes; 5 viewer-scoped view types; derived-not-stored table; full relationship map; Round-1 obligations checklist (all 5 satisfied).
 2. `business-rules.md` — 33 numbered rules across 8 areas: Persian normalization (10-step ordered transformation with ordering rationale), Jalali calendar (month lengths, leap-year delegation, Tehran day-boundary rule), neighborhood proximity (BFS hop distance, MAX_HOPS=4), the 4 repository contract invariants restated in testable form, mock store rules, error taxonomy, validation rules, session/viewer resolution.
 3. `business-logic-model.md` — store initialization flow; **normative scoped-read pipeline with ordering rationale** (load → filter blocks → filter query → rank → paginate → project); write flow; viewer resolution; seed data model; **PBT-01 property identification (mandatory, blocking) — 14 properties across 5 modules plus 5 components explicitly marked as having none**; extension compliance.
 4. `frontend-components.md` — 6 binding RTL conventions; `data-testid` naming convention; all 16 UI primitives with props/state/rules; `JalaliDatePicker` interaction flow including the Saturday week-start rule; app shell provider composition with ordering rationale; `RepositoryProvider` as the NFR-A1 seam; 4-state async convention; component inventory with per-component PBT status; integration points for U2-U6.
 
 **Notable design decisions recorded**:
+
 - **No `age`/`dateOfBirth` field on User** — AR-01 accepted no age restriction, so collecting a birth date would gather personal data the product never uses. Not collecting is better than collecting-and-ignoring.
 - **`exactAddress` is stored even for `neighborhood`-precision activities** — storage is not disclosure; INV-2 governs disclosure. Lets a poster switch precision without re-entering the address.
 - **`sharedContact` is a snapshot, not a reference** — if a user later changes their phone number, an already-sent request still shows what was actually disclosed. A reference would rewrite history.
@@ -631,6 +705,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - **Saturday week start in the Jalali picker** — the Iranian week runs شنبه…جمعه; a Sunday/Monday start makes the calendar unusable at a glance.
 
 **Extension compliance for this stage**:
+
 - PBT: **Compliant, 0 blocking findings** — PBT-01 fully satisfied (every component analysed; 14 properties identified with categories; 5 components explicitly marked "no properties identified" with rationale). PBT-07 generator requirements specified per property group, with explicit notes on why raw primitive generators would test nothing here. PBT-08 shrinking enabled and seeds logged. PBT-09 fast-check. PBT-10 example-based companions required for every property.
 - SECURITY: **Compliant, 0 blocking findings** — SECURITY-15 fail-closed (BR-U1-54) and generic user-facing errors (BR-U1-53); SECURITY-05 validation with code-point-based length checks (BR-U1-61); SECURITY-11 safety logic isolated and invariants declared as testable contracts; NFR-S1 contact fields structurally absent from `ProfileView`.
 - RESILIENCY: **N/A, 0 blocking findings** — no deployed infrastructure in U1.
@@ -638,6 +713,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Functional Design — Step 7: Approval Prompt
+
 **Timestamp**: 2026-07-30T04:20:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Presenting the Functional Design completion message per Step 7, using the standardized 2-option format (Request Changes / Continue to Next Stage) as mandated — NOT an emergent 3-option menu. Next stage for U1 is Code Generation, since NFR Requirements, NFR Design, and Infrastructure Design are all SKIP per the approved execution plan."
@@ -646,6 +722,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## Session Resume — Context Reload
+
 **Timestamp**: 2026-08-02T00:00:00Z
 **User Input**: "Resume the AI-DLC workflow. Read aidlc-docs/aidlc-state.md first."
 **AI Response**: "Read `aidlc-state.md` first per session-continuity.md rule 1. Executed mandatory previous-stage artifact loading (rule 3, Design Stages tier): `inception/requirements/requirements.md` (53 FRs, 40 NFRs, 4 accepted risks, tech stack), `inception/application-design/application-design.md` (architecture + INV-1…INV-4), `inception/application-design/unit-of-work.md` (6 units, code organization override), and all 4 U1 functional design artifacts (`domain-entities.md`, `business-rules.md`, `business-logic-model.md`, `frontend-components.md`) plus the U1 plan checklist state. Confirmed no application code exists at workspace root — only `CLAUDE.md`, `.aidlc-rule-details/`, `aidlc-docs/`. Confirmed all 33 plan checkboxes are [x]. Verified extension configuration from state file: SECURITY (Yes/blocking), RESILIENCY (Yes/blocking, vendor-neutral per AR-03), PBT (Yes/blocking). Per audit history, the last recorded event is the U1 Functional Design Step 7 approval prompt with no user response logged — the workflow is therefore still parked at the Step 8 approval gate. Re-presenting the standardized 2-option Functional Design completion message per functional-design.md Step 7. Did NOT re-run any completed stage and did NOT proceed to Code Generation."
@@ -654,6 +731,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 **Deliberately not bulk-loaded** (per aidlc-state.md resume instructions): `audit.md` body (grepped/tailed only), the `*-questions.md` and `*-plan.md` answer files (answers already folded into artifacts), `stories.md` (loaded per-unit when needed).
 
 **Three carried-forward items confirmed intact**:
+
 1. Code organization override — `src/{app,core,infra,ui,features}/`, NOT `code-generation.md`'s `src/{unit-name}/`. User decision, Units Gen Q3 `A`, recorded in `unit-of-work.md` §2.
 2. Contract invariants INV-1 … INV-4 — the mechanism carrying safety requirements into Round 2.
 3. Accepted risks AR-01 … AR-04 — settled user decisions, not to be re-litigated.
@@ -661,6 +739,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Functional Design — Step 8/9: Approval Received
+
 **Timestamp**: 2026-08-03T00:00:00Z
 **User Input**: "continue to next stage"
 **AI Response**: "Explicit approval recorded for U1 Functional Design. Marking the stage complete in `aidlc-state.md`. Per the approved execution plan, NFR Requirements, NFR Design, and Infrastructure Design are all SKIP for Round 1 (deferred to Round 2), so the next stage for U1 is Code Generation. Beginning Code Generation PART 1 - PLANNING (Steps 1-6 of `construction/code-generation.md`). No application code will be written until the plan is explicitly approved."
@@ -669,12 +748,14 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Part 1 Steps 1-6: Plan Created
+
 **Timestamp**: 2026-08-03T00:10:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Executed Part 1 Steps 1-4 of `construction/code-generation.md`. Step 1 unit context analysis: read the 4 U1 functional design artifacts, `unit-of-work.md` (unit definition + directory ownership), `component-methods.md` (repository interface and rule signatures), and stories US-90/US-91/US-92 with full acceptance criteria from `stories.md`. Step 2: read workspace root `/home/mohammadali/Desktop/link` and project type (greenfield) from `aidlc-state.md`; determined code location per the RECORDED OVERRIDE — `src/{app,core,infra,ui,features}/`, NOT `code-generation.md`'s `src/{unit-name}/` — and resolved every generic step category as EXECUTE or N/A with reasons. Steps 3-4: created `aidlc-docs/construction/plans/u1-foundation-code-generation-plan.md` with 41 numbered checkbox steps across 8 phases, full unit context, story traceability, PBT-01…PBT-10 mapping, extension compliance, and definition of done. Step 5 summary presented to user. STOPPING at Step 7 — no application code written until the plan is explicitly approved."
 **Context**: CONSTRUCTION PHASE - U1 Code Generation, Part 1 (Planning), Steps 1-6 complete
 
 **Stage applicability resolved** (recorded, not silently dropped):
+
 - **API Layer Generation/Testing/Summary — N/A**: no backend exists in Round 1 (CQ1 `A`). The repository interface IS the API contract; real HTTP API is Round 2.
 - **Database Migration Scripts — N/A**: no database in Round 1. Persistence is versioned localStorage; schema mismatch resets to seed (BR-U1-40), no migration by design.
 - **Deployment Artifacts — EXECUTE (scoped)**: static build config + NFR-S3/SECURITY-04 header configuration only. No IaC — that is Round 2.
@@ -683,7 +764,8 @@ also it can suggest activities or cafes can add their daily activities, like " w
 **Plan structure**: Phase A Project Scaffolding (7 steps) · Phase B Domain Model (5) · Phase C core/rules business logic (6) · Phase D Localization assets and reference data (4) · Phase E Repository contracts and mock implementation (6) · Phase F UI primitives (4) · Phase G App shell (5) · Phase H Verification, docs, deployment artifacts (4).
 
 **Notable planning decisions recorded**:
-- **`exactOptionalPropertyTypes` enabled in tsconfig (Step 2)** — this is what makes "absent key" and "present but undefined" *different types*, which is the compiler-level foundation INV-2 rests on. Not a style preference.
+
+- **`exactOptionalPropertyTypes` enabled in tsconfig (Step 2)** — this is what makes "absent key" and "present but undefined" _different types_, which is the compiler-level foundation INV-2 rests on. Not a style preference.
 - **ESLint boundary rules fail the build (Step 5)** — DEP-1…DEP-4 plus bans on physical-direction CSS classes, `dangerouslySetInnerHTML`, and raw user-facing string literals. A `features/` → `infra/` import fails no test, is invisible in the running app, and would surface only when the Round-2 swap was attempted.
 - **INV-2 holds from the first commit (Step 27)** — U1's projection stub already omits `exactAddress` for non-authors rather than deferring the behaviour to U3. Safety enforcement is not switched on later; U3 replaces a conservative stub with the full rule.
 - **Step 38 repository-swap test is the only real proof of NFR-A1** — mounting against a stub HTTP repository. If any screen needs modification, U1's definition of done is not met. Verification, not assertion of intent.
@@ -692,6 +774,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 - **P-U1-13 (absent-key preservation) flagged as highest-stakes store property** — a JSON round-trip turning absent → `undefined` → present would silently weaken INV-2 while every other test still passed.
 
 **Extension compliance for Code Generation (Planning)**:
+
 - PBT: **Compliant, 0 blocking findings** — all ten rules PBT-01…PBT-10 mapped to named plan steps. 14 properties have generation steps; PBT-07 domain-appropriate generators specified for Persian text, Jalali dates (weighted to Esfand 29/30 and leap boundaries), and domain objects (optional fields present AND absent); PBT-08 shrinking enabled and seeds logged (Step 6); PBT-05/06 oracle and stateful model at Step 28; PBT-10 example companion paired with every property suite.
 - SECURITY: **Compliant, 0 blocking findings** — SECURITY-04 five headers (Step 40); SECURITY-05 validation with code-point lengths; SECURITY-09 generic errors, no secrets; SECURITY-10 pinned lock file + CI vulnerability scan; SECURITY-11 safety logic isolated with INV-1…INV-4 on interfaces (Step 23); SECURITY-15 fail-closed Result taxonomy (Step 12).
 - RESILIENCY: **N/A, 0 blocking findings** — U1 deploys nothing. Step 24's in-memory localStorage fallback is graceful degradation in the spirit of RESILIENCY-10. Round-2 obligations remain recorded, not waived.
@@ -699,6 +782,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Part 1 Step 6: Approval Prompt
+
 **Timestamp**: 2026-08-03T00:10:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Presenting the Part 1 plan summary and approval request per Step 5/6, referencing the complete plan at `aidlc-docs/construction/plans/u1-foundation-code-generation-plan.md`. Awaiting explicit approval per Step 7 before any code generation begins."
@@ -707,6 +791,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Part 1: User Question During Approval Gate
+
 **Timestamp**: 2026-08-03T00:20:00Z
 **User Input**: "explain issues in persian"
 **AI Response**: "User requested an explanation of the outstanding issues/risks in Persian. This is a clarification request, NOT an approval and NOT a change request — the Part 1 approval gate (Step 7) remains OPEN and no code generation has begun. Provided a Persian-language explanation covering: (1) the three technical risks flagged in the plan summary (exactOptionalPropertyTypes as the compiler foundation for INV-2, INV-2 being live from the first commit rather than deferred to U3, and Step 38 as the only real proof of NFR-A1); (2) the four highest-risk plan steps (23, 24/25, 27, 38); (3) the four accepted risks AR-01 through AR-04 carried from Requirements, restated as settled user decisions not open questions; (4) the known gap of venue approval having no approver until Round 3; (5) the categories resolved as N/A at this stage (API layer, database migrations) with reasons. No artifacts modified."
@@ -715,6 +800,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Part 1: User Question During Approval Gate (Location Model)
+
 **Timestamp**: 2026-08-03T00:30:00Z
 **User Input**: "الان چند نوع یوزر داریم و کدومشون می‌تونن لوکیشن دقیق ست کنند؟ آیا لوکیشن دقیق فقط مخصوص activity عه؟"
 **AI Response**: "Clarification request about the account-type model and where exact location lives. NOT an approval and NOT a change request — Part 1 Step 7 approval gate remains OPEN, no code written. Answered from existing approved artifacts without modifying any: (1) THREE account types per FR-05 and the AccountType enum — user | venue | admin — versus FOUR personas, since P1 Activity Poster and P2 Activity Seeker are the same account type separated only by goal. (2) Exact-location capability: regular users choose locationPrecision per activity with NO default (FR-11, US-11); venues have NO choice, venueService.publishVenueActivity forces 'exact' (FR-54); admin does not author activities (Round 3). (3) Exact location exists in TWO places in the model, not one: Activity.exactAddress (conditional, governed by INV-2) and Venue.address (required, always public). The LocationPrecision CHOICE exists only on Activity. (4) User entity has homeNeighborhoodId only — no exact-address field and no coordinate field exists anywhere in the domain model; per design philosophy #2 and CQ8 `B`, the app never learns a user's position. Also surfaced BR-U1-71: a null viewer receives no exactAddress for ANY activity regardless of precision."
@@ -723,6 +809,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Part 1 Steps 8-9: Plan APPROVED
+
 **Timestamp**: 2026-08-03T01:00:00Z
 **User Input**: "I approve plan, proceed to U1 code generation part 2, execute the 41 steps in order"
 **AI Response**: "Explicit approval recorded for the U1 code generation plan. Approval covers the entire plan and generation sequence per Step 7. Marking Part 1 (Planning) complete in `aidlc-state.md`. Beginning PART 2 - GENERATION (Steps 10-13), executing the 41 plan steps in order. Per the Generation Phase Rules: NO HARDCODED LOGIC (only what the plan specifies), FOLLOW PLAN EXACTLY (no deviation from the step sequence), UPDATE CHECKBOXES immediately as each step completes, STORY TRACEABILITY for US-90/US-91/US-92. Application code goes to workspace root per the recorded organization override `src/{app,core,infra,ui,features}/`; only markdown summaries go to `aidlc-docs/construction/u1-foundation/code/`."
@@ -731,6 +818,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Part 2 Steps 10-13: Generation COMPLETE
+
 **Timestamp**: 2026-08-03T05:20:00Z
 **User Input**: N/A (AI action)
 **AI Response**: "Executed all 41 plan steps across 8 phases in order. Marked each checkbox [x] in the same interaction as its work, per plan-level checkbox enforcement. Application code written to workspace root using the approved layered structure src/{app,core,infra,ui,features}/ per the recorded override; markdown summaries only in aidlc-docs/construction/u1-foundation/code/. 63 source files, 18 test files. Verified: typecheck clean, ESLint clean (0 errors 0 warnings, including DEP-1..DEP-4), 127/127 tests passing across 13 files, production build succeeds at ~104 KB gzipped JS (NFR-P3 budget 250 KB)."
@@ -739,10 +827,12 @@ also it can suggest activities or cafes can add their daily activities, like " w
 **Definition of done — all 7 criteria met**: boots in Persian RTL with dir/lang; seeded Persian data visible; Jalali dates render and picker works; ESLint boundary rules active and failing the build; all property tests plus example companions pass; **repository-swap test passes with zero screen changes (the only real proof of NFR-A1)**; demoable in browser in Persian.
 
 **TWO DEFECTS FOUND BY PROPERTY/COMPONENT TESTS, NOT REVIEW**:
+
 1. **Iranian DST** — a property asserting `startOfTehranDay` yields hour 0 failed, shrunk to `2013-03-21T20:30:00.000Z`. Iran observed DST until 2022; on 22 March 2013 clocks jumped 00:00 -> 01:00 and MIDNIGHT DID NOT EXIST. The supported range (Jalali 1300-1500 = 1921-2121 CE) spans the entire DST era, so this is inside the contract. The implementation was correct; the assertion was too strong. Property now states the real contract (earliest instant of that Tehran day) and an example test pins the 2013 case. A hard-coded +03:30 offset — which BR-U1-11 explicitly warns against — would be wrong by an hour here and by a whole day near the boundary.
 2. **JalaliDatePicker manual entry unreachable** — binding the text input directly to the formatted value meant a partially typed date never parsed, so value stayed null, so display stayed empty, so each keystroke vanished. Users could never type a complete date. Fixed with local draft state.
 
 **THREE DEVIATIONS FROM APPROVED ARTIFACTS — recorded, require user acknowledgement**:
+
 1. **DEP-3 narrowed, not applied literally.** `unit-of-work.md` §2.4 says ui/ imports nothing from core/. But `frontend-components.md` §3.5 places JalaliDatePicker in ui/ while requiring its conversion logic to live in core/rules/jalali, and FC-U1-06 requires ui/ primitives to render Persian digits. ESLint now permits ONLY `@core/rules/jalali` and `@core/rules/persianText` from ui/ (pure formatting helpers), and still bans @core/domain, @core/repositories, @core/services, @core/i18n, @core/reference, features/, infra/. The alternative was duplicating Jalali arithmetic inside ui/ — two implementations of BR-U1-13 with only one property-tested.
 2. **`core/rules/projection.ts` and `core/rules/activityLifecycle.ts` created in U1.** The plan named a "projection stub"; unit-of-work assigns `locationPrecision` to U3. Named `projection.ts` because it carries BOTH INV-2 (activity address) and INV-3 (profile contact fields) — splitting one enforcement point across two modules would be worse. `activityLifecycle.deriveState` was required because `ActivityView.derivedState` is part of every read's return type. U3 absorbs and may rename.
 3. **Step 19 font binaries NOT committed.** `public/fonts/README.md` documents the three required woff2 files and their SIL-licensed source. Downloading and committing third-party binaries is a maintainer decision, not a codegen side effect. The app runs without them in a fallback face.
@@ -752,6 +842,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 **Config fixes required during generation**: added `@types/node`; removed TS project references (TS6310); dropped the React plugin from vitest.config.ts (vitest 2.x bundles its own Vite major, causing a plugin type conflict); aligned `tailwindcss` and `@tailwindcss/vite` to 4.3.3 (4.0.0 vs bundled 4.3.3 runtime broke the CSS build).
 
 **Extension compliance for Code Generation (Generation)**:
+
 - PBT: **Compliant, 0 blocking** — PBT-02..PBT-08 and PBT-10 all satisfied. 14 properties implemented; oracle/stateful model at P-U1-14 compares SETS of live requesters (not counts) so Round 2 cannot return the wrong people and still pass; 5 domain generators each documenting why primitive generators would test nothing; shrinking never disabled; seeds printed every run.
 - SECURITY: **Compliant, 0 blocking** — SECURITY-04 all five headers with a CSP carrying NO `unsafe-inline` and NO `unsafe-eval` (achievable because the font is self-hosted, no component uses an inline style attribute, and dangerouslySetInnerHTML is lint-banned); SECURITY-08 INV-4 makes unscoped reads inexpressible and repositories refuse rather than relying on hidden UI; SECURITY-15 failClosed + Result taxonomy; SECURITY-11 safety logic isolated with invariants on the interfaces. Six rules N/A and captured as R2 obligations, not waived. Watch item: 10 npm advisories in build-time dependencies, reported non-blocking by deliberate choice, to tighten before public launch.
 - RESILIENCY: **N/A this stage, 0 blocking** — U1 deploys nothing. BR-U1-44's in-memory localStorage fallback is graceful degradation in the spirit of RESILIENCY-10. AR-03 obligation honoured: no resiliency rule silently ticked.
@@ -759,6 +850,7 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Part 2 Step 14: Approval Prompt
+
 **Timestamp**: 2026-08-03T05:20:00Z
 **User Input**: N/A (awaiting user)
 **AI Response**: "Presenting the Code Generation completion message per Step 14, using the standardized 2-option format (Request Changes / Continue to Next Stage). Next stage is U2 Identity and Profile Functional Design, per the build sequence U1 -> U2 -> U3 -> {U4, U5} -> U6."
@@ -767,14 +859,16 @@ also it can suggest activities or cafes can add their daily activities, like " w
 ---
 
 ## U1 Code Generation — Post-generation defect found by running the app
+
 **Timestamp**: 2026-08-03T05:35:00Z
 **User Input**: "explain how can I run it and see it"
 **AI Response**: "Created `.claude/launch.json`, made the Vite dev port configurable via PORT (5173 was already held by another process), started the dev server and inspected the rendered page. Found and fixed a US-90 violation that the test suite had missed: `FoundationDemo` rendered activity CATEGORY CHIPS from the raw slug (`art`, `tech`, `cafe-event`, `boardgames`) rather than looking up `nameFa` from reference data — English text visible to users in a Persian-only product. Also fixed the date label, which used a static `date.upcoming` key for every activity including past ones; it now maps `derivedState` to the right catalogue key. Verified: typecheck clean, lint clean, 127/127 tests still passing, page now renders «هنر»، «فناوری»، «رویداد کافه»، «بازی رومیزی» and «برگزار شده» for past activities."
 **Context**: CONSTRUCTION PHASE - U1 Code Generation, Step 15 approval gate still OPEN
 
-**Why the tests missed it**: `tests/app/shell.test.tsx` asserts no untranslated English in the NAV CHROME, and the ESLint rule bans Persian literals in components (which catches hard-coded copy) — but neither catches a component rendering an English *value* pulled from data. The gap is that "no untranslated English is visible" (US-90) was tested at the chrome level and enforced at the literal level, with the data-rendering path between them uncovered. Worth a broader assertion when U3 builds the real ActivityCard.
+**Why the tests missed it**: `tests/app/shell.test.tsx` asserts no untranslated English in the NAV CHROME, and the ESLint rule bans Persian literals in components (which catches hard-coded copy) — but neither catches a component rendering an English _value_ pulled from data. The gap is that "no untranslated English is visible" (US-90) was tested at the chrome level and enforced at the literal level, with the data-rendering path between them uncovered. Worth a broader assertion when U3 builds the real ActivityCard.
 
 ## U1 — Post-generation change request: redesign, night mode, card changes, date filter
+
 **Timestamp**: 2026-08-03T08:30:00Z
 **User Input**: "so redesign the page using UI UX pro max skill, add night mode to website, change آدرس دقیق in cards to مکان.
 change برگزار شده and پیش رو to تاریخ برگزاری just change cards that are expired.
@@ -786,6 +880,7 @@ also it's not working with date filter."
 **AMBIGUITY RESOLVED (flagged to user)**: "change برگزار شده and پیش رو to تاریخ برگزاری just change cards that are expired" read as: the FIELD LABEL is «تاریخ برگزاری» on every card, and expired cards additionally carry a «برگزار شده» badge plus a desaturated treatment. Rationale: a date is a date whatever its state, so relabelling the same field to encode state made the label do two jobs; state now lives in the badge where it can be seen at a glance.
 
 **Changes made**:
+
 1. **Design direction** — palette rebuilt around Persian turquoise (فیروزه), taken from the tilework the audience grew up with, with saffron ochre reserved exclusively for "already happened". Replaces the arbitrary indigo. All pairs annotated with contrast ratios; WCAG AA held in both modes.
 2. **PERSIAN TYPOGRAPHY RULE recorded in CSS**: `letter-spacing` is forced to `normal` globally. Persian script is cursive — tracking pulls letter joins apart and visibly breaks words. The "small wide-tracked label" device that carries much of Latin editorial design is unavailable, so hierarchy is built from size, weight and colour alone. This is a language constraint, not a preference, and is now enforced rather than remembered.
 3. **Night mode** — two triggers in priority order: system preference honoured by default (no attribute written, so an OS switch at sunset reaches an open tab), explicit `data-theme` always wins, persisted to localStorage with a graceful failure path. Not an inversion: surfaces lift as they come forward, turquoise brightens, ochre warms.
@@ -804,6 +899,7 @@ also it's not working with date filter."
 ---
 
 ## U1 — Second change request: حوالی, no author, 4-up grid, top bar, brand polish
+
 **Timestamp**: 2026-08-03T09:00:00Z
 **User Input**: "write حوالی instead of میزبان نشانی دقیق را مشخص نکرده
 don't show name of author.
@@ -814,6 +910,7 @@ and also try more beautiful designs suitable for our brand"
 **Context**: CONSTRUCTION PHASE - U1 Code Generation, Step 15 approval gate still OPEN
 
 **Changes**:
+
 1. **«حوالی {{neighborhood}}»** replaces the sentence «میزبان آدرس دقیق را منتشر نکرده». One ordinary Persian word carries the whole idea; the previous phrasing read as a notice about a setting. The hatched "veiled line" signature was REMOVED with it — «حوالی» plus a dashed-ring icon does the same work with far less noise. Chanel's rule: take one accessory off.
 2. **Author removed from the card.** At a four-across width a name and a rating crowd out the three facts that drive the decision. Recorded for U3: reputation must appear on the ACTIVITY DETAIL view, where someone is deciding whether to contact a stranger and has room to weigh it. Dropping it from a card is a layout call; dropping it from the product would be a safety regression.
 3. **Responsive grid** — 1 / 2 / 3 / 4 columns at base / sm / lg / xl. Card redesigned for the narrower width: 4:3 image, single category chip on the image, two icon-led meta rows, hover lift.
@@ -821,6 +918,7 @@ and also try more beautiful designs suitable for our brand"
 5. **Inline SVG icon set** (`src/ui/icons.tsx`) replacing emoji in meta rows. Stroke width 1.6 rather than 2: beside Vazirmatn's fairly light Persian text a 2px stroke out-weighs the words it sits next to.
 
 **THREE DEFECTS FOUND IN THE BROWSER, NONE BY TESTS**:
+
 1. **The var-transition bug reappeared twice** — `transition-all` on the card and `transition-colors` on the pills and on `Button`. Same root cause fixed earlier on `body`: a CSS transition on a value derived from a custom property changed on `:root` never settles, so the element keeps painting the old theme's colour. Now fixed in all four places AND written up as a standing rule in `global.css`: transition transform, opacity and box-shadow freely; never background-color, color, or border-color.
 2. **Grid blanked to skeletons on every keystroke.** The feed query key includes `filters` and `viewerId`, so it went pending whenever either changed — including when the session resolved. Surfaced as a test failing between `findByTestId` and `getByTestId` on consecutive lines: the element genuinely vanished in between. Fixed with `placeholderData: (previous) => previous`, so the list stays on screen while the next result loads instead of flickering under the user's hands.
 3. **NFR-U2 violated by the new chrome** — category pills 34px and the search field 42px, both under the 44px minimum. The bar was built to look right before it was measured. Fixed; verified zero interactive targets under 44×44 at 375px.
@@ -832,12 +930,14 @@ and also try more beautiful designs suitable for our brand"
 ---
 
 ## U1 — Third change request: date filter becomes a range (از / تا)
+
 **Timestamp**: 2026-08-03T09:30:00Z
 **User Input**: "change date filter from one day only to from and until"
 **AI Response**: "Replaced the single-day filter with an inclusive از/تا range. Verified in the browser and by test. Typecheck clean, ESLint clean, 150/150 tests passing (8 new), build ~106 KB gzipped JS."
 **Context**: CONSTRUCTION PHASE - U1 Code Generation, Step 15 approval gate still OPEN
 
 **Changes**:
+
 1. `FeedFilterProvider` — `date: string | null` replaced by `dateFrom` / `dateUntil`, each independently nullable so a half-open range is a first-class state rather than an error.
 2. **THE LOAD-BEARING DETAIL — `until` covers the WHOLE Tehran day, not its midnight.** Using that day's 00:00 as the upper bound would make «از ۱۵ تا ۱۵» return nothing, and «تا ۱۵» silently exclude everything on the 15th. The user asked for a day, not for an instant. Both ends resolve through `startOfTehranDay` (BR-U1-17), so an activity at 21:00 Tehran on the end date is included even though it has already rolled over in UTC — verified live: «از ۱۰ تا ۱۵ مرداد» returns 4 activities including the 21:00 one on the 15th.
 3. **The two pickers fence each other** — `maxDate` on «از» is the current «تا», and `minDate` on «تا» is the current «از». The invalid range is made hard to EXPRESS rather than accepted and then complained about. If it is reached another way, the other bound follows the user's most recent action instead of leaving a window that can only ever return nothing.
@@ -846,6 +946,7 @@ and also try more beautiful designs suitable for our brand"
 **Polish found while verifying in the browser**: after typing a date manually the field kept the raw Latin text («1405/05/15») because the draft state held it. Added `onBlur` to drop the draft, so the field settles back to the canonical «۱۴۰۵/۰۵/۱۵» with Persian digits once focus moves, and a half-typed date that never parsed reverts rather than lingering as text that looks committed. Note for future browser testing: React delegates `onBlur` to the native `focusout`, so a synthetic `blur` event does not trigger it — a real focus move does.
 
 **New tests (8)**:
+
 - `tests/app/dateFilter.test.tsx` rewritten for ranges (6): single-day range returns that day; multi-day range includes both endpoints; open-ended start; open-ended end; both window ends land on the intended Tehran day for a 23:00-Tehran instant; an empty range returns nothing rather than falling back to everything.
 - `tests/app/dateRangeUi.test.tsx` (5): two optional bounds render; picking a start narrows the feed and clearing restores it; an inclusive same-day range is expressible; a day before the start is DISABLED in «تا»; a day after the end is DISABLED in «از».
 
@@ -854,6 +955,7 @@ and also try more beautiful designs suitable for our brand"
 ---
 
 ## U1 — Fourth change request: eight UI/UX fixes
+
 **Timestamp**: 2026-08-03T10:15:00Z
 **User Input**: "1 - add a filter for showing or not showing done activities
 2 - when someone choose a date as from, in the part for choosing until use dim color for dates before chosen date as from and vice versa for until
@@ -870,6 +972,7 @@ and also try more beautiful designs suitable for our brand"
 `inset-inline-start-3`, `inset-block-0`, `inset-inline-end-0`, and `inset-inline-start-2.5` (x2) were used in components but never defined in `global.css` — so they silently did nothing. The search icon had no positioning at all, which is exactly what the user saw. Tailwind v4 already ships logical inset utilities (`start-*`, `end-*`, `inset-y-*`); hand-rolling a parallel set meant every name I mistyped failed silently instead of loudly. All hand-rolled inset utilities deleted and every call site moved to the framework's. Recorded in `global.css` so nobody re-adds them.
 
 **Per item**:
+
 1. **Done-activities filter** — `excludePast?: boolean` added to `ActivityFilters` (absent = include, so no existing caller changes behaviour and Round 2's API can add the parameter without breaking). Implemented in the mock read pipeline via `deriveState`, so "past" stays DERIVED from the Tehran day boundary rather than a stored flag. **Defaults to SHOWING past activities** — they are where ratings come from, so hiding them by default would quietly remove the product's reputation signal. Verified: 24 -> 19 activities, past cards 6 -> 0.
 2. **Out-of-range days dimmed** — disabled day cells go to `opacity-35` with muted colour instead of the previous faint grey. In a range picker "before the start" is the commonest thing a person tries, so the answer has to be legible at a glance rather than a click that quietly does nothing. Verified: days 10 and 14 disabled at opacity 0.35 with «از» set to 15; day 15 and later at opacity 1.
 3. **Three ways out of the calendar** — Escape, a tap anywhere outside (via a document `pointerdown` listener), and an explicit «بستن» button. Opening on focus with no exit is a trap on touch: there is no Escape key and "tap outside" is a convention people have to already know.
@@ -886,6 +989,7 @@ and also try more beautiful designs suitable for our brand"
 ---
 
 ## U1 Code Generation — APPROVED
+
 **Timestamp**: 2026-08-04T17:11:26Z
 **User Input**: "it's ok, let's continue to next step"
 **AI Response**: "Recorded as explicit approval of U1 Code Generation, including the three deviations listed in `implementation-summary.md` §6 (DEP-3 narrowed for two pure formatting helpers; `core/rules/projection.ts` + `activityLifecycle.ts` created in U1; Vazirmatn font binaries not committed). U1 marked COMPLETE in aidlc-state.md. Proceeding to U2 Identity and Profile — Functional Design, Part 1 (Planning)."
@@ -894,6 +998,7 @@ and also try more beautiful designs suitable for our brand"
 ---
 
 ## U2 Functional Design — Part 1 (Planning) started
+
 **Timestamp**: 2026-08-04T17:11:26Z
 **User Input**: (continuation of the approval above)
 **AI Response**: "Created `aidlc-docs/construction/plans/u2-identity-functional-design-plan.md` with unit context, 12 embedded questions, and a 6-phase execution checklist. Awaiting answers."
@@ -902,6 +1007,7 @@ and also try more beautiful designs suitable for our brand"
 ---
 
 ## Change Request CR-01 — location filter, filter placement, activity map
+
 **Timestamp**: 2026-08-04T17:11:26Z
 **User Input**: "before going ahead I remember one thing
 add a filter based on approximate location, like neighborhood in tehran or Isfahan, ...
@@ -910,19 +1016,21 @@ and also add a map so each activity has a place on map and if user opens the map
 **AI Response**: "Assessed as FOUR distinct changes of very different cost and recorded in `aidlc-docs/change-requests/cr-01-location-filters-and-map.md` with 8 questions. Did NOT implement — two of the four reopen approved decisions."
 **Current State**: CONSTRUCTION — U2 Functional Design Part 1, questions open (13, unanswered). U1 approved.
 **Impact Assessment**:
+
 - **A — neighborhood filter**: LOW. `ActivityFilters.neighborhoodIds` already in the contract and already filtering in the mock pipeline (`context.ts:218`); only the UI is missing. `NeighborhoodSelector` is already a planned U2 component built for U3 filter reuse.
 - **B — filters on the right**: LOW. Layout only. Two notes: RTL makes right the LEADING edge (must use logical properties — U1 already shipped a bug of exactly this kind), and 375px has no room for a persistent rail, so it needs a second layout.
 - **C — second city (Isfahan)**: MODERATE, and it reopens **AS-01** ("one big city means Tehran"). Needs a `City` level above `District`; the adjacency graph becomes two disconnected graphs, so **hop distance between cities is undefined, not large** — BR-U1-23 and FR-21 both need a cross-city rule. Also a full Isfahan dataset + adjacency + seed content. Recommended split: adopt the model now, defer the dataset.
 - **D — map**: **SAFETY-CRITICAL, largest.** Conflicts head-on with US-11/FR-11/INV-2: the request is that EVERY activity has a place on the map, but a `neighborhood`-precision activity has no honest and safe point. A real pin defeats INV-2 outright; an approximate pin is a precision claim the data does not support and is arguably worse than the honest text. Requirements §6.3 already scoped maps to "exact-address activities only", and NFR-R9/R10 require graceful degradation. Additionally **there are no coordinates anywhere in the product** — U1 FD Q1 rejected coordinates explicitly in favour of the adjacency graph — and `exactAddress` is free text, not a point, so even exact activities have nothing to plot without geocoding or a composer change.
-**Proposed rule if a map is built**: any approximate position must be derived deterministically from the NEIGHBORHOOD, never from the real address. A jittered true location is not privacy — repeated observation narrows it back. Proposed as a fifth contract invariant **INV-5** with a property test, same treatment US-11 already gets.
-**Recommended sequencing**: B + A now as a U1 change; C's model now with the dataset deferred; D designed and built in U3, where its filter-state and coordinate dependencies already live.
-**User Confirmation**: PENDING — 8 questions awaiting answers.
-**Action Taken**: Impact assessment written. No code or artifact changes made. U2 Functional Design Part 1 remains open behind CR-01.
-**Artifacts Affected**: none yet; the projected list is CR-01 §8.
+  **Proposed rule if a map is built**: any approximate position must be derived deterministically from the NEIGHBORHOOD, never from the real address. A jittered true location is not privacy — repeated observation narrows it back. Proposed as a fifth contract invariant **INV-5** with a property test, same treatment US-11 already gets.
+  **Recommended sequencing**: B + A now as a U1 change; C's model now with the dataset deferred; D designed and built in U3, where its filter-state and coordinate dependencies already live.
+  **User Confirmation**: PENDING — 8 questions awaiting answers.
+  **Action Taken**: Impact assessment written. No code or artifact changes made. U2 Functional Design Part 1 remains open behind CR-01.
+  **Artifacts Affected**: none yet; the projected list is CR-01 §8.
 
 ---
 
 ## CR-01 deferred · U2 Functional Design questions answered
+
 **Timestamp**: 2026-08-04T17:40:00Z
 **User Input**: "ok just save it for possible future features
 also i've done questions"
@@ -932,6 +1040,7 @@ also i've done questions"
 **CR-01 disposition**: no requirement, artifact, or line of code changed. Questions left deliberately unanswered — they are the decisions a future implementer must make first. Recorded in the deferral note: the map's conflict with US-11/INV-2 (§5.1), the adjacency graph splitting in two across cities (§4), and that the `City` level is the only one of the four whose cost compounds while it waits.
 
 **U2 answers recorded (all recommended)**:
+
 - Q1 `A` — any well-formed Iranian mobile signs in; an unseeded number creates an account and lands on setup (no account enumeration, per US-01)
 - Q2 `A` — new `AuthRepository` interface in `core/repositories`
 - Q3 `A` — explicit `profileCompletedAt?: string` on `User`; `homeNeighborhoodId` becomes optional
@@ -949,12 +1058,14 @@ also i've done questions"
 ---
 
 ## U2 Functional Design — Part 2 (Generation) COMPLETE
+
 **Timestamp**: 2026-08-04T17:55:00Z
 **User Input**: (executing the answers given above)
 **AI Response**: "Five artifacts written to `aidlc-docs/construction/u2-identity/functional-design/`: domain-entities.md, business-rules.md, business-logic-model.md, frontend-components.md, extension-compliance.md. All 40 checklist steps marked complete. 43 business rules, 4 property tests, 9 components, 0 blocking extension findings."
 **Context**: CONSTRUCTION — U2 Functional Design Part 2 complete, awaiting approval
 
 **Design decisions recorded**:
+
 - `User.displayName` and `homeNeighborhoodId` become OPTIONAL; `profileCompletedAt` is the single definition of completeness (BR-U2-31). A completed user who clears their interests while editing is complete-but-editing, not incomplete — a derived check would throw them back into onboarding.
 - Account creation is folded INSIDE `verifyCode`. A separate `createAccount` would have to be called by something that knows the number is new, and that something is an account-enumeration oracle — exactly what US-01 forbids.
 - `ProfileView` requires `displayName` and `neighborhoodId`, which an incomplete account cannot supply. So incomplete accounts are structurally undiscoverable (BR-U2-32) — the guarantee falls out of the type rather than needing a filter at each call site.
@@ -964,6 +1075,7 @@ also i've done questions"
 - React Query cache keys must not contain the phone. `['auth', phone]` is the natural key to write and it puts a phone number into devtools and any serialized error report (BR-U2-60).
 
 **TWO DEVIATIONS NEEDING ACKNOWLEDGEMENT**:
+
 - **DEV-U2-01** — `avatarUrl?: string` replaced by `avatarId?: AvatarPresetId` on `User`, `ProfileView`, and `ProfilePatch`, following Q5 `A` (bundled preset set). Touches seed data and every `Avatar` render site. A field named `...Url` that never holds a URL was the alternative and was rejected.
 - **DEV-U2-02** — the plan's Q8 proposed a 300-character bio limit. U1's APPROVED rules, the `bio_too_long` code, and the Persian string in `fa.ts` all say 200. **200 stands.** The 300 was my error in writing the question, not a decision by the user, and `all recommended` should not silently rewrite an approved, translated, implemented limit.
 
@@ -972,6 +1084,7 @@ also i've done questions"
 ---
 
 ## U2 Functional Design — APPROVED
+
 **Timestamp**: 2026-08-04T18:05:00Z
 **User Input**: "continue to next stage"
 **AI Response**: "Recorded as explicit approval of U2 Functional Design, including both deviations (DEV-U2-01 avatarUrl → avatarId; DEV-U2-02 bio limit stays at U1's approved 200). Proceeding to U2 Code Generation, Part 1 (Planning)."
@@ -980,6 +1093,7 @@ also i've done questions"
 ---
 
 ## U2 Code Generation — Part 1 (Planning) started
+
 **Timestamp**: 2026-08-04T18:05:00Z
 **AI Response**: "Creating `aidlc-docs/construction/plans/u2-identity-code-generation-plan.md`."
 **Context**: CONSTRUCTION — U2 Code Generation, Steps 1-4
@@ -989,6 +1103,7 @@ also i've done questions"
 ---
 
 ## U2 Code Generation Part 1 — approval prompt
+
 **Timestamp**: 2026-08-04T18:10:00Z
 **AI Response**: "Plan complete: `aidlc-docs/construction/plans/u2-identity-code-generation-plan.md` — 36 steps across 8 phases, 4 stories, 4 property tests, 10 done-criteria. Asking for approval before Part 2."
 **Context**: CONSTRUCTION — U2 Code Generation Part 1, Step 6 (log approval prompt before asking)
@@ -998,6 +1113,7 @@ also i've done questions"
 ---
 
 ## U2 Code Generation Part 1 — APPROVED
+
 **Timestamp**: 2026-08-04T18:15:00Z
 **User Input**: "Approve"
 **AI Response**: "Plan approved. Executing Part 2 — 36 steps in order, checkboxes marked as each completes."
@@ -1006,6 +1122,7 @@ also i've done questions"
 ---
 
 ## U2 Code Generation — Part 2 (Generation) COMPLETE
+
 **Timestamp**: 2026-08-05T00:30:00Z
 **AI Response**: "All 36 steps executed. 19 new files, 17 modified. Typecheck clean, lint clean (0 errors, 0 warnings), 206/206 tests passing (was 160), build 118.8 KB gzipped. Verified in a real browser at 375px and 1280px."
 **Context**: CONSTRUCTION — U2 Code Generation Part 2 complete, awaiting approval
@@ -1029,6 +1146,7 @@ also i've done questions"
 ---
 
 ## CR-02 — six change requests during the U2 approval gate
+
 **Timestamp**: 2026-08-05T01:30:00Z
 **User Input**: "1 - when choosing a profile picture circle around it isn't fit
 2 - choosing interest shouldn't be necessary
@@ -1044,6 +1162,7 @@ also i've done questions"
 **Item 1** — the preset artwork sat in an `inline-block` span, which sits on the text baseline and reserves descender space beneath it, so the SVG rode high inside its circle and the ring looked off-centre. `grid place-items-center` + `block` on the SVG. Verified: 64×64 art in a 64×64 circle.
 
 **Items 2 and 4 AMEND APPROVED REQUIREMENTS** — recorded, not absorbed:
+
 - Interests: required (1–10) → **optional** (0–10). The cap stays because it is a ranking decision, not tidiness.
 - Location: required Tehran neighborhood → **optional Iranian city** (25 listed, plus «ترجیح می‌دهم نگویم» as an explicit answer).
 - A complete profile now means **a name**. BR-U2-30 amended, BR-U2-24 min → 0, BR-U2-25 rewritten, **BR-U2-33 RETIRED** (it protected exactly the two requirements that just became optional; left in place it would be a check that can never fire).
@@ -1063,6 +1182,7 @@ also i've done questions"
 ---
 
 ## U2 Code Generation — APPROVED
+
 **Timestamp**: 2026-08-05T02:00:00Z
 **User Input**: "good for now, proceed to next stage"
 **AI Response**: "Recorded as explicit approval of U2 Code Generation, including CR-02's six changes and the requirement amendments they carry (AS-01, US-02, BR-U2-24/25/30, BR-U2-33 retired). Proceeding to U3 Activities and Discovery — Functional Design, Part 1 (Planning)."
@@ -1071,6 +1191,7 @@ also i've done questions"
 ---
 
 ## U3 Functional Design — Part 1 (Planning) started
+
 **Timestamp**: 2026-08-05T02:05:00Z
 **AI Response**: "Created `aidlc-docs/construction/plans/u3-activities-functional-design-plan.md` — unit context, 12 questions, 7-phase / 40-step execution checklist. Awaiting answers."
 **Context**: CONSTRUCTION — U3 Activities and Discovery, Functional Design Steps 1-4
@@ -1084,6 +1205,7 @@ also i've done questions"
 ---
 
 ## U3 Functional Design — answers received, 2 ambiguities detected
+
 **Timestamp**: 2026-08-05T02:20:00Z
 **User Input**: "done" (answers filled into `u3-activities-functional-design-plan.md`)
 **AI Response**: "Ten answers recorded as unambiguous. TWO required clarification, so Part 2 is blocked per the question-format guide. Created `u3-activities-clarification-questions.md` with 4 questions."
@@ -1096,6 +1218,7 @@ also i've done questions"
 **AMBIGUITY 2 — "learn from divar.ir".** Fetched divar.ir and confirmed only what is public: it is CITY-FIRST (pick a city, then browse), with a popular-city list nearly identical to the one CR-02 already added to the profile. Could NOT confirm how an individual listing renders its location — and that is precisely the safety-critical detail in US-11 and CR-01 §5, so it was not assumed. Clarification asks whether this means city-first navigation, location display, both, or direction for a later round. **Flagged that a map interpretation reopens CR-01 change D**, deferred on 2026-08-04, whose blocking reason is unchanged: a neighborhood-precision activity has no honest, safe point on a map. Also flagged that city-first navigation needs Round-1 content in more than one city or every city but Tehran is an empty app.
 
 **Q6 ANSWERED `X` — a real product change, accepted, with three consequences recorded**:
+
 1. It **restores US-20 rather than changing it**. US-20 already specifies "published, non-past, non-cancelled". The deviation was MINE: past activities entered the demo feed via the user's own U1 change request ("add a filter for showing or not showing done activities") and I defaulted them to visible, arguing they carry the reputation signal. The user's decision puts the product back on the story as written.
 2. The «نمایش فعالیت‌های برگزارشده» toggle must be REMOVED — it is the control that request added, and it now offers what the platform has decided not to do.
 3. Ratings (US-50 → US-52) still need a route to past activities. After this change the only routes are the author's own list and an attendee's sent-requests list. Both survive. Recorded so U4 does not discover the gap.
@@ -1105,6 +1228,7 @@ also i've done questions"
 ---
 
 ## U3 clarifications answered — CR-01 change D UN-DEFERRED
+
 **Timestamp**: 2026-08-05T02:40:00Z
 **User Input**: "done and also this is a screenshot about what I'm talking about ." + screenshot of Divar's location step; CQ2 answer adds: "when you want to post something on divar it asks you to choose a location on map and after setting the pin on map it asks you for it to be percise or aproximate."
 **AI Response**: "All four clarifications answered A. The screenshot resolves the detail I could not verify from the public page and CONFIRMS the area-not-a-pin rule CR-01 §5 recommended. CR-01 change D is un-deferred; change C is partially adopted as city-first navigation."
@@ -1113,6 +1237,7 @@ also i've done questions"
 **Answers**: CQ1 `A` (six property tests) · CQ2 `A` + map-pin flow (city-first navigation AND the composer picks a point on a map) · CQ3 `A` (un-defer the map, area-not-a-pin) · CQ4 `A` (the author's profile is public, per US-53).
 
 **WHAT THE SCREENSHOT SHOWS** — Divar's «مکان آگهی» step, after an address is chosen:
+
 - Two options presented SIDE BY SIDE as pictures, not as words: «نمایش موقعیت حدودی» renders a translucent CIRCLE over an area with NO pin; «نمایش موقعیت دقیق» renders a PIN at a point. The selected one is outlined.
 - Footnote: «توجه کنید بعد از ثبت آگهی، ویرایش شهر امکان‌پذیر نیست» — the CITY cannot be edited after posting.
 
@@ -1131,6 +1256,7 @@ Worse, a circle CENTRED on the true point makes the centre itself the exact loca
 ---
 
 ## U3 Functional Design — Part 2 (Generation) COMPLETE
+
 **Timestamp**: 2026-08-05T03:00:00Z
 **AI Response**: "Four artifacts written to `aidlc-docs/construction/u3-activities/functional-design/`. All 49 checklist steps (40 original + 9 added for city-first navigation and the map) marked complete. 48 business rules, 6 property tests, 1 NEW CONTRACT INVARIANT."
 **Context**: CONSTRUCTION — U3 Functional Design Part 2 complete, awaiting approval
@@ -1152,6 +1278,7 @@ Worse, a circle CENTRED on the true point makes the centre itself the exact loca
 ---
 
 ## U3 Functional Design — APPROVED · Code Generation Part 1 (Planning) complete
+
 **Timestamp**: 2026-08-05T03:10:00Z
 **User Input**: "continue to next stage"
 **AI Response**: "Recorded as explicit approval of U3 Functional Design, including INV-5 and the un-deferral of CR-01 change D. Created `aidlc-docs/construction/plans/u3-activities-code-generation-plan.md` — 45 steps across 9 phases. Asking for approval before Part 2."
@@ -1168,6 +1295,7 @@ Worse, a circle CENTRED on the true point makes the centre itself the exact loca
 ---
 
 ## U3 Code Generation Part 1 — APPROVED
+
 **Timestamp**: 2026-08-05T03:15:00Z
 **User Input**: "approve"
 **AI Response**: "Plan approved. Executing Part 2 — 45 steps in order, checkboxes marked as each completes."
@@ -1176,6 +1304,7 @@ Worse, a circle CENTRED on the true point makes the centre itself the exact loca
 ---
 
 ## U3 Code Generation Part 2 — progress checkpoint (16 of 45 steps)
+
 **Timestamp**: 2026-08-05T04:00:00Z
 **AI Response**: "The entire non-UI stack below the feature layer is built and verified. 215/215 tests passing, typecheck and lint clean. 29 steps remain, almost all of them UI."
 **Context**: CONSTRUCTION — U3 Code Generation Part 2, in progress. NOT complete.
@@ -1193,6 +1322,7 @@ Worse, a circle CENTRED on the true point makes the centre itself the exact loca
 ---
 
 ## U3 Code Generation — Part 2 (Generation) COMPLETE
+
 **Timestamp**: 2026-08-05T04:30:00Z
 **AI Response**: "All 45 steps executed. Typecheck clean, lint clean, 228/228 tests passing (was 208), build 128.6 KB gzipped. Verified in a real browser at 375px and 1280px."
 **Context**: CONSTRUCTION — U3 Code Generation Part 2 complete, awaiting approval
@@ -1221,6 +1351,7 @@ Worse, a circle CENTRED on the true point makes the centre itself the exact loca
 ---
 
 ## CR-04 — city switcher, city-scoped neighborhoods, Divar data
+
 **Timestamp**: 2026-08-05T05:30:00Z
 **User Input**: "1 - when I click on city name above the page it show only 4 citie although there must be more. and also when I create a post in another city it shouldn't be same neighborhood as tehran in the list. keep neighborhood feature only for big cities(Tehran, Mashhad, Isfahan, Karaj and Shiraz) and bring list of neighborhoods from divar"
 **AI Response**: "Two bugs and a data change, all implemented and verified in the browser. Typecheck clean, lint clean, 228/228 tests passing."
@@ -1246,6 +1377,7 @@ All 25 cities were rendering; only 4 were on screen. First attempt — bounding 
 ---
 
 ## Session resumed — UNDOCUMENTED WORKSPACE DRIFT DETECTED
+
 **Timestamp**: 2026-08-08T00:56:00Z
 **User Input**: "Resume the AI-DLC workflow. Read aidlc-docs/aidlc-state.md first."
 **AI Response**: "State read. U3 Code Generation gate is still open, as recorded. But the workspace no longer matches the record — 16 modified files and 3 new files exist with no audit entry, no state entry and no change-request document. Created u3-resume-reconciliation-questions.md with 4 questions rather than approving or proceeding."
@@ -1272,6 +1404,7 @@ All 25 cities were rendering; only 4 were on screen. First attempt — bounding 
 ---
 
 ## Reconciliation questions ANSWERED — CR-05 adopted, rules amended, tests first, font blocking
+
 **Timestamp**: 2026-08-08T01:20:00Z
 **User Input**: "1: A, 2: A, 3: A, 4: B"
 **AI Response**: "All four answered. Proceeding: adopt the drift as CR-05 with a written document, amend BR-U3-50/51 rather than treating the all-cities default as a deviation, write the missing tests BEFORE presenting the U3 approval gate, acknowledge DEV-U3-02, and treat the missing Vazirmatn binaries as blocking."
@@ -1288,6 +1421,7 @@ All 25 cities were rendering; only 4 were on screen. First attempt — bounding 
 ---
 
 ## CR-05 documented, rules amended, 21 tests added — TWO DEFECTS FOUND
+
 **Timestamp**: 2026-08-08T01:40:00Z
 **AI Response**: "CR-05 written, BR-U3-50/51 amended, BR-U3-53 retired, BR-U3-54 added, 21 tests added across 4 new files and 1 extended. Typecheck clean, lint clean, 249/249 passing (was 228), build 137.9 KB gzipped. Font still outstanding."
 **Context**: CONSTRUCTION — U3 Code Generation, approval gate still OPEN. Q1/Q2/Q3 work complete; Q4's font item not yet done.
@@ -1308,6 +1442,7 @@ All 25 cities were rendering; only 4 were on screen. First attempt — bounding 
 ---
 
 ## Vazirmatn installed · browser verification · A THIRD DEFECT
+
 **Timestamp**: 2026-08-08T02:30:00Z
 **User Input**: "yes do it"
 **AI Response**: "Font downloaded, verified rendering, browser verification run. Found and fixed a third defect. Typecheck clean, lint clean, 250/250 passing, build 137.9 KB gzipped."
@@ -1334,6 +1469,7 @@ Both routes render `ActivityComposerScreen` in the same position, so React recon
 ---
 
 ## Committed and pushed · ambiguous "done" — approval NOT recorded
+
 **Timestamp**: 2026-08-08T02:45:00Z
 **User Input**: "commit and push it"
 **AI Response**: "Committed as 7675c57 on a new branch `u3-cr-05-navigation-and-requests` (38 files, +1758/-83) and pushed to origin. `main` left untouched at fb4d2ba."
@@ -1344,6 +1480,7 @@ Both routes render `ActivityComposerScreen` in the same position, so React recon
 ---
 
 ## User said "done" — treated as AMBIGUOUS, not as approval
+
 **Timestamp**: 2026-08-08T02:47:00Z
 **User Input**: "done"
 **AI Response**: "Asked what 'done' refers to rather than recording a stage approval."
@@ -1356,6 +1493,7 @@ Reading it as approval would put U3 — including CR-05's rule amendment and the
 ---
 
 ## Gate answers — US-40 RECLASSIFIED as a mock U4 must rebuild
+
 **Timestamp**: 2026-08-08T02:55:00Z
 **User Input**: "1 is ok
 2 what we built is a mocked version and must be rebuilt in U4
@@ -1380,6 +1518,7 @@ Reading it as approval would put U3 — including CR-05's rule amendment and the
 ---
 
 ## Correction committed and pushed to main
+
 **Timestamp**: 2026-08-08T04:05:00Z
 **User Input**: "commit, push and merge with main."
 **AI Response**: "Committed 0577bde, pushed to origin/main. The merge was already in place — origin/main had advanced to 7675c57 between turns, so HEAD was on main and the correction landed there directly."
@@ -1396,6 +1535,7 @@ Reading it as approval would put U3 — including CR-05's rule amendment and the
 ---
 
 ## ✅ U3 Code Generation APPROVED · U4 Connections started
+
 **Timestamp**: 2026-08-08T04:15:00Z
 **User Input**: "approve U3 and start U4"
 **AI Response**: "U3 Code Generation approved and recorded. Marking the stage complete and opening U4 Functional Design Part 1 (Planning)."
@@ -1412,6 +1552,7 @@ Reading it as approval would put U3 — including CR-05's rule amendment and the
 ---
 
 ## U4 Connections — Functional Design Part 1 (Planning) started
+
 **Timestamp**: 2026-08-08T04:15:00Z
 **Context**: CONSTRUCTION — U4 Functional Design, Part 1.
 
@@ -1420,21 +1561,23 @@ Reading it as approval would put U3 — including CR-05's rule amendment and the
 **Plan created**: `aidlc-docs/construction/plans/u4-connections-functional-design-plan.md` — 10 questions, awaiting answers.
 
 **⚠️ CODE AUDIT AGAINST THE BINDING SEQUENCE — TWO OF SEVEN STEPS ARE MISSING.** `services.md` §4.4 specifies `sendJoinRequest` as a seven-step sequence and calls it binding. Reading `connectionRepository.ts` against it:
+
 - **Step 1 incomplete** — the activity's existence is checked, but NOT that it is published and not past. A request can currently be sent to a past activity.
 - **Step 3 absent entirely** — no duplicate-request check. **US-30's acceptance criteria explicitly require** that a second request shows the existing request state instead of creating a duplicate. Nothing prevents it today.
-Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wires.
+  Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wires.
 
-**⚠️ NEITHER PURE RULE THE DESIGN MANDATES EXISTS.** `unit-of-work.md` says U4 owns `core/rules/{ratingEligibility,contactSharing}`. Both behaviours are inline in the repository instead: `canRate`'s reasoning is buried in `listRateableParticipants` and returns a LIST rather than the specified typed `{allowed, reason}`; `validateShareSelection`/`requiresDisclosure` do not exist, and `invalid_telegram_format` is specified but unimplemented. U1's own comment anticipated this — *"U4 moves this to core/rules/contactSharing with its own property test"*. Raised as Question 8 rather than assumed, because extraction means rewriting code that currently works.
+**⚠️ NEITHER PURE RULE THE DESIGN MANDATES EXISTS.** `unit-of-work.md` says U4 owns `core/rules/{ratingEligibility,contactSharing}`. Both behaviours are inline in the repository instead: `canRate`'s reasoning is buried in `listRateableParticipants` and returns a LIST rather than the specified typed `{allowed, reason}`; `validateShareSelection`/`requiresDisclosure` do not exist, and `invalid_telegram_format` is specified but unimplemented. U1's own comment anticipated this — _"U4 moves this to core/rules/contactSharing with its own property test"_. Raised as Question 8 rather than assumed, because extraction means rewriting code that currently works.
 
 **U4 IS MOSTLY EXTRACTION, NOT GREENFIELD** — most of its repository layer was built in U1 and works. Recorded at the top of the plan so the design does not duplicate what exists.
 
-**`NEW_MEMBER_RATING_THRESHOLD = 3` is a PLACEHOLDER awaiting this stage** — `views.ts` says so in a comment: *"The threshold value is set in U4's functional design."* Question 2.
+**`NEW_MEMBER_RATING_THRESHOLD = 3` is a PLACEHOLDER awaiting this stage** — `views.ts` says so in a comment: _"The threshold value is set in U4's functional design."_ Question 2.
 
 **Questions deliberately raised beyond the obvious**: whether a withdrawn request frees the slot (a harassment route if it does — withdraw and re-send repeatedly to keep reappearing in an inbox); whether attendance confirmation has a deadline (no deadline means someone can confirm months later purely to open a rating window); and whether rating COMMENTS are displayed at all, since with few ratings an unattributed comment plus a known activity roster often identifies its author — which would defeat US-53's non-attribution requirement.
 
 ---
 
 ## U4 Functional Design — answers received, 1 CONTRADICTION and 2 ambiguities
+
 **Timestamp**: 2026-08-08T04:40:00Z
 **User Input**: "questions qnswered" — Q1 `C` · Q2 `C` · Q3 "C only one chance of re-requesting is allowed and also only 5 request can be sent per day." · Q4 `C` · Q5 `A` · Q6 `C` · Q7 `B` · Q8 `A` · Q9 `A` · Q10 "something to mention: ways of connecting must not be empty, user have to fill something."
 **AI Response**: "Eight answers recorded as final. Created u4-connections-clarification-questions.md — one contradiction with an approved Must story and two ambiguities. Did NOT generate artifacts."
@@ -1443,13 +1586,13 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 **Recorded as final**: Q1 `C` (inbox redesigned from scratch) · Q2 `C` (**threshold 3 → 2**) · Q4 `C` (no attendance deadline, prompt ages) · Q5 `A` (**rating comments stored but NEVER displayed** in Round 1) · Q6 `C` (notifications screen + inbox; badge counts unread REQUESTS only) · Q7 `B` (a Telegram ID entered at request time is used once, not saved) · Q8 `A` (**both pure rules extracted**, repository calls them) · Q9 `A` (seed extended).
 
 **⚠️ CONTRADICTION — Q10 DELETES AN APPROVED MUST STORY. Not implemented.**
-*"ways of connecting must not be empty, user have to fill something"* directly contradicts **US-32 — "Send a request sharing nothing"** (Must, FR-31), whose criteria require the «هیچ‌کدام» option to exist AND to be shown with EQUAL VISUAL WEIGHT — *"never de-emphasized, greyed, or hidden behind 'more options'"*.
+_"ways of connecting must not be empty, user have to fill something"_ directly contradicts **US-32 — "Send a request sharing nothing"** (Must, FR-31), whose criteria require the «هیچ‌کدام» option to exist AND to be shown with EQUAL VISUAL WEIGHT — _"never de-emphasized, greyed, or hidden behind 'more options'"_.
 
-**Why this is not an edit but a re-decision.** AR-02 accepts that contact details go out immediately, to a stranger, with no approval gate, unrecallable. That acceptance rests on TWO mitigations: the US-31 disclosure, and the fact that a cautious person can participate WITHOUT disclosing anything. `stories.md` says so directly in the abuse analysis — *"the strongest argument for keeping the 'share nothing' option prominent (US-32)"*, immediately after noting that blocking in Link does not block Telegram. Remove the second mitigation and **every join request in the product becomes a mandatory disclosure of a real phone number to an unvetted stranger** — a materially different risk posture from the one accepted. Also stated plainly in the clarification file: the person most likely to want to attend and not hand over her number is a woman evaluating a stranger's activity in Tehran, and US-32 was written for her.
+**Why this is not an edit but a re-decision.** AR-02 accepts that contact details go out immediately, to a stranger, with no approval gate, unrecallable. That acceptance rests on TWO mitigations: the US-31 disclosure, and the fact that a cautious person can participate WITHOUT disclosing anything. `stories.md` says so directly in the abuse analysis — _"the strongest argument for keeping the 'share nothing' option prominent (US-32)"_, immediately after noting that blocking in Link does not block Telegram. Remove the second mitigation and **every join request in the product becomes a mandatory disclosure of a real phone number to an unvetted stranger** — a materially different risk posture from the one accepted. Also stated plainly in the clarification file: the person most likely to want to attend and not hand over her number is a woman evaluating a stranger's activity in Tehran, and US-32 was written for her.
 
 **The instinct behind it may still be right** — a request with no note and no contact is unactionable for the poster. Offered option B (require a NOTE when sharing nothing) and C (state the consequence at send time), both of which address that without retiring the story. Option D retires US-32 openly as a change request rather than by side effect.
 
-**⚠️ AMBIGUITY — the 5-per-day limit is ROUND-2 SCOPE pulled forward.** Rate limiting is **US-34**, and `unit-of-work.md`'s U4 story list literally carries *"(US-34 rate limiting is Round 2)"*; FR-38 is recorded as a deferred AR-02 mitigation. The user may pull it forward, but **Round 1 has no backend**, so any limit is enforced in the browser against local storage and **a determined harvester clears storage and continues**. It stops accidental spam; it does not stop the attack AR-02 is about. Flagged BEFORE building so it is not later mistaken for a real defence.
+**⚠️ AMBIGUITY — the 5-per-day limit is ROUND-2 SCOPE pulled forward.** Rate limiting is **US-34**, and `unit-of-work.md`'s U4 story list literally carries _"(US-34 rate limiting is Round 2)"_; FR-38 is recorded as a deferred AR-02 mitigation. The user may pull it forward, but **Round 1 has no backend**, so any limit is enforced in the browser against local storage and **a determined harvester clears storage and continues**. It stops accidental spam; it does not stop the attack AR-02 is about. Flagged BEFORE building so it is not later mistaken for a real defence.
 
 **AMBIGUITY — Q1 `C` discards the inbox tests.** The screen, agreed. But that file is barely a component test: most of it asserts, for EVERY user rather than a chosen one, that `sharedContact` reaches only its intended poster — at the repository boundary and on the rendered DOM. That is **INV-3**, whose single product-wide exception lives in this unit, and it already caught a real defect. Deleting the file is fine; deleting the ASSERTIONS would leave U4 rebuilding the one screen carrying the INV-3 exception with less coverage than the mock had.
 
@@ -1458,6 +1601,7 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 ---
 
 ## U4 clarifications answered — CQ1 `E` REVERSES AN EXPLICITLY REJECTED FEATURE → CR-06
+
 **Timestamp**: 2026-08-08T05:00:00Z
 **User Input**: "done" — CQ1 `E` "make a way so day can communicate through the platform itself, like poster can reply on request and the response to eachother in a page dedicated to requests(sent and recieved)" · CQ2 `C` · CQ3 `A`
 **AI Response**: "CQ2 and CQ3 recorded as final. CQ1 `E` is in-app messaging — raised as CR-06 with five scoping questions rather than folded into U4's design."
@@ -1467,9 +1611,9 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 
 **CQ3 `A` — the INV-3 assertions are rewritten into U4's own suite.** The mock's test file goes with the mock; the checks survive at least as strong — every user, on the wire, plus FR-35's asymmetry.
 
-**⚠️ CQ1 `E` IS IN-APP MESSAGING, WHICH WAS NOT MERELY ABSENT BUT AUDITED FOR.** `requirements.md` AR-04 records "No in-app chat" as **"Deliberate product philosophy — the app is an introduction layer"**, from Q5 and CQ5. `stories.md`'s own validation checklist reads: *"✅ No story reintroduces a rejected feature — verified absent: **in-app chat**, friend/follow graph, GPS or device location, push notifications, approval gate on join requests, age verification."* This is that audit item returning. Legitimate — but it belongs in the open, as a requirements change, not inside U4's functional design.
+**⚠️ CQ1 `E` IS IN-APP MESSAGING, WHICH WAS NOT MERELY ABSENT BUT AUDITED FOR.** `requirements.md` AR-04 records "No in-app chat" as **"Deliberate product philosophy — the app is an introduction layer"**, from Q5 and CQ5. `stories.md`'s own validation checklist reads: _"✅ No story reintroduces a rejected feature — verified absent: **in-app chat**, friend/follow graph, GPS or device location, push notifications, approval gate on join requests, age verification."_ This is that audit item returning. Legitimate — but it belongs in the open, as a requirements change, not inside U4's functional design.
 
-**THE IDEA IS GOOD AND I SAID SO.** It dissolves the very problem that produced Clarification 1: a request sharing nothing is unactionable, so «هیچ‌کدام» is a dead end. With a thread it stops being one — a cautious person takes part, talks, and decides LATER whether to hand over a number. **That is a BETTER safety posture than AR-02 accepted**, not a worse one: disclosure stops being the price of entry. It also gives U6 something to investigate — `stories.md` currently says of harassment *"there is no in-app chat (AR-04), so the platform has no record of what happened"*, and US-70's report form is shaped around that absence.
+**THE IDEA IS GOOD AND I SAID SO.** It dissolves the very problem that produced Clarification 1: a request sharing nothing is unactionable, so «هیچ‌کدام» is a dead end. With a thread it stops being one — a cautious person takes part, talks, and decides LATER whether to hand over a number. **That is a BETTER safety posture than AR-02 accepted**, not a worse one: disclosure stops being the price of entry. It also gives U6 something to investigate — `stories.md` currently says of harassment _"there is no in-app chat (AR-04), so the platform has no record of what happened"_, and US-70's report form is shaped around that absence.
 
 **⚠️ THE OBJECTION THAT MATTERS IS NOT EFFORT — IT IS THAT MESSAGING CANNOT WORK IN ROUND 1, AND CONTACT EXCHANGE CAN.** Round 1 has no backend; the whole store is ONE browser's localStorage. A phone number reaching the poster's screen is real — a person can dial it today. A message written in one browser reaches nobody and can only be demonstrated as a thread talking to itself inside a single browser. **Replacing contact exchange with messaging in Round 1 would make the product LESS functional, not more.** Recorded as the argument against CR-06 Q1 option `C`.
 
@@ -1482,6 +1626,7 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 ---
 
 ## CR-06 WITHDRAWN · CQ1 re-answered `D` → CR-07 raised
+
 **Timestamp**: 2026-08-08T05:20:00Z
 **User Input**: "I've changed my mind / remove CR-06 for now / I answered u4-connection-clarification-questions.md's first question again"
 **AI Response**: "CR-06 withdrawn. CQ1 re-read as `D` — retire US-32, rewrite FR-31, re-decide AR-02 — raised as CR-07 with four decisions. Still no U4 artifacts."
@@ -1492,7 +1637,7 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 **CQ1 `E` → `D`.** The user reversed direction entirely: from adding in-app messaging so that sharing nothing becomes viable, to removing the ability to share nothing at all. Chosen after the argument against it was put in full, which is exactly how it should happen — recorded without re-arguing.
 
 **⚠️ THE FINDING THAT MATTERS IS AN INTERACTION BETWEEN TWO ANSWERS GIVEN AT DIFFERENT TIMES.**
-`requirements.md` lists AR-02's mitigations as a set of FOUR: *"FR-32 mandatory in-UI disclosure at the point of sharing; **FR-31 'share nothing' must be a real, prominent option**; FR-38 rate limiting in R2; FR-60/61 reporting."*
+`requirements.md` lists AR-02's mitigations as a set of FOUR: _"FR-32 mandatory in-UI disclosure at the point of sharing; **FR-31 'share nothing' must be a real, prominent option**; FR-38 rate limiting in R2; FR-60/61 reporting."_
 
 - **CQ1 `D`** removes FR-31 — permanently.
 - **CQ2 `C`** keeps FR-38 out of Round 1.
@@ -1500,7 +1645,7 @@ Steps 2, 4, 5 and 6 are correctly implemented; step 7 is a client concern U4 wir
 
 **So in Round 1 the FR-32 disclosure would be the ONLY active mitigation, where AR-02 was accepted on the assumption it was one of four.** Concretely: someone can post a fake activity, every interested person MUST hand over a real phone number or Telegram handle, there is no cap on requests sent or received, and no moderation console until Round 3.
 
-Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public users — but because AR-02's own text says *"monitor for harvesting patterns after launch"*, and the risk now being accepted is materially larger than the one that sentence was written about. **Accepting it knowingly is fine; accepting it because two separate answers quietly compounded is not.** Recommended CR-07 Q1 `B`: bring FR-38 back into Round 1 so two guards are active rather than one — which was the user's own earlier instinct before CQ2 `C`.
+Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public users — but because AR-02's own text says _"monitor for harvesting patterns after launch"_, and the risk now being accepted is materially larger than the one that sentence was written about. **Accepting it knowingly is fine; accepting it because two separate answers quietly compounded is not.** Recommended CR-07 Q1 `B`: bring FR-38 back into Round 1 so two guards are active rather than one — which was the user's own earlier instinct before CQ2 `C`.
 
 **Also raised in CR-07**: what replaces «هیچ‌کدام» in the sheet; what happens to the 5 seeded requests carrying `kind: 'none'` and to the `SharedContact['none']` variant in the domain type (keep as legacy, or remove and migrate to schema v4); and whether the disclosure copy changes now that sharing is compulsory rather than voluntary — it was written for a voluntary act, and US-31 warns explicitly against weakening it.
 
@@ -1511,6 +1656,7 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 ---
 
 ## CR-07 ADOPTED · U4 Functional Design Part 2 COMPLETE
+
 **Timestamp**: 2026-08-08T22:20:00Z
 **User Input**: "B, B, A, B"
 **AI Response**: "CR-07 adopted. Upstream artifacts amended, four U4 functional-design artifacts generated."
@@ -1539,6 +1685,7 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 ---
 
 ## ✅ U4 Functional Design APPROVED · Code Generation Part 1 (Planning) started
+
 **Timestamp**: 2026-08-08T22:35:00Z
 **User Input**: "approve and start code generation"
 **AI Response**: "U4 Functional Design approved and recorded. Creating the U4 code generation plan for approval before any code is written."
@@ -1549,6 +1696,7 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 **Clear and unambiguous.** Recorded as approval; the earlier bare "done" in this session was not.
 
 ## U4 Code Generation Part 1 — plan complete, approval prompt
+
 **Timestamp**: 2026-08-08T22:50:00Z
 **AI Response**: "45-step plan created at `construction/plans/u4-connections-code-generation-plan.md`. Asking for approval before writing any code."
 **Context**: CONSTRUCTION — U4 Code Generation Part 1, awaiting approval.
@@ -1557,7 +1705,7 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 
 **⚠️ The plan states explicitly that U4 is EXTRACTION, not greenfield.** Most of the repository layer was built in U1 and works. Steps 5–7 move reasoning into pure rules; steps 18–20 make the repository call them; the plan says in §1.5 and §5 **do not rewrite working persistence**. Without that instruction the obvious failure mode is a well-intentioned rewrite of code that already passes its tests.
 
-**Steps carrying a ⚠️ are the ones that must not be quietly softened**: Step 5 (`canRate` pure — a Round-2 server must call it with no browser and no repository), Step 10 (**verify P-U4-01 fails against a deliberately broken `canRate` before keeping it**), Step 18 (the two never-implemented steps of the binding seven-step sequence), Step 26 (`DisclosureNotice`, carrying a *do not "improve" this component* header), Step 36 (delete the CR-05 mock AND its tests), Step 39 (INV-3 on the wire for every user), Step 42 (`Notification.requestPermission` never called).
+**Steps carrying a ⚠️ are the ones that must not be quietly softened**: Step 5 (`canRate` pure — a Round-2 server must call it with no browser and no repository), Step 10 (**verify P-U4-01 fails against a deliberately broken `canRate` before keeping it**), Step 18 (the two never-implemented steps of the binding seven-step sequence), Step 26 (`DisclosureNotice`, carrying a _do not "improve" this component_ header), Step 36 (delete the CR-05 mock AND its tests), Step 39 (INV-3 on the wire for every user), Step 42 (`Notification.requestPermission` never called).
 
 **Step 34 carries a U3 lesson forward**: distinct route `key`s wherever two routes share a component. U3 shipped `/create` opening prefilled with the activity just edited because React reconciled the two routes as one element and never remounted; submitting would have created a duplicate carrying the original's exact address.
 
@@ -1568,12 +1716,14 @@ Raised NOT to relitigate `D` — it is the user's call and Round 1 has no public
 ---
 
 ## ✅ U4 Code Generation Part 1 APPROVED — Part 2 (Generation) started
+
 **Timestamp**: 2026-08-08T23:00:00Z
 **User Input**: "approve"
 **AI Response**: "Plan approved. Executing all 45 steps."
 **Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
 
 ## U4 Code Generation Part 2 — checkpoint (steps 1–11, 18–20 of 45)
+
 **Timestamp**: 2026-08-09T00:20:00Z
 **Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
 
@@ -1594,6 +1744,7 @@ It then caught a **second** difference on the next run: the oracle sent `{kind:'
 ---
 
 ## U4 Part 2 — checkpoint 2 (steps 12–17, 21–23)
+
 **Timestamp**: 2026-08-09T00:45:00Z
 **Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
 
@@ -1618,6 +1769,7 @@ Adding the other two would have made the seed larger and the demo no more comple
 ---
 
 ## U4 Part 2 — checkpoint 3 (steps 24–36: the frontend)
+
 **Timestamp**: 2026-08-09T01:30:00Z
 **Context**: CONSTRUCTION — U4 Code Generation Part 2 in progress.
 
@@ -1640,6 +1792,7 @@ Adding the other two would have made the seed larger and the demo no more comple
 ---
 
 ## U4 Code Generation — Part 2 (Generation) COMPLETE
+
 **Timestamp**: 2026-08-09T02:10:00Z
 **AI Response**: "All 45 steps executed. Typecheck clean, lint clean, 289/289 tests passing, build 143.2 KB gzipped. Full loop verified in a real browser."
 **Context**: CONSTRUCTION — U4 Code Generation Part 2 complete, awaiting approval.
@@ -1668,6 +1821,7 @@ Adding the other two would have made the seed larger and the demo no more comple
 ---
 
 ## Change Request — CR-08 raised (competitive comparison)
+
 **Timestamp**: 2026-09-04T00:00:00Z
 **User Input**: "https://apps.apple.com/us/app/amup/id6642675054
 this is a similar project. describe difference we have from them and suggest what we can learn from them before continue."
@@ -1677,6 +1831,7 @@ this is a similar project. describe difference we have from them and suggest wha
 ---
 
 ## Change Request — CR-08 opened
+
 **Timestamp**: 2026-09-04T00:00:00Z
 **User Input**: "open a change request for activity expiry and the Q&A channel"
 **AI Response**: "Created `change-requests/cr-08-join-window-and-public-questions.md`. Status RAISED — no design, no code, four questions unanswered."
@@ -1693,6 +1848,7 @@ this is a similar project. describe difference we have from them and suggest wha
 ---
 
 ## Knowledge graph built · ⚠️ A REAL COVERAGE GAP FOUND AND CLOSED
+
 **Timestamp**: 2026-08-09T03:10:00Z
 **User Input**: "use graphify on this project" / "yes trace it"
 **AI Response**: "Code-only graph built (1092 nodes, 3522 edges, 61 communities). Tracing its highest-betweenness node found a genuine hole in U4's test coverage; closed with a new test."
@@ -1704,9 +1860,10 @@ this is a similar project. describe difference we have from them and suggest wha
 
 `UserId` is the highest-betweenness node in the codebase (0.060, ~3× the next) and bridges 15 of 61 communities. Tracing it showed **15 distinct roles on one branded type** — `userId`(48), `viewerId`(17), `authorId`(11), `requesterId`(9), `posterId`(9), `subjectId`(5), `participantId`(5), `blockerId`(5), `blockedId`(5), `actorId`(5), `reporterId`(4), `raterId`(4)… Several are **ADVERSARIAL PAIRS adjacent in one signature**, and the compiler cannot tell them apart.
 
-**Checked rather than assumed.** The one *positional* pair — `canSendRequestTo(viewerId, authorId, blocks)` — turned out to be **genuinely symmetric**: `buildBlockIndex` links both directions, so `has(x,y) === has(y,x)` and a transposition is a no-op. That is INV-1 working as designed, not luck.
+**Checked rather than assumed.** The one _positional_ pair — `canSendRequestTo(viewerId, authorId, blocks)` — turned out to be **genuinely symmetric**: `buildBlockIndex` links both directions, so `has(x,y) === has(y,x)` and a transposition is a no-op. That is INV-1 working as designed, not luck.
 
 **But the keyed pair was not protected.** Transposing `actorId`/`subjectId` in `submitRating`'s call to `canRate`:
+
 - **typechecks cleanly** (both are `UserId`)
 - **all 289 tests pass**
 
@@ -1723,12 +1880,13 @@ this is a similar project. describe difference we have from them and suggest wha
 ---
 
 ## Import cycles FIXED — selectors moved to features/reference
+
 **Timestamp**: 2026-08-09T03:40:00Z
 **User Input**: "fix those import cycles"
 **AI Response**: "Both cycles broken by moving the three reference-data selectors out of features/identity. Verified by rebuilding the graph: 'Import Cycles: None detected.'"
 **Context**: CONSTRUCTION — U4 awaiting approval. Module structure changed; no production logic changed.
 
-**ROOT CAUSE, not the symptom.** `NeighborhoodSelector`, `CitySelector` and `InterestSelector` were built in `features/identity` because signup needed them first, then re-exported for U3's filter panel — **the identity barrel admitted it in a comment**: *"Exported for U3's filter panel (US-21, US-22)"*. That single line made `features/activities` depend on `features/identity`. CR-05 then closed the loop by giving `ProfileScreen` an embedded `MyActivitiesScreen`.
+**ROOT CAUSE, not the symptom.** `NeighborhoodSelector`, `CitySelector` and `InterestSelector` were built in `features/identity` because signup needed them first, then re-exported for U3's filter panel — **the identity barrel admitted it in a comment**: _"Exported for U3's filter panel (US-21, US-22)"_. That single line made `features/activities` depend on `features/identity`. CR-05 then closed the loop by giving `ProfileScreen` an embedded `MyActivitiesScreen`.
 
 **Checked before moving**: all three selectors import ONLY `core/domain`, `core/i18n`, `core/reference`, `core/rules/persianText` and `ui/` primitives. **Zero identity dependencies** — they know nothing about users, sessions or profiles. They were misfiled, not entangled.
 
@@ -1745,6 +1903,7 @@ this is a similar project. describe difference we have from them and suggest wha
 ---
 
 ## ✅ U4 Code Generation APPROVED · U5 deferred · U6 Safety and Trust started
+
 **Timestamp**: 2026-08-09T04:00:00Z
 **User Input**: "approve U4 and start U6"
 **AI Response**: "U4 approved and recorded. U5 explicitly deferred, not forgotten. Opening U6 Functional Design Part 1."
@@ -1754,10 +1913,11 @@ this is a similar project. describe difference we have from them and suggest wha
 
 **⚠️ U5 VENUE DASHBOARD IS DEFERRED, NOT DONE.** The user chose U6 next. U5 is off the critical path (`unit-of-work.md`: build sequence U1 → U2 → U3 → {U4, U5} → U6), so this is legitimate sequencing — but U5's five stories (US-60…64) remain unbuilt, `src/features/venues/` is an empty `.gitkeep`, and `venueRepository` has no caller. **U6 is now the last unit in the current plan, so nothing downstream will surface U5's absence.** Recorded here so it is a decision rather than a gap discovered later.
 
-**⚠️ U6 IS ORDERED LAST BY DESIGN, AND THAT REASONING NOW PAYS OFF.** `unit-of-work.md` §U6: US-72's criterion is *"absent from **every** feed, search result, and listing"*, which is only testable once every feed, search and listing exists. U6 running after U4 means its property test covers the complete set of read paths rather than sampling a partial one. **With U5 deferred, "every read path" now excludes the venue dashboard** — the property will be complete for what exists, and must be re-run when U5 lands.
+**⚠️ U6 IS ORDERED LAST BY DESIGN, AND THAT REASONING NOW PAYS OFF.** `unit-of-work.md` §U6: US-72's criterion is _"absent from **every** feed, search result, and listing"_, which is only testable once every feed, search and listing exists. U6 running after U4 means its property test covers the complete set of read paths rather than sampling a partial one. **With U5 deferred, "every read path" now excludes the venue dashboard** — the property will be complete for what exists, and must be re-run when U5 lands.
 
 **⚠️ A CROSS-UNIT GAP FOUND WHILE SCOPING U6 — US-73 criterion 4 IS UNMET.**
-> *"Given I am about to send a first join request, When the sheet opens, Then a link to safety guidance is present alongside the disclosure (US-31)."*
+
+> _"Given I am about to send a first join request, When the sheet opens, Then a link to safety guidance is present alongside the disclosure (US-31)."_
 
 `JoinRequestSheet` has **no link to safety guidance**. U4 built that sheet and did not implement this, because **US-73 belongs to U2 and was not in U4's story list** — the criterion describes a screen U2 could not build, since the join sheet did not exist until U4. It fell between two units, and neither owned it.
 
@@ -1769,7 +1929,7 @@ This is not cosmetic. US-73's own notes call the guidance screen **"the product'
 
 **⚠️ THE CENTRAL U6 FINDING, MEASURED RATHER THAN ASSUMED: BLOCKING FILTERS ACTIVITIES AND NOTHING ELSE.** Of U4's read paths, NONE applies the block index — `listIncomingRequests`, `listSentRequests`, `listRateableParticipants`, `getRatingSummary`, `ctx.ratingSummary`, `listAttendance` all ignore it. So today, after blocking someone: **their join request stays in your inbox WITH the contact detail they shared**, they remain offered for you to rate, **their rating still counts toward your public score**, and they still appear in your attendance list.
 
-US-72's literal wording covers activities — "absent from every feed, search result, category listing, and filtered view" — and that IS satisfied. But the story's own sentence is *"so that we stop appearing to each other"*, and U4's carry-forward already recorded *"Blocking and reporting must extend to requests (U6)"*. **This table is the substance of U6, not the screens.**
+US-72's literal wording covers activities — "absent from every feed, search result, category listing, and filtered view" — and that IS satisfied. But the story's own sentence is _"so that we stop appearing to each other"_, and U4's carry-forward already recorded _"Blocking and reporting must extend to requests (U6)"_. **This table is the substance of U6, not the screens.**
 
 **THIS IS EXACTLY WHY U6 WAS SCHEDULED LAST**, and the first concrete payoff of that ordering: none of these surfaces existed before U4, so the gap was not visible in any earlier unit.
 
@@ -1784,6 +1944,7 @@ US-72's literal wording covers activities — "absent from every feed, search re
 ---
 
 ## U6 answered (1A 2A 3A 4B 5C) · CR-08 answered (1A 2B 3C 4A) — ⛔ ONE ANSWER BREAKS INV-3
+
 **Timestamp**: 2026-08-09T04:30:00Z
 **User Input**: "1- A / 2- A / 3- A / 4- B / 5- C" (U6), plus CR-08's four tags filled in the file: Q1 `A`, Q2 `B`, Q3 `C`, Q4 `A`
 **AI Response**: "Seven of nine recorded as final. Created u6-cr08-clarification-questions.md — one hard conflict with a binding invariant, one abuse vector, one scope expansion. No artifacts generated."
@@ -1792,51 +1953,53 @@ US-72's literal wording covers activities — "absent from every feed, search re
 **Recorded as final**: U6 Q2 `A` (a blocked person's delivered request disappears) · U6 Q3 `A` (free-text reports only) · U6 Q4 `B` (told "recorded", not "will be reviewed" — accurate, since nothing reads reports until Round 3) · U6 Q5 `C` (CR-08 first) · CR-08 Q1 `A` (`joinsCloseAt`) · CR-08 Q4 `A` (Part B sequenced after U6).
 
 **⛔ CR-08 Q3 `C` VIOLATES INV-3. NOT BUILT.**
-INV-3, verbatim from `src/core/repositories/index.ts`: *"No read returns another user's contact details, **except as `sharedContact` on a JoinRequestView addressed to the viewer**."* The exception is singular, named, and scoped to ONE viewer. Allowing contact details inside public questions creates a **second exception scoped to nobody** — a question holding a phone number is returned by a questions read to EVERY viewer.
+INV-3, verbatim from `src/core/repositories/index.ts`: _"No read returns another user's contact details, **except as `sharedContact` on a JoinRequestView addressed to the viewer**."_ The exception is singular, named, and scoped to ONE viewer. Allowing contact details inside public questions creates a **second exception scoped to nobody** — a question holding a phone number is returned by a questions read to EVERY viewer.
 
-**This is categorically different from the decisions this project has already made.** CR-07 changed a REQUIREMENT and re-accepted a RISK. This changes an **INVARIANT** — and `aidlc-state.md` calls the five invariants *"the mechanism carrying the safety requirements into Round 2"*, the things Round 2's server is built to reproduce. INV-3 is also the one U4 verified on the wire (9 contact values in the store, 0 reaching the DOM).
+**This is categorically different from the decisions this project has already made.** CR-07 changed a REQUIREMENT and re-accepted a RISK. This changes an **INVARIANT** — and `aidlc-state.md` calls the five invariants _"the mechanism carrying the safety requirements into Round 2"_, the things Round 2's server is built to reproduce. INV-3 is also the one U4 verified on the wire (9 contact values in the store, 0 reaching the DOM).
 
-**What it enables, concretely**: under CR-07 sharing is already mandatory and AR-02's harvesting risk is at its highest recorded level. A public channel accepting contact details turns harvesting from *"post a fake activity and collect what requesters disclose to me"* into *"post a fake activity and let people publish their numbers to everyone, including me."* **The bad actor no longer needs the requests at all.** Plainer version: someone answering at 2am with their number, meaning it for one host, has published it to every stranger reading that activity — and to Round 2's search index.
+**What it enables, concretely**: under CR-07 sharing is already mandatory and AR-02's harvesting risk is at its highest recorded level. A public channel accepting contact details turns harvesting from _"post a fake activity and collect what requesters disclose to me"_ into _"post a fake activity and let people publish their numbers to everyone, including me."_ **The bad actor no longer needs the requests at all.** Plainer version: someone answering at 2am with their number, meaning it for one host, has published it to every stranger reading that activity — and to Round 2's search index.
 
 Offered four routes including `C` — allow it, but **amend INV-3 openly** and re-accept AR-02 a third time. Buildable if chosen; **not buildable silently**.
 
-**⚠️ U6 Q1 `A` MAKES BLOCKING A RATING-DELETION TOOL.** The user chose "everything two-way", explicitly including *"accepts that a blocked person's past rating disappears from your score"*. Exercisable in about four seconds: someone rates you 1 star → you block them → your public average rises. **Ratings become opt-out**, so the score measures who you have not blocked rather than how you behave — manufacturing the rating signal from the opposite end to the one US-52 guards. Precedent applied rather than re-arguing: CR-07 removed an AR-02 mitigation and AR-02 was formally re-accepted; offered the same here as **AR-05**, so the decision stands and the cost sits on the record beside AR-01…AR-04.
+**⚠️ U6 Q1 `A` MAKES BLOCKING A RATING-DELETION TOOL.** The user chose "everything two-way", explicitly including _"accepts that a blocked person's past rating disappears from your score"_. Exercisable in about four seconds: someone rates you 1 star → you block them → your public average rises. **Ratings become opt-out**, so the score measures who you have not blocked rather than how you behave — manufacturing the rating signal from the opposite end to the one US-52 guards. Precedent applied rather than re-arguing: CR-07 removed an AR-02 mitigation and AR-02 was formally re-accepted; offered the same here as **AR-05**, so the decision stands and the cost sits on the record beside AR-01…AR-04.
 
-**⚠️ CR-08 Q2 `B` IS LARGER THAN IT LOOKS** — and CR-08's own text calls it *"scope growth wearing item 1's clothes"*. `startsAt` is load-bearing in four approved places: `deriveState` (BR-U1-17), `excludePast` on every discovery read, ranking's recency term (BR-U3-60), and `canRate`'s *"the activity date has passed"*. **That last one means an open-ended activity is permanently un-rateable** — attending one earns nobody any reputation. Not re-arguing the decision; making the size visible before designing it.
+**⚠️ CR-08 Q2 `B` IS LARGER THAN IT LOOKS** — and CR-08's own text calls it _"scope growth wearing item 1's clothes"_. `startsAt` is load-bearing in four approved places: `deriveState` (BR-U1-17), `excludePast` on every discovery read, ranking's recency term (BR-U3-60), and `canRate`'s _"the activity date has passed"_. **That last one means an open-ended activity is permanently un-rateable** — attending one earns nobody any reputation. Not re-arguing the decision; making the size visible before designing it.
 
-**A PROCESS DEFECT OF MY OWN, TWICE.** The script that writes answers into a question file matched the literal string `[Answer]:` inside every *"Other (please describe after [Answer]: tag below)"* placeholder, consuming answers meant for the real tags and shifting the rest — so U6 Q2 briefly read `C` when the user said `A`. It did the same thing to CR-07 earlier and was patched by hand both times. Repaired by targeting only lines that START with `[Answer]:`. Recorded because a tool that silently mis-records a user's answer is worse than one that fails.
+**A PROCESS DEFECT OF MY OWN, TWICE.** The script that writes answers into a question file matched the literal string `[Answer]:` inside every _"Other (please describe after [Answer]: tag below)"_ placeholder, consuming answers meant for the real tags and shifting the rest — so U6 Q2 briefly read `C` when the user said `A`. It did the same thing to CR-07 earlier and was patched by hand both times. Repaired by targeting only lines that START with `[Answer]:`. Recorded because a tool that silently mis-records a user's answer is worse than one that fails.
 
 **NOT DONE**: no U6 functional-design artifacts. Designing a public content channel while its safety rule is in dispute would be work thrown away, and building it as answered would breach a contract invariant without anyone having said so out loud.
 
 ---
 
 ## Clarifications resolved — INV-3 preserved, AR-05 recorded, CR-09 split out
+
 **Timestamp**: 2026-08-09T05:00:00Z
 **User Input**: "apply your suggestions"
 **AI Response**: "Applied CQ1 `A`, CQ2 `A`, CQ3 `B`. INV-3 stands, AR-05 recorded, CR-08 resolved, CR-09 raised. U6 Part 2 unblocked."
 **Context**: CONSTRUCTION — U6 Functional Design Part 1 COMPLETE. Part 2 may proceed.
 
-**⚠️ A NUMBERING SLIP OF MINE, CORRECTED BEFORE IT WAS ACTED ON.** My chat recommendation read *"1: A (build it, record AR-05), 2: B (separate CR), 3: A (reject contact details)"* — listed by CONTENT, but numbered against the wrong questions. Mapped to the file the recommendations are **CQ1 `A`** (reject contact details), **CQ2 `A`** (build + AR-05), **CQ3 `B`** (separate CR). Applied by content, which is unambiguous, and the slip was stated to the user rather than quietly resolved — "apply your suggestions" against mis-numbered options could have applied the opposite of what I argued for.
+**⚠️ A NUMBERING SLIP OF MINE, CORRECTED BEFORE IT WAS ACTED ON.** My chat recommendation read _"1: A (build it, record AR-05), 2: B (separate CR), 3: A (reject contact details)"_ — listed by CONTENT, but numbered against the wrong questions. Mapped to the file the recommendations are **CQ1 `A`** (reject contact details), **CQ2 `A`** (build + AR-05), **CQ3 `B`** (separate CR). Applied by content, which is unambiguous, and the slip was stated to the user rather than quietly resolved — "apply your suggestions" against mis-numbered options could have applied the opposite of what I argued for.
 
 **⛔ INV-3 STANDS. CR-08 Q3 revised `C` → `A`.** A question containing a phone number or Telegram handle is **refused at write time by the repository**, reusing `core/rules/phone.ts` so the check cannot drift from the one that already exists. Part B stays buildable; the invariant is untouched. Option `C` — amend INV-3 openly and re-accept AR-02 a third time — remained available and was not chosen.
 
-**⚠️ AR-05 RECORDED IN `requirements.md`, beside AR-01…AR-04.** *"Blocking suppresses a blocked person's rating from the subject's aggregate."* The user's U6 Q1 `A` stands and will be built; the cost now sits on the record rather than inside a design document nobody re-reads. The entry states the vector plainly — rate 1 star → get blocked → average rises, repeatable — names it as **the US-52 abuse guard defeated from the opposite end** (US-52 stops a rating being manufactured by a non-attendee; this lets one be un-manufactured by an attendee), and carries a Round-2 mitigation: **recompute the aggregate server-side with blocks NOT applied**, so the public score stops being suppressible while viewer-facing separation stays. Until then **the vector is live and unmitigated**, and the monitoring signature is recorded: accounts whose block count is disproportionate to their activity count.
+**⚠️ AR-05 RECORDED IN `requirements.md`, beside AR-01…AR-04.** _"Blocking suppresses a blocked person's rating from the subject's aggregate."_ The user's U6 Q1 `A` stands and will be built; the cost now sits on the record rather than inside a design document nobody re-reads. The entry states the vector plainly — rate 1 star → get blocked → average rises, repeatable — names it as **the US-52 abuse guard defeated from the opposite end** (US-52 stops a rating being manufactured by a non-attendee; this lets one be un-manufactured by an attendee), and carries a Round-2 mitigation: **recompute the aggregate server-side with blocks NOT applied**, so the public score stops being suppressible while viewer-facing separation stays. Until then **the vector is live and unmitigated**, and the monitoring signature is recorded: accounts whose block count is disproportionate to their activity count.
 
 **CR-08 RESOLVED** — Part A adopted as `joinsCloseAt` only; Part B adopted, contact details refused at write time, sequenced after U6 so reporting exists on day one.
 
-**CR-09 RAISED — open-ended activities, split out of CR-08 Q2.** CR-08 itself called this *"scope growth wearing item 1's clothes"*, and the audit confirms it: `startsAt` is load-bearing in FOUR approved rules. The one that makes it a design job rather than a nullable column is **`canRate`** — an activity with no date can never become `past`, so **rating never opens and attending one earns nobody any reputation**. That is a hole in US-52's model, not a variation of it. Five questions recorded; nothing depends on it.
+**CR-09 RAISED — open-ended activities, split out of CR-08 Q2.** CR-08 itself called this _"scope growth wearing item 1's clothes"_, and the audit confirms it: `startsAt` is load-bearing in FOUR approved rules. The one that makes it a design job rather than a nullable column is **`canRate`** — an activity with no date can never become `past`, so **rating never opens and attending one earns nobody any reputation**. That is a hole in US-52's model, not a variation of it. Five questions recorded; nothing depends on it.
 
 **U6 PART 2 IS NOW UNBLOCKED** — U6 Q5 `C` required CR-08 answered first, and it is.
 
 ---
 
 ## U6 Functional Design — Part 2 (Generation) COMPLETE
+
 **Timestamp**: 2026-08-09T05:30:00Z
 **User Input**: "generate U6's artifacts"
 **AI Response**: "Four artifacts generated under construction/u6-safety/functional-design/. 27 rules (BR-U6-10…52), 5 property tests."
 **Context**: CONSTRUCTION — U6 Functional Design complete, awaiting approval.
 
-**⚠️ NO NEW ENTITY, NO NEW FIELD, NO MIGRATION — SCHEMA STAYS v3.** Stated as a design claim rather than an omission: **blocking is not a thing to store more of, it is a filter to apply in more places.** A U6 that needed a new table would be solving the wrong problem. The only structural change is `Report.reasonCode` narrowing from `string` to a union — and the entity's own comment already said *"Taxonomy is defined in U6."*
+**⚠️ NO NEW ENTITY, NO NEW FIELD, NO MIGRATION — SCHEMA STAYS v3.** Stated as a design claim rather than an omission: **blocking is not a thing to store more of, it is a filter to apply in more places.** A U6 that needed a new table would be solving the wrong problem. The only structural change is `Report.reasonCode` narrowing from `string` to a union — and the entity's own comment already said _"Taxonomy is defined in U6."_
 
 **The unit is one table, not two screens** — `business-logic-model.md` §3, the complete read-path map: nine paths, where the filter sits in each, and what it deliberately does not touch.
 
@@ -1844,19 +2007,20 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 
 **⚠️ A CONSEQUENCE OF AR-05 THAT ONLY APPEARED WHILE MODELLING IT**: `getRatingSummary` becomes a function of **(subject, viewer)** rather than of subject alone, because the aggregate now excludes ratings from people the VIEWER has blocked. **It therefore stops being cacheable across viewers** — anything memoizing it by subject id alone becomes a cross-viewer leak, showing one person's filtered average to somebody else. Recorded in `business-logic-model.md` §3.2 before any code exists to get it wrong.
 
-**REVERSIBILITY IS A PROPERTY OF THE DESIGN, NOT A FEATURE.** BR-U6-15: a block DELETES NOTHING; everything is filtered on read. So US-72's *"normal visibility resumes"* is true by construction rather than by a restore procedure — if a block deleted rows, unblocking would have to resurrect them, and would fail because the information would be gone. Also what lets a Round-3 moderator see what a block hid. Pinned by **P-U6-03** and **P-U6-04**.
+**REVERSIBILITY IS A PROPERTY OF THE DESIGN, NOT A FEATURE.** BR-U6-15: a block DELETES NOTHING; everything is filtered on read. So US-72's _"normal visibility resumes"_ is true by construction rather than by a restore procedure — if a block deleted rows, unblocking would have to resurrect them, and would fail because the information would be gone. Also what lets a Round-3 moderator see what a block hid. Pinned by **P-U6-03** and **P-U6-04**.
 
-**⚠️ THE US-73 LINK IS DESIGNED AS A POSITION RULE (BR-U6-51).** The obvious implementation — the guidance link inside or above the disclosure — is the one that WEAKENS it, and `stories.md` says a weakened disclosure invalidates AR-02's acceptance. CR-07 has since removed one of the two remaining mitigations, so the disclosure carries more weight than when that sentence was written. The link goes AFTER both lines, outside the notice box, visually subordinate, not a dismiss control, and must not lose the sheet's state. **`DisclosureNotice` is not modified** — its header already says *do not "improve" this component*, and a link inside it would be the first such improvement.
+**⚠️ THE US-73 LINK IS DESIGNED AS A POSITION RULE (BR-U6-51).** The obvious implementation — the guidance link inside or above the disclosure — is the one that WEAKENS it, and `stories.md` says a weakened disclosure invalidates AR-02's acceptance. CR-07 has since removed one of the two remaining mitigations, so the disclosure carries more weight than when that sentence was written. The link goes AFTER both lines, outside the notice box, visually subordinate, not a dismiss control, and must not lose the sheet's state. **`DisclosureNotice` is not modified** — its header already says _do not "improve" this component_, and a link inside it would be the first such improvement.
 
-**A COPY DECISION THAT IS DELIBERATELY AN OMISSION**: the block confirmation does NOT mention that the blocked person's rating stops counting. Stating it would advertise the vector — *"block your critics to raise your average"*. The copy describes what a person will experience; the behaviour is recorded in AR-05 and in the design, not surfaced as a feature.
+**A COPY DECISION THAT IS DELIBERATELY AN OMISSION**: the block confirmation does NOT mention that the blocked person's rating stops counting. Stating it would advertise the vector — _"block your critics to raise your average"_. The copy describes what a person will experience; the behaviour is recorded in AR-05 and in the design, not surfaced as a feature.
 
 **`harvesting` kept separate from `fake_activity`** — they look similar and are not: one is a post about nothing, the other is a post designed to extract phone numbers. **AR-02 says to monitor for harvesting patterns after launch, and that monitoring needs a code it can count.** Folding them together would hide the exact signal the accepted risk asks to watch.
 
-**⚠️ P-U6-01's COMPLETENESS IS BOUNDED BY U5's DEFERRAL** — it enumerates read paths, so the venue dashboard's are absent. Complete for what exists; must be extended when U5 lands. Written into the artifact so *"verified across every read path"* is never read as stronger than it was.
+**⚠️ P-U6-01's COMPLETENESS IS BOUNDED BY U5's DEFERRAL** — it enumerates read paths, so the venue dashboard's are absent. Complete for what exists; must be extended when U5 lands. Written into the artifact so _"verified across every read path"_ is never read as stronger than it was.
 
 ---
 
 ## ✅ U6 Functional Design APPROVED · Code Generation Part 1 started
+
 **Timestamp**: 2026-08-09T05:45:00Z
 **User Input**: "approve and start code generation"
 **AI Response**: "U6 Functional Design approved. Creating the code generation plan for approval before any code is written."
@@ -1879,12 +2043,14 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 ---
 
 ## ✅ U6 Code Generation Part 1 APPROVED — Part 2 started
+
 **Timestamp**: 2026-08-09T06:00:00Z
 **User Input**: "approve"
 **AI Response**: "Plan approved. Executing all 27 steps."
 **Context**: CONSTRUCTION — U6 Code Generation Part 2 in progress.
 
 ## U6 Part 2 — checkpoint 1 (steps 1–13: the filter)
+
 **Timestamp**: 2026-08-09T06:30:00Z
 **Context**: CONSTRUCTION — U6 Code Generation Part 2 in progress.
 
@@ -1905,6 +2071,7 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 ---
 
 ## U6 Code Generation — Part 2 (Generation) COMPLETE
+
 **Timestamp**: 2026-08-09T07:15:00Z
 **AI Response**: "All 27 steps executed. Typecheck clean, lint clean, 305/305, build 144.1 KB gzipped. Block/unblock loop verified in the browser."
 **Context**: CONSTRUCTION — U6 Code Generation Part 2 complete, awaiting approval. **Last unit in the plan.**
@@ -1915,7 +2082,7 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 
 **⚠️ ONE OF MY OWN BROWSER CHECKS WAS MEASURING NOTHING, AND IT IS RECORDED.** The first assertion looked for the blocked person's NAME in the feed. **Feed cards render titles, not author names**, so it would have returned `false` whether the filter worked or not — the same class of error as U3's P-U3-02 (comparing `"[object Object]"` to itself) and U4's negative assertion against a blank page. Third instance this project has caught. The meaningful signal is the card count and the titles.
 
-**⚠️ P-U6-01 VERIFIED AGAINST TWO BROKEN FILTERS** before being kept: `isHiddenFrom` always false → 3 failures; **one-directional block** → 2 failures; restored → 6 pass. The second is the valuable catch — a **half-applied block**, which `visibility.ts` itself warns is *"worse than no block at all, because the person who asked for protection believes they have it."* Precisely the defect that ships green without this check.
+**⚠️ P-U6-01 VERIFIED AGAINST TWO BROKEN FILTERS** before being kept: `isHiddenFrom` always false → 3 failures; **one-directional block** → 2 failures; restored → 6 pass. The second is the valuable catch — a **half-applied block**, which `visibility.ts` itself warns is _"worse than no block at all, because the person who asked for protection believes they have it."_ Precisely the defect that ships green without this check.
 
 **⚠️ BLOCKING WAS UNREACHABLE FROM AN ACTIVITY — found by a component test, not review.** The first `SafetyMenu` offered report on an activity but not block, so from an activity you could report the post and had **no way to stop seeing its host** — which is exactly where someone decides that. Fixed; the activity subject now carries the author's name.
 
@@ -1924,5 +2091,42 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **Three places deliberately do not filter, each commented in place**: `listBlocks` (null viewer — else unblocking is unreachable) · `rating_received` notifications (ratings are never attributed, so the notification names nobody; filtering would require storing a rater id purely to hide it) · the block confirmation's copy (mentioning AR-05 would advertise the vector).
 
 **Carried forward**: ⚠️ **AR-05 is live and unmitigated** — Round 2 must recompute the aggregate server-side with blocks NOT applied · ⚠️ **P-U6-01 is bounded by U5's deferral** and must be extended when U5 lands, or the claim silently becomes false · reports stay write-only until Round 3 · CR-08 Part B next · CR-09 unanswered.
+
+---
+
+## ✅ U6 Code Generation APPROVED · Build and Test started
+
+**Timestamp**: 2026-08-09T07:30:00Z
+**User Input**: "approve and start build and test"
+**AI Response**: "U6 approved and recorded. Opening Build and Test — the last CONSTRUCTION stage."
+**Context**: CONSTRUCTION — U6 CLOSED. **All planned units are now approved except U5, which is deferred.** Build and Test OPEN.
+
+**Approval covers**: 27/27 steps, nine read paths filtering blocks, the `ReportReason` taxonomy, `safetyService`, four screens, the US-73 guidance link, 305 passing tests, AR-05 as an accepted risk, and P-U6-01 verified against two broken filters.
+
+**⚠️ THIS IS THE END OF THE PER-UNIT LOOP, WITH ONE UNIT MISSING.** U1, U2, U3, U4 and U6 are approved; **U5 Venue Dashboard was deferred by user choice on 2026-08-09 and was never built.** Build and Test therefore covers five of six units, and any instruction claiming to cover "all units" would be false.
+
+## Build and Test — instructions COMPLETE
+**Timestamp**: 2026-08-09T08:00:00Z
+**AI Response**: "Five documents created under construction/build-and-test/. Every gate re-run and measured. One pre-existing CI failure found and fixed."
+**Context**: CONSTRUCTION — Build and Test complete, awaiting approval. Last stage of the phase.
+
+**Created**: `build-instructions.md` · `unit-test-instructions.md` · `integration-test-instructions.md` · `performance-test-instructions.md` · `build-and-test-summary.md`.
+
+**⚠️ CI WAS RED AND HAD BEEN FOR A LONG TIME — FOUND BY ACTUALLY RUNNING THE GATE.** `npm run format:check` failed on **174 files** (110 md, 36 tsx, 28 ts). **It predates this session**: `src/app/App.tsx`, written in U1, was among them. CI runs `format:check` as a BLOCKING step between lint and test, so **every push since that step existed would have gone red**, and nobody looked.
+
+**Investigated before acting rather than reflexively formatting.** Diffed one design document first: prettier's changes are entirely cosmetic — `*emphasis*` → `_emphasis_` and table-column padding, 52 lines, no content. Only then ran `npm run format` (170 files) and re-ran everything: typecheck clean, lint clean, **305/305**, build byte-identical. **Formatting touched no behaviour.**
+
+**⚠️ I WROTE A FALSE CLAIM AND CORRECTED IT.** The first draft of `build-and-test-summary.md` recorded *"format:check | Clean"* **before the gate had ever been run in this project**. It was not clean. Corrected in the document itself with §3.1 rather than quietly edited — **a build-and-test document that reports a gate it never executed is precisely the failure this stage exists to catch**, and hiding that would have been worse than the original error.
+
+**⚠️ THREE CLAIMS THE STAGE DELIBERATELY REFUSES TO MAKE**, each recorded in the summary §3:
+- *"All units build and pass"* — **five of six. U5 is deferred and unbuilt**, `features/venues/` is a `.gitkeep`, `venueRepository` has no caller, no U5 test exists.
+- *"Blocking is verified across every read path"* — true only for the paths that EXIST. **U5's arrival silently invalidates it** unless P-U6-01 is extended; written into the test file as well as the summary.
+- *"Performance requirements are met"* — NFR-P2/P3/P4 measured and met; **NFR-P1 (FCP over 3G) is NOT measurable in Round 1** and approximating it on localhost would produce a number meaning nothing about Tehran.
+
+**No load or stress tests were written**, and the performance document says why in its first paragraph: they measure a server, and there is no server. Writing them would have produced instructions nobody can run against a CDN nobody has configured.
+
+**No separate integration command was invented.** The cross-unit seams are already covered inside `npm test`; a second command re-running the same files under a different name would be theatre. Stated in the document rather than papered over.
+
+**Measured, not estimated**: 41 files · **305 tests** · ~11 s · build **≈144.1 KB gzipped** against NFR-P3's 250 KB budget.
 
 ---

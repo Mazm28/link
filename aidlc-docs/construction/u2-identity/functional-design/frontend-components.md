@@ -11,18 +11,18 @@ Component structure, props, state, interaction flows, and validation surfaces fo
 
 Eight components from `components.md` §5.1, plus the gate from Q12 `A`.
 
-| Component | Location | Stories |
-|---|---|---|
-| `OnboardingGate` | `app/` | US-01, US-02, US-73 |
-| `PhoneEntryScreen` | `features/identity/` | US-01 |
-| `CodeVerificationScreen` | `features/identity/` | US-01 |
-| `ProfileSetupScreen` | `features/identity/` | US-02 |
-| `ProfileEditScreen` | `features/identity/` | US-03 |
-| `AccountDeletionFlow` | `features/identity/` | US-03 |
-| `SafetyGuidanceScreen` | `features/identity/` | US-73 |
-| `CitySelector` | `features/identity/` | US-02 (**CR-02 item 4** — replaces the neighborhood picker on the profile) |
-| `NeighborhoodSelector` | `features/identity/` | **US-21 (U3 reuse only)** — no longer on the profile |
-| `InterestSelector` | `features/identity/` | US-02, **US-22 (U3 reuse)** |
+| Component                | Location             | Stories                                                                    |
+| ------------------------ | -------------------- | -------------------------------------------------------------------------- |
+| `OnboardingGate`         | `app/`               | US-01, US-02, US-73                                                        |
+| `PhoneEntryScreen`       | `features/identity/` | US-01                                                                      |
+| `CodeVerificationScreen` | `features/identity/` | US-01                                                                      |
+| `ProfileSetupScreen`     | `features/identity/` | US-02                                                                      |
+| `ProfileEditScreen`      | `features/identity/` | US-03                                                                      |
+| `AccountDeletionFlow`    | `features/identity/` | US-03                                                                      |
+| `SafetyGuidanceScreen`   | `features/identity/` | US-73                                                                      |
+| `CitySelector`           | `features/identity/` | US-02 (**CR-02 item 4** — replaces the neighborhood picker on the profile) |
+| `NeighborhoodSelector`   | `features/identity/` | **US-21 (U3 reuse only)** — no longer on the profile                       |
+| `InterestSelector`       | `features/identity/` | US-02, **US-22 (U3 reuse)**                                                |
 
 `OnboardingGate` sits in `app/` beside `RoleGuard` — it is composition, not a feature. Everything else is `features/identity/`.
 
@@ -30,15 +30,15 @@ Eight components from `components.md` §5.1, plus the gate from Q12 `A`.
 
 ## 2. Routes
 
-| Path | Component | Reachable when |
-|---|---|---|
-| `/auth/phone` | `PhoneEntryScreen` | SIGNED_OUT |
-| `/auth/verify` | `CodeVerificationScreen` | SIGNED_OUT, and a code was requested |
-| `/onboarding/profile` | `ProfileSetupScreen` | NEEDS_SETUP |
-| `/onboarding/safety` | `SafetyGuidanceScreen` (acknowledgement variant) | NEEDS_GUIDANCE |
-| `/profile` | `ProfileEditScreen` | ONBOARDED |
-| `/profile/delete` | `AccountDeletionFlow` | ONBOARDED |
-| `/safety-guidance` | `SafetyGuidanceScreen` (read-only variant) | **always** |
+| Path                  | Component                                        | Reachable when                       |
+| --------------------- | ------------------------------------------------ | ------------------------------------ |
+| `/auth/phone`         | `PhoneEntryScreen`                               | SIGNED_OUT                           |
+| `/auth/verify`        | `CodeVerificationScreen`                         | SIGNED_OUT, and a code was requested |
+| `/onboarding/profile` | `ProfileSetupScreen`                             | NEEDS_SETUP                          |
+| `/onboarding/safety`  | `SafetyGuidanceScreen` (acknowledgement variant) | NEEDS_GUIDANCE                       |
+| `/profile`            | `ProfileEditScreen`                              | ONBOARDED                            |
+| `/profile/delete`     | `AccountDeletionFlow`                            | ONBOARDED                            |
+| `/safety-guidance`    | `SafetyGuidanceScreen` (read-only variant)       | **always**                           |
 
 `/auth/verify` reached directly, without a requested code, redirects to `/auth/phone` — the canonical phone lives in router state, and without it the screen has nothing to verify against.
 
@@ -64,22 +64,22 @@ Wraps the router's protected branch. Reads `session`, `profileCompletedAt`, `saf
 ## 4. `PhoneEntryScreen`
 
 ```ts
-props: none
+props: none;
 state: {
-  input: string;              // raw, as typed — may contain Persian digits
-  error: string | null;       // catalogue key
+  input: string; // raw, as typed — may contain Persian digits
+  error: string | null; // catalogue key
   isSubmitting: boolean;
 }
 ```
 
-| Behaviour | Rule |
-|---|---|
-| `inputMode="tel"`, `dir="ltr"` on the field itself inside the RTL page | Phone numbers read left-to-right even in Persian text |
-| Persian digits accepted and normalized on submit | BR-U2-01 |
-| Validation runs **before** any request | BR-U2-04 |
-| Invalid → inline error under the field, focus retained | §8 |
-| Submit → `requestCode`, then navigate to `/auth/verify` with the canonical phone in router state | §2 |
-| A link to `/safety-guidance` is present | BR-U2-51 |
+| Behaviour                                                                                        | Rule                                                  |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| `inputMode="tel"`, `dir="ltr"` on the field itself inside the RTL page                           | Phone numbers read left-to-right even in Persian text |
+| Persian digits accepted and normalized on submit                                                 | BR-U2-01                                              |
+| Validation runs **before** any request                                                           | BR-U2-04                                              |
+| Invalid → inline error under the field, focus retained                                           | §8                                                    |
+| Submit → `requestCode`, then navigate to `/auth/verify` with the canonical phone in router state | §2                                                    |
+| A link to `/safety-guidance` is present                                                          | BR-U2-51                                              |
 
 The screen states that a code will be sent by SMS. It does not say whether the number is registered, and there is no "sign up" versus "sign in" distinction anywhere — one door, both cases.
 
@@ -90,24 +90,24 @@ The screen states that a code will be sent by SMS. It does not say whether the n
 ## 5. `CodeVerificationScreen`
 
 ```ts
-props: none                      // canonical phone from router state
+props: none; // canonical phone from router state
 state: {
-  code: string;                  // 5 digits
+  code: string; // 5 digits
   error: string | null;
   isSubmitting: boolean;
-  resendAvailableAt: number;     // epoch ms
+  resendAvailableAt: number; // epoch ms
 }
 ```
 
-| Behaviour | Rule |
-|---|---|
-| **The phone number is never rendered.** No masked form, no last-four | BR-U2-05, FR-02 |
-| Five-digit input, Persian digits normalized | BR-U2-10 |
-| Wrong code → one generic Persian message, user stays on screen | BR-U2-14 |
-| Resend disabled for 60s with a live countdown in **Persian digits** | BR-U2-15 |
-| «تغییر شماره» returns to `/auth/phone` | — |
-| The code is never pre-filled, displayed, or logged — including in the dev menu | BR-U2-16 |
-| Success → `OnboardingGate` re-evaluates | §1 |
+| Behaviour                                                                      | Rule            |
+| ------------------------------------------------------------------------------ | --------------- |
+| **The phone number is never rendered.** No masked form, no last-four           | BR-U2-05, FR-02 |
+| Five-digit input, Persian digits normalized                                    | BR-U2-10        |
+| Wrong code → one generic Persian message, user stays on screen                 | BR-U2-14        |
+| Resend disabled for 60s with a live countdown in **Persian digits**            | BR-U2-15        |
+| «تغییر شماره» returns to `/auth/phone`                                         | —               |
+| The code is never pre-filled, displayed, or logged — including in the dev menu | BR-U2-16        |
+| Success → `OnboardingGate` re-evaluates                                        | §1              |
 
 **On "we sent a code to ۰۹۱۲···۴۵۶۷".** Common, friendly, and excluded here. FR-02 says the phone number is never displayed, and a masked number is still the number — enough to confirm a guess to someone holding the phone. The user typed it thirty seconds ago; «تغییر شماره» covers the mistype case.
 
@@ -133,16 +133,16 @@ state: {
 
 Single screen, not a wizard — six fields, two of them selectors, is one screenful on a phone. A multi-step wizard adds navigation state and a place to abandon.
 
-| Field | Control | Validation |
-|---|---|---|
-| `displayName` | `Input`, required | BR-U2-20, 22, 23 |
-| avatar | `AvatarPresetPicker` (§6.1) | BR-U2-27 |
-| `bio` | `TextArea`, optional, live counter to 200 | BR-U2-21 |
-| interests | `InterestSelector`, required | BR-U2-24 |
-| neighborhood | `NeighborhoodSelector`, required | BR-U2-25 |
-| `telegramId` | `Input`, optional, with the privacy label | BR-U2-26, 63 |
+| Field         | Control                                   | Validation       |
+| ------------- | ----------------------------------------- | ---------------- |
+| `displayName` | `Input`, required                         | BR-U2-20, 22, 23 |
+| avatar        | `AvatarPresetPicker` (§6.1)               | BR-U2-27         |
+| `bio`         | `TextArea`, optional, live counter to 200 | BR-U2-21         |
+| interests     | `InterestSelector`, required              | BR-U2-24         |
+| neighborhood  | `NeighborhoodSelector`, required          | BR-U2-25         |
+| `telegramId`  | `Input`, optional, with the privacy label | BR-U2-26, 63     |
 
-**Submit is enabled but validates on press**, rather than being disabled until the form is valid. A disabled button with no explanation is the single most common accessibility failure in a signup form — the user cannot discover *why*. Pressing it surfaces every error at once, inline and in Persian.
+**Submit is enabled but validates on press**, rather than being disabled until the form is valid. A disabled button with no explanation is the single most common accessibility failure in a signup form — the user cannot discover _why_. Pressing it surfaces every error at once, inline and in Persian.
 
 **Errors render per field**, not as a summary at the top; focus moves to the first invalid field.
 
@@ -172,13 +172,13 @@ props: {
 state: { query: string; isOpen: boolean }
 ```
 
-| Behaviour | Rule |
-|---|---|
-| Options grouped by district, districts in numeric order | U1 reference data |
-| Type-to-filter, matching on **normalized** Persian | BR-U1-03 |
-| **Never requests device location.** No `navigator.geolocation` anywhere | CQ8 `B`, US-02 |
-| Opens as a `Sheet` on phones, an inline listbox on wide screens | NFR-U2 |
-| `mode: 'multiple'` returns an array — U3's filter panel | U3 |
+| Behaviour                                                               | Rule              |
+| ----------------------------------------------------------------------- | ----------------- |
+| Options grouped by district, districts in numeric order                 | U1 reference data |
+| Type-to-filter, matching on **normalized** Persian                      | BR-U1-03          |
+| **Never requests device location.** No `navigator.geolocation` anywhere | CQ8 `B`, US-02    |
+| Opens as a `Sheet` on phones, an inline listbox on wide screens         | NFR-U2            |
+| `mode: 'multiple'` returns an array — U3's filter panel                 | U3                |
 
 `mode` exists now because retrofitting multi-select into a single-select component means changing its value type, and every existing caller with it. One prop today, or a refactor in U3.
 
@@ -216,15 +216,15 @@ state: same fields as setup, initialized from getCurrentUser(), plus:
        { isDirty: boolean }
 ```
 
-| Behaviour | Rule |
-|---|---|
-| Loads via `getCurrentUser` — the one read returning contact fields, to their owner | INV-3 |
-| Builds a patch of **changed keys only**; unchanged keys are **absent** | P-U2-02 |
-| Cannot empty interests or unset the neighborhood | BR-U2-33 |
-| `telegramId` shown with the privacy label | BR-U2-63 |
-| Save → `Toast` confirmation, `isDirty` cleared | — |
-| Navigating away while dirty → confirmation `Dialog` | — |
-| A «حذف حساب کاربری» entry point, visually separated and de-emphasised | §10 |
+| Behaviour                                                                          | Rule     |
+| ---------------------------------------------------------------------------------- | -------- |
+| Loads via `getCurrentUser` — the one read returning contact fields, to their owner | INV-3    |
+| Builds a patch of **changed keys only**; unchanged keys are **absent**             | P-U2-02  |
+| Cannot empty interests or unset the neighborhood                                   | BR-U2-33 |
+| `telegramId` shown with the privacy label                                          | BR-U2-63 |
+| Save → `Toast` confirmation, `isDirty` cleared                                     | —        |
+| Navigating away while dirty → confirmation `Dialog`                                | —        |
+| A «حذف حساب کاربری» entry point, visually separated and de-emphasised              | §10      |
 
 **The phone number is not shown on this screen either.** There is no field for it and no read-only display of it. Changing a number is Round 2, and it needs re-verification.
 
@@ -235,8 +235,12 @@ state: same fields as setup, initialized from getCurrentUser(), plus:
 ## 10. `AccountDeletionFlow`
 
 ```ts
-props: none
-state: { step: 'consequences' | 'confirm'; typed: string; isDeleting: boolean }
+props: none;
+state: {
+  step: 'consequences' | 'confirm';
+  typed: string;
+  isDeleting: boolean;
+}
 ```
 
 **Step 1 — consequences.** Renders BR-U2-45's five statements as a list, in Persian, in plain words. «این کار قابل بازگشت نیست» is visually the strongest line on the screen. Two actions: cancel (default focus) and continue.
@@ -254,8 +258,12 @@ On success: session cleared, whole query cache dropped, redirect to `/auth/phone
 ## 11. `SafetyGuidanceScreen`
 
 ```ts
-props: { variant: 'onboarding' | 'reference' }
-state: { isAcknowledging: boolean }
+props: {
+  variant: 'onboarding' | 'reference';
+}
+state: {
+  isAcknowledging: boolean;
+}
 ```
 
 Same content in both variants. `onboarding` adds the acknowledgement button that writes `safetyGuidanceSeenAt`; `reference` has no write and is reachable unconditionally.
@@ -277,16 +285,16 @@ Written for a young reader (BR-U2-54): short sentences, concrete advice, no lega
 
 ## 12. Loading, Empty, and Error States (NFR-U5)
 
-| Screen | Loading | Empty | Error |
-|---|---|---|---|
-| `OnboardingGate` | Full-page `Skeleton` | — | `ErrorState`, retry |
-| `PhoneEntryScreen` | Button spinner | — | Inline |
-| `CodeVerificationScreen` | Button spinner | — | Inline, generic |
-| `ProfileSetupScreen` | `Skeleton` on the two selectors while reference data loads | — | `ErrorState`, retry |
-| `ProfileEditScreen` | `Skeleton` form | — | `ErrorState`, retry |
-| `SafetyGuidanceScreen` | — (static) | — | — |
-| `NeighborhoodSelector` | `Skeleton` list | «محله‌ای پیدا نشد» | `ErrorState` |
-| `InterestSelector` | `Skeleton` chips | — | `ErrorState` |
+| Screen                   | Loading                                                    | Empty              | Error               |
+| ------------------------ | ---------------------------------------------------------- | ------------------ | ------------------- |
+| `OnboardingGate`         | Full-page `Skeleton`                                       | —                  | `ErrorState`, retry |
+| `PhoneEntryScreen`       | Button spinner                                             | —                  | Inline              |
+| `CodeVerificationScreen` | Button spinner                                             | —                  | Inline, generic     |
+| `ProfileSetupScreen`     | `Skeleton` on the two selectors while reference data loads | —                  | `ErrorState`, retry |
+| `ProfileEditScreen`      | `Skeleton` form                                            | —                  | `ErrorState`, retry |
+| `SafetyGuidanceScreen`   | — (static)                                                 | —                  | —                   |
+| `NeighborhoodSelector`   | `Skeleton` list                                            | «محله‌ای پیدا نشد» | `ErrorState`        |
+| `InterestSelector`       | `Skeleton` chips                                           | —                  | `ErrorState`        |
 
 U1's mock delay (150–300 ms) means every one of these is actually reachable in development rather than flashing past — which was the reason for that decision.
 
@@ -304,17 +312,17 @@ U1's mock delay (150–300 ms) means every one of these is actually reachable in
 
 ## 14. Component-to-Rule Coverage
 
-| Component | Rules |
-|---|---|
-| `OnboardingGate` | BR-U2-30, 31, 50 |
-| `PhoneEntryScreen` | BR-U2-01…05, 60 |
+| Component                | Rules                   |
+| ------------------------ | ----------------------- |
+| `OnboardingGate`         | BR-U2-30, 31, 50        |
+| `PhoneEntryScreen`       | BR-U2-01…05, 60         |
 | `CodeVerificationScreen` | BR-U2-05, 10…16, 60, 72 |
-| `ProfileSetupScreen` | BR-U2-20…27, 30, 63 |
-| `NeighborhoodSelector` | BR-U2-25 |
-| `InterestSelector` | BR-U2-24 |
-| `ProfileEditScreen` | BR-U2-20…27, 33, 62, 63 |
-| `AccountDeletionFlow` | BR-U2-40…46 |
-| `SafetyGuidanceScreen` | BR-U2-50…55 |
+| `ProfileSetupScreen`     | BR-U2-20…27, 30, 63     |
+| `NeighborhoodSelector`   | BR-U2-25                |
+| `InterestSelector`       | BR-U2-24                |
+| `ProfileEditScreen`      | BR-U2-20…27, 33, 62, 63 |
+| `AccountDeletionFlow`    | BR-U2-40…46             |
+| `SafetyGuidanceScreen`   | BR-U2-50…55             |
 
 ---
 

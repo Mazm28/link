@@ -697,9 +697,7 @@ function buildActivities(now: Date): Activity[] {
     ...(s.address === undefined ? {} : { exactAddress: s.address }),
     ...(s.capacity === undefined ? {} : { capacity: s.capacity }),
     ...(s.venue === undefined ? {} : { venueId: ven(s.venue) }),
-    ...(s.recurring
-      ? { recurrence: { frequency: 'weekly' as const, daysOfWeek: [4] } }
-      : {}),
+    ...(s.recurring ? { recurrence: { frequency: 'weekly' as const, daysOfWeek: [4] } } : {}),
   }));
 }
 
@@ -731,9 +729,21 @@ interface RequestSeed {
  * U4 additions at the end make every state of the loop reachable without
  * setting it up by hand (answer Q9 `A`). */
 const REQUEST_SEEDS: RequestSeed[] = [
-  { n: '01', activity: '01', requester: '03', contact: 'telegram', note: 'تا حالا بازی نکردم ولی خیلی دوست دارم شروع کنم.' },
+  {
+    n: '01',
+    activity: '01',
+    requester: '03',
+    contact: 'telegram',
+    note: 'تا حالا بازی نکردم ولی خیلی دوست دارم شروع کنم.',
+  },
   { n: '02', activity: '01', requester: '07', contact: 'phone', note: 'میزت جا داره؟' },
-  { n: '03', activity: '01', requester: '12', contact: 'none', note: 'اگر جا بود خوشحال می‌شوم بیایم.' },
+  {
+    n: '03',
+    activity: '01',
+    requester: '12',
+    contact: 'none',
+    note: 'اگر جا بود خوشحال می‌شوم بیایم.',
+  },
   { n: '04', activity: '02', requester: '11', contact: 'phone' },
   { n: '05', activity: '02', requester: '10', contact: 'none' },
   { n: '06', activity: '03', requester: '08', contact: 'telegram', note: 'کتاب را خوانده‌ام.' },
@@ -742,7 +752,13 @@ const REQUEST_SEEDS: RequestSeed[] = [
   { n: '09', activity: '06', requester: '12', contact: 'none' },
   { n: '10', activity: '09', requester: '05', contact: 'phone' },
   { n: '11', activity: '16', requester: '01', contact: 'none' },
-  { n: '12', activity: '05', requester: '01', contact: 'telegram', note: 'ساعت شطرنج خودم را هم می‌آورم.' },
+  {
+    n: '12',
+    activity: '05',
+    requester: '01',
+    contact: 'telegram',
+    note: 'ساعت شطرنج خودم را هم می‌آورم.',
+  },
   // Withdrawn: the contact is marked revoked, but US-33 is explicit that this
   // does not undo the disclosure — the poster may already have seen it.
   { n: '13', activity: '07', requester: '10', contact: 'phone', withdrawn: true },
@@ -762,7 +778,14 @@ const REQUEST_SEEDS: RequestSeed[] = [
   /* BR-U4-33 — the one allowed RE-REQUEST. سینا withdrew from activity 08 and
    * came back. Withdrawing this one is TERMINAL, so the exhausted path is
    * demoable by pressing withdraw once. */
-  { n: '19', activity: '08', requester: '05', contact: 'phone', seq: 2, note: 'ببخشید، دوباره پشیمان شدم — این بار حتماً می‌آیم.' },
+  {
+    n: '19',
+    activity: '08',
+    requester: '05',
+    contact: 'phone',
+    seq: 2,
+    note: 'ببخشید، دوباره پشیمان شدم — این بار حتماً می‌آیم.',
+  },
 
   /* ⚠️ NOTHING ELSE WAS ADDED, because nothing else was missing.
    *
@@ -845,20 +868,92 @@ function buildRequests(now: Date, users: User[]): JoinRequest[] {
 function buildAttendance(now: Date): Attendance[] {
   const confirmedAt = ago(now, 5);
   return [
-    { activityId: a('19'), participantId: u('03'), attended: true, confirmedByUserId: u('01'), confirmedAt },
-    { activityId: a('19'), participantId: u('07'), attended: true, confirmedByUserId: u('01'), confirmedAt },
-    { activityId: a('20'), participantId: u('11'), attended: true, confirmedByUserId: u('02'), confirmedAt },
-    { activityId: a('21'), participantId: u('08'), attended: true, confirmedByUserId: u('04'), confirmedAt },
-    { activityId: a('22'), participantId: u('03'), attended: true, confirmedByUserId: u('09'), confirmedAt },
-    { activityId: a('22'), participantId: u('01'), attended: true, confirmedByUserId: u('09'), confirmedAt },
-    { activityId: a('23'), participantId: u('04'), attended: true, confirmedByUserId: u('10'), confirmedAt },
+    {
+      activityId: a('19'),
+      participantId: u('03'),
+      attended: true,
+      confirmedByUserId: u('01'),
+      confirmedAt,
+    },
+    {
+      activityId: a('19'),
+      participantId: u('07'),
+      attended: true,
+      confirmedByUserId: u('01'),
+      confirmedAt,
+    },
+    {
+      activityId: a('20'),
+      participantId: u('11'),
+      attended: true,
+      confirmedByUserId: u('02'),
+      confirmedAt,
+    },
+    {
+      activityId: a('21'),
+      participantId: u('08'),
+      attended: true,
+      confirmedByUserId: u('04'),
+      confirmedAt,
+    },
+    {
+      activityId: a('22'),
+      participantId: u('03'),
+      attended: true,
+      confirmedByUserId: u('09'),
+      confirmedAt,
+    },
+    {
+      activityId: a('22'),
+      participantId: u('01'),
+      attended: true,
+      confirmedByUserId: u('09'),
+      confirmedAt,
+    },
+    {
+      activityId: a('23'),
+      participantId: u('04'),
+      attended: true,
+      confirmedByUserId: u('10'),
+      confirmedAt,
+    },
     // Confirmed ABSENT — said they would come and did not. Different from
     // having no record at all, and neither one may rate (US-52).
-    { activityId: a('23'), participantId: u('06'), attended: false, confirmedByUserId: u('10'), confirmedAt },
-    { activityId: a('24'), participantId: u('01'), attended: true, confirmedByUserId: u('90'), confirmedAt },
-    { activityId: a('24'), participantId: u('03'), attended: true, confirmedByUserId: u('90'), confirmedAt },
-    { activityId: a('24'), participantId: u('07'), attended: true, confirmedByUserId: u('90'), confirmedAt },
-    { activityId: a('21'), participantId: u('12'), attended: false, confirmedByUserId: u('04'), confirmedAt },
+    {
+      activityId: a('23'),
+      participantId: u('06'),
+      attended: false,
+      confirmedByUserId: u('10'),
+      confirmedAt,
+    },
+    {
+      activityId: a('24'),
+      participantId: u('01'),
+      attended: true,
+      confirmedByUserId: u('90'),
+      confirmedAt,
+    },
+    {
+      activityId: a('24'),
+      participantId: u('03'),
+      attended: true,
+      confirmedByUserId: u('90'),
+      confirmedAt,
+    },
+    {
+      activityId: a('24'),
+      participantId: u('07'),
+      attended: true,
+      confirmedByUserId: u('90'),
+      confirmedAt,
+    },
+    {
+      activityId: a('21'),
+      participantId: u('12'),
+      attended: false,
+      confirmedByUserId: u('04'),
+      confirmedAt,
+    },
   ];
 }
 

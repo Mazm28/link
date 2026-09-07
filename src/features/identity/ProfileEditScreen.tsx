@@ -35,7 +35,8 @@ export function ProfileEditScreen() {
   const [confirmLeave, setConfirmLeave] = useState(false);
 
   if (isLoading) return <Skeleton variant="card" lines={5} />;
-  if (user === null || original === null) return <ErrorState title={t('state.error.title')} message={t('state.error.message')} />;
+  if (user === null || original === null)
+    return <ErrorState title={t('state.error.title')} message={t('state.error.message')} />;
 
   const current = draft ?? original;
   const patch = buildProfilePatch(user, current);
@@ -104,7 +105,10 @@ export function ProfileEditScreen() {
   }
 
   return (
-    <form onSubmit={(event) => void submit(event)} className="mx-auto flex w-full max-w-md flex-col gap-6 py-6">
+    <form
+      onSubmit={(event) => void submit(event)}
+      className="mx-auto flex w-full max-w-md flex-col gap-6 py-6"
+    >
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-fg">{t('profile.editTitle')}</h1>
         <Button variant="ghost" onClick={leave}>

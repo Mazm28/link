@@ -65,19 +65,22 @@ AI-DLC is a structured yet flexible software development process that adapts to 
 
 ### Phase Breakdown:
 
-**INCEPTION PHASE** - *Planning & Application Design*
+**INCEPTION PHASE** - _Planning & Application Design_
+
 - **Purpose**: Determines WHAT to build and WHY
 - **Activities**: Understanding requirements, analyzing existing code (if any), planning the approach
 - **Output**: Clear requirements, execution plan, decisions on the number of units of work for parallel development
 - **Your Role**: Answer questions, review plans, approve direction
 
-**CONSTRUCTION PHASE** - *Detailed Design, Implementation & Test*
+**CONSTRUCTION PHASE** - _Detailed Design, Implementation & Test_
+
 - **Purpose**: Determines HOW to build it
 - **Activities**: Detailed design (when needed), code generation, comprehensive testing
 - **Output**: Working code, tests, build instructions
 - **Your Role**: Review designs, approve implementation plans, validate results
 
-**OPERATIONS PHASE** - *Deployment & Monitoring (Future)*
+**OPERATIONS PHASE** - _Deployment & Monitoring (Future)_
+
 - **Purpose**: How to DEPLOY and RUN it
 - **Status**: Placeholder for future deployment and monitoring workflows
 - **Current State**: Build and test activities handled in CONSTRUCTION phase
@@ -101,6 +104,7 @@ AI-DLC is a structured yet flexible software development process that adapts to 
 6. **You'll get working code** with complete documentation and tests
 
 The AI-DLC process adapts to:
+
 - 📋 Your intent clarity and complexity
 - 🔍 Existing codebase state
 - 🎯 Scope and impact of changes

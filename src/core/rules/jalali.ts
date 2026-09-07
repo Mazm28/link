@@ -55,7 +55,15 @@ export const JALALI_MONTHS_FA = [
 
 /** The Iranian week runs شنبه … جمعه. Index 0 is Saturday, and the calendar
  *  grid in JalaliDatePicker depends on that (FC, US-91). */
-export const JALALI_WEEKDAYS_FA = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'] as const;
+export const JALALI_WEEKDAYS_FA = [
+  'شنبه',
+  'یکشنبه',
+  'دوشنبه',
+  'سه‌شنبه',
+  'چهارشنبه',
+  'پنجشنبه',
+  'جمعه',
+] as const;
 
 export interface JalaliDate {
   /** 1300 … 1500 */

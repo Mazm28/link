@@ -44,27 +44,31 @@ describe('P-U3-01 — location precision', () => {
 
   it('⚠️ the area is the NEIGHBOURHOOD area — identical for every activity there', () => {
     fc.assert(
-      fc.property(arbActivity, arbActivity, arbProfileView, arbUserId, (a1, a2, author, viewerId) => {
-        /* Two DIFFERENT activities — different coordinates, different
-         * addresses — in the SAME neighborhood. */
-        const first: Activity = { ...a1, locationPrecision: 'neighborhood' };
-        const second: Activity = {
-          ...a2,
-          locationPrecision: 'neighborhood',
-          cityId: first.cityId,
-          ...(first.neighborhoodId === undefined
-            ? {}
-            : { neighborhoodId: first.neighborhoodId }),
-        };
-        fc.pre(viewerId !== first.authorId && viewerId !== second.authorId);
+      fc.property(
+        arbActivity,
+        arbActivity,
+        arbProfileView,
+        arbUserId,
+        (a1, a2, author, viewerId) => {
+          /* Two DIFFERENT activities — different coordinates, different
+           * addresses — in the SAME neighborhood. */
+          const first: Activity = { ...a1, locationPrecision: 'neighborhood' };
+          const second: Activity = {
+            ...a2,
+            locationPrecision: 'neighborhood',
+            cityId: first.cityId,
+            ...(first.neighborhoodId === undefined ? {} : { neighborhoodId: first.neighborhoodId }),
+          };
+          fc.pre(viewerId !== first.authorId && viewerId !== second.authorId);
 
-        const v1 = project(first, author, viewerId);
-        const v2 = project(second, author, viewerId);
+          const v1 = project(first, author, viewerId);
+          const v2 = project(second, author, viewerId);
 
-        // Indistinguishable. This is what makes jitter impossible to ship.
-        expect(v1.approximateArea).toEqual(v2.approximateArea);
-        expect(v1.approximateArea).toEqual(areaOf(first.cityId, first.neighborhoodId));
-      }),
+          // Indistinguishable. This is what makes jitter impossible to ship.
+          expect(v1.approximateArea).toEqual(v2.approximateArea);
+          expect(v1.approximateArea).toEqual(areaOf(first.cityId, first.neighborhoodId));
+        },
+      ),
     );
   });
 
@@ -72,8 +76,7 @@ describe('P-U3-01 — location precision', () => {
     fc.assert(
       fc.property(arbActivity, arbProfileView, arbUserId, (activity, author, viewerId) => {
         const view = project(activity, author, viewerId);
-        const both =
-          Object.hasOwn(view, 'coordinate') && Object.hasOwn(view, 'approximateArea');
+        const both = Object.hasOwn(view, 'coordinate') && Object.hasOwn(view, 'approximateArea');
         expect(both).toBe(false);
       }),
     );

@@ -89,7 +89,9 @@ export function toPersianDigits(input: string | number): string {
  */
 export function toLatinDigits(input: string): string {
   return input
-    .replace(PERSIAN_DIGITS, (d) => String.fromCharCode(d.charCodeAt(0) - PERSIAN_ZERO + LATIN_ZERO))
+    .replace(PERSIAN_DIGITS, (d) =>
+      String.fromCharCode(d.charCodeAt(0) - PERSIAN_ZERO + LATIN_ZERO),
+    )
     .replace(ARABIC_INDIC_DIGITS, (d) =>
       String.fromCharCode(d.charCodeAt(0) - ARABIC_INDIC_ZERO + LATIN_ZERO),
     );

@@ -42,7 +42,6 @@ export function buildBlockIndex(blocks: readonly Block[]): BlockIndex {
   };
 }
 
-
 /**
  * U6 / BR-U6-30 — ⚠️ THE SINGLE PREDICATE EVERY U6 READ PATH USES.
  *
@@ -92,10 +91,6 @@ export function filterVisibleActivities<T extends Pick<Activity, 'authorId'>>(
 
 /** Whether the viewer may send a join request to this author. Used by U4;
  *  declared here so the block check has one implementation, not two. */
-export function canSendRequestTo(
-  viewerId: UserId,
-  authorId: UserId,
-  blocks: BlockIndex,
-): boolean {
+export function canSendRequestTo(viewerId: UserId, authorId: UserId, blocks: BlockIndex): boolean {
   return viewerId !== authorId && isMutuallyUnblocked(viewerId, authorId, blocks);
 }

@@ -28,13 +28,9 @@ import { arbStore } from '@tests/generators/domain';
 
 /** Everything about a person that must not survive deletion. */
 function personalValues(user: User): string[] {
-  return [
-    user.phone,
-    user.telegramId,
-    user.displayName,
-    user.bio,
-    user.avatarId,
-  ].filter((value): value is string => typeof value === 'string' && value.trim() !== '');
+  return [user.phone, user.telegramId, user.displayName, user.bio, user.avatarId].filter(
+    (value): value is string => typeof value === 'string' && value.trim() !== '',
+  );
 }
 
 /** Deep scan: any string anywhere in the returned structure. */

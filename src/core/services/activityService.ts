@@ -1,19 +1,8 @@
-import type {
-  Activity,
-  ActivityId,
-  ActivityView,
-  CityId,
-  Page,
-  User,
-  UserId,
-} from '../domain';
+import type { Activity, ActivityId, ActivityView, CityId, Page, User, UserId } from '../domain';
 import { type AppError, ErrorCode, appError, err, ok, type Result, RefusalError } from '../errors';
 import type { ActivityFilters, ActivityRepository } from '../repositories';
 import { editableFields, mayCancel } from '../rules/activityLifecycle';
-import {
-  validateActivityDraft,
-  type ActivityDraftInput,
-} from '../rules/activityValidation';
+import { validateActivityDraft, type ActivityDraftInput } from '../rules/activityValidation';
 import { mayActInPublic } from '../rules/onboarding';
 import {
   effectiveMode,

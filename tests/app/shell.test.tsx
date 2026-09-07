@@ -74,9 +74,8 @@ describe('App shell — US-90 acceptance', () => {
     // would break unnoticed until Round 2 introduced real network time.
     expect(screen.getByTestId('feed-loading')).toBeInTheDocument();
 
-    await waitFor(
-      () => expect(screen.queryByTestId('feed-loading')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
+    await waitFor(() => expect(screen.queryByTestId('feed-loading')).not.toBeInTheDocument(), {
+      timeout: 3000,
+    });
   });
 });

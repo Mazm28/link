@@ -12,15 +12,15 @@ U2 adds no new stored entity. It **extends `User`**, adds a `Session`, adds one 
 
 U1's `User` cannot represent a person who has signed in but not yet finished setup — `displayName` and `homeNeighborhoodId` are required. Q3 `A` resolves this with an explicit completion marker rather than a derived one.
 
-| Field | U1 | U2 | Why |
-|---|---|---|---|
-| `displayName` | `string` | `string \| undefined` | Nothing to put there at account creation. A placeholder would be worse — a placeholder name can leak into the UI, and a name that *looks* real is the kind of thing that survives to production |
-| `homeNeighborhoodId` | `NeighborhoodId` | `NeighborhoodId \| undefined` | Chosen during setup, which happens after the account exists. **CR-02 item 4: no longer collected at all** — kept because seeded users have one and FR-21 is the only thing that can use it |
-| `homeCityId` | — | `CityId \| undefined` | **CR-02 item 4** — the only location a profile now asks for, and optional |
-| `avatarUrl?: string` | present | **removed** | Replaced by `avatarId` — see §1.2 |
-| `avatarId?: AvatarPresetId` | — | **new** | Q5 `A` — a preset key, not a URL and not a data blob |
-| `profileCompletedAt?: string` | — | **new** | Q3 `A` — ISO-8601 UTC, set once when setup succeeds |
-| `safetyGuidanceSeenAt?: string` | — | **new** | Q4 `A` — ISO-8601 UTC, set when the guidance screen is acknowledged |
+| Field                           | U1               | U2                            | Why                                                                                                                                                                                             |
+| ------------------------------- | ---------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `displayName`                   | `string`         | `string \| undefined`         | Nothing to put there at account creation. A placeholder would be worse — a placeholder name can leak into the UI, and a name that _looks_ real is the kind of thing that survives to production |
+| `homeNeighborhoodId`            | `NeighborhoodId` | `NeighborhoodId \| undefined` | Chosen during setup, which happens after the account exists. **CR-02 item 4: no longer collected at all** — kept because seeded users have one and FR-21 is the only thing that can use it      |
+| `homeCityId`                    | —                | `CityId \| undefined`         | **CR-02 item 4** — the only location a profile now asks for, and optional                                                                                                                       |
+| `avatarUrl?: string`            | present          | **removed**                   | Replaced by `avatarId` — see §1.2                                                                                                                                                               |
+| `avatarId?: AvatarPresetId`     | —                | **new**                       | Q5 `A` — a preset key, not a URL and not a data blob                                                                                                                                            |
+| `profileCompletedAt?: string`   | —                | **new**                       | Q3 `A` — ISO-8601 UTC, set once when setup succeeds                                                                                                                                             |
+| `safetyGuidanceSeenAt?: string` | —                | **new**                       | Q4 `A` — ISO-8601 UTC, set when the guidance screen is acknowledged                                                                                                                             |
 
 `interestIds` stays `InterestTagId[]` and is `[]` on a fresh account. It does not need to become optional — an empty array is the honest representation of "has chosen none", and BR-U2-30 requires at least one for completion.
 
@@ -46,7 +46,7 @@ Keeping the name `avatarUrl` while storing a preset key was the alternative. It 
 /** Round 1: a local marker of who is signed in. Round 2: a server-issued token. */
 export interface Session {
   userId: UserId;
-  startedAt: string;   // ISO-8601 UTC
+  startedAt: string; // ISO-8601 UTC
 }
 ```
 
@@ -99,12 +99,12 @@ A separate `createAccount` would have to be called by something that knows the n
 
 ### 4.2 Round-2 mapping
 
-| Round 1 | Round 2 |
-|---|---|
-| `requestCode` | `POST /auth/request-code` — Kavenegar sends the SMS |
-| `verifyCode` | `POST /auth/verify` — returns a real token; brute-force throttling lands here (SECURITY-12) |
-| `getSession` | `GET /auth/session` |
-| `signOut` | `POST /auth/sign-out` — **invalidates server-side** (US-04) |
+| Round 1       | Round 2                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| `requestCode` | `POST /auth/request-code` — Kavenegar sends the SMS                                         |
+| `verifyCode`  | `POST /auth/verify` — returns a real token; brute-force throttling lands here (SECURITY-12) |
+| `getSession`  | `GET /auth/session`                                                                         |
+| `signOut`     | `POST /auth/sign-out` — **invalidates server-side** (US-04)                                 |
 
 `services.md` §4.1 warns that this service changes more than any other between rounds. The interface above is deliberately free of anything that reveals Round 1 is mocked — no `isMock`, no test codes in the signature.
 
@@ -133,7 +133,7 @@ markSafetyGuidanceSeen(userId: UserId): Promise<User>;
 ```ts
 export interface ProfileSetupInput {
   displayName: string;
-  interestIds: InterestTagId[];      // 1 … 10  (BR-U2-24)
+  interestIds: InterestTagId[]; // 1 … 10  (BR-U2-24)
   homeNeighborhoodId: NeighborhoodId;
   avatarId?: AvatarPresetId;
   bio?: string;
@@ -157,12 +157,12 @@ So the type system already prevents a half-created account from being rendered a
 
 ## 8. Invariant Check
 
-| Invariant | Does U2 hold it? |
-|---|---|
-| **INV-1** blocking | Not exercised — U6 owns blocks. No U2 read path bypasses one |
-| **INV-2** exact address | Untouched — U2 reads no activities |
-| **INV-3** no contact leakage | **Held.** `ProfileView` still has no contact field. `Session` carries none. `telegramId` and `phone` leave the store only via `getCurrentUser` (to the owner) or as a `SharedContact` the user explicitly attached in U4 |
-| **INV-4** viewer-scoped reads | **Held.** `getProfile` keeps its viewer parameter. `getCurrentUser` is scoped by definition — it returns the caller's own record |
+| Invariant                     | Does U2 hold it?                                                                                                                                                                                                         |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **INV-1** blocking            | Not exercised — U6 owns blocks. No U2 read path bypasses one                                                                                                                                                             |
+| **INV-2** exact address       | Untouched — U2 reads no activities                                                                                                                                                                                       |
+| **INV-3** no contact leakage  | **Held.** `ProfileView` still has no contact field. `Session` carries none. `telegramId` and `phone` leave the store only via `getCurrentUser` (to the owner) or as a `SharedContact` the user explicitly attached in U4 |
+| **INV-4** viewer-scoped reads | **Held.** `getProfile` keeps its viewer parameter. `getCurrentUser` is scoped by definition — it returns the caller's own record                                                                                         |
 
 No fifth invariant is needed for U2.
 
@@ -170,16 +170,16 @@ No fifth invariant is needed for U2.
 
 ## 9. Entity Summary
 
-| Type | Status | Owner |
-|---|---|---|
-| `User` | **Extended** — 2 fields relaxed, 2 added, 1 replaced | U1 model, U2 change |
-| `Session` | **New** | U2 |
-| `AvatarPreset` | **New** | U2 |
-| `AuthRepository` | **New interface** | U2 |
-| `UserRepository` | **Extended** — 2 methods | U1 contract, U2 change |
-| `ProfileSetupInput` | **New** | U2 |
-| `ProfilePatch` | **Changed** — `avatarUrl` → `avatarId` | U1, U2 change |
-| `ProfileView` | **Changed** — `avatarUrl` → `avatarId` | U1, U2 change |
+| Type                | Status                                               | Owner                  |
+| ------------------- | ---------------------------------------------------- | ---------------------- |
+| `User`              | **Extended** — 2 fields relaxed, 2 added, 1 replaced | U1 model, U2 change    |
+| `Session`           | **New**                                              | U2                     |
+| `AvatarPreset`      | **New**                                              | U2                     |
+| `AuthRepository`    | **New interface**                                    | U2                     |
+| `UserRepository`    | **Extended** — 2 methods                             | U1 contract, U2 change |
+| `ProfileSetupInput` | **New**                                              | U2                     |
+| `ProfilePatch`      | **Changed** — `avatarUrl` → `avatarId`               | U1, U2 change          |
+| `ProfileView`       | **Changed** — `avatarUrl` → `avatarId`               | U1, U2 change          |
 
 ---
 

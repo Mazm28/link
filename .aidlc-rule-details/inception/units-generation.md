@@ -1,7 +1,9 @@
 # Units Generation - Detailed Steps
 
 ## Overview
+
 This stage decomposes the system into manageable units of work through two integrated parts:
+
 - **Part 1 - Planning**: Create decomposition plan with questions, collect answers, analyze for ambiguities, get approval
 - **Part 2 - Generation**: Execute approved plan to generate unit artifacts
 
@@ -10,6 +12,7 @@ This stage decomposes the system into manageable units of work through two integ
 **Terminology**: Use "Service" for independently deployable components, "Module" for logical groupings within a service, "Unit of Work" for planning context.
 
 ## Prerequisites
+
 - Workspace Detection must be complete
 - Requirements Analysis recommended (provides functional scope)
 - User Stories recommended (stories map to units)
@@ -21,12 +24,15 @@ This stage decomposes the system into manageable units of work through two integ
 # PART 1: PLANNING
 
 ## Step 1: Create Unit of Work Plan
+
 - Generate plan with checkboxes [] for decomposing system into units of work
 - Focus on breaking down the system into manageable development units
 - Each step and sub-step should have a checkbox []
 
 ## Step 2: Include Mandatory Unit Artifacts in Plan
+
 **ALWAYS** include these mandatory artifacts in the unit plan:
+
 - [ ] Generate `aidlc-docs/inception/application-design/unit-of-work.md` with unit definitions and responsibilities
 - [ ] Generate `aidlc-docs/inception/application-design/unit-of-work-dependency.md` with dependency matrix
 - [ ] Generate `aidlc-docs/inception/application-design/unit-of-work-story-map.md` mapping stories to units
@@ -35,6 +41,7 @@ This stage decomposes the system into manageable units of work through two integ
 - [ ] Ensure all stories are assigned to units
 
 ## Step 3: Generate Context-Appropriate Questions
+
 **DIRECTIVE**: Thoroughly analyze the requirements, stories, and application design to identify ALL areas where clarification would improve unit decomposition quality. Be proactive in asking questions to ensure comprehensive coverage of decomposition concerns.
 
 **CRITICAL**: Default to asking questions when there is ANY ambiguity or missing detail that could affect unit boundaries or decomposition quality. It's better to ask too many questions than to make incorrect assumptions about how the system should be decomposed.
@@ -47,6 +54,7 @@ This stage decomposes the system into manageable units of work through two integ
 - **When in doubt, ask the question** - overconfidence leads to poor unit boundaries
 
 **Question categories to evaluate** (consider ALL categories):
+
 - **Story Grouping** - Ask about grouping strategy, story affinity, and logical clustering approaches
 - **Dependencies** - Ask about integration approach, shared resources, and inter-unit communication patterns
 - **Team Alignment** - Ask about team structure, ownership boundaries, and collaboration models
@@ -55,22 +63,27 @@ This stage decomposes the system into manageable units of work through two integ
 - **Code Organization (Greenfield multi-unit only)** - Ask about deployment model and directory structure preferences
 
 ## Step 4: Store UOW Plan
+
 - Save as `aidlc-docs/inception/plans/unit-of-work-plan.md`
 - Include all [Answer]: tags for user input
 - Ensure plan covers all aspects of system decomposition
 
 ## Step 5: Request User Input
+
 - Ask user to fill [Answer]: tags directly in the plan document
 - Emphasize importance of decomposition decisions
 - Provide clear instructions on completing the [Answer]: tags
 
 ## Step 6: Collect Answers
+
 - Wait for user to provide answers to all questions using [Answer]: tags in the document
 - Do not proceed until ALL [Answer]: tags are completed
 - Review the document to ensure no [Answer]: tags are left blank
 
 ## Step 7: ANALYZE ANSWERS (MANDATORY)
+
 Before proceeding, you MUST carefully review all user answers for:
+
 - **Vague or ambiguous responses**: "mix of", "somewhere between", "not sure", "depends"
 - **Undefined criteria or terms**: References to concepts without clear definitions
 - **Contradictory answers**: Responses that conflict with each other
@@ -78,7 +91,9 @@ Before proceeding, you MUST carefully review all user answers for:
 - **Answers that combine options**: Responses that merge different approaches without clear decision rules
 
 ## Step 8: MANDATORY Follow-up Questions
+
 If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
+
 - Add specific follow-up questions to the plan document using [Answer]: tags
 - DO NOT proceed to approval until all ambiguities are resolved
 - Examples of required follow-ups:
@@ -88,15 +103,18 @@ If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
   - "You mentioned 'depends on complexity' - how do you define complexity levels?"
 
 ## Step 9: Request Approval
+
 - Ask: "**Unit of work plan complete. Review the plan in aidlc-docs/inception/plans/unit-of-work-plan.md. Ready to proceed to generation?**"
 - DO NOT PROCEED until user confirms
 
 ## Step 10: Log Approval
+
 - Log prompt and response in audit.md with timestamp
 - Use ISO 8601 timestamp format
 - Include complete approval prompt text
 
 ## Step 11: Update Progress
+
 - Mark Units Generation Part 1 (Planning) complete in aidlc-state.md
 - Update the "Current Status" section
 - Prepare for transition to Units Generation Part 2 (Generation)
@@ -106,22 +124,26 @@ If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
 # PART 2: GENERATION
 
 ## Step 12: Load Unit of Work Plan
+
 - [ ] Read the complete plan from `aidlc-docs/inception/plans/unit-of-work-plan.md`
 - [ ] Identify the next uncompleted step (first [ ] checkbox)
 - [ ] Load the context and requirements for that step
 
 ## Step 13: Execute Current Step
+
 - [ ] Perform exactly what the current step describes
 - [ ] Generate unit artifacts as specified in the plan
 - [ ] Follow the approved decomposition approach from Planning
 - [ ] Use the criteria and boundaries specified in the plan
 
 ## Step 14: Update Progress
+
 - [ ] Mark the completed step as [x] in the unit of work plan
 - [ ] Update `aidlc-docs/aidlc-state.md` current status
 - [ ] Save all generated artifacts
 
 ## Step 15: Continue or Complete
+
 - [ ] If more steps remain, return to Step 12
 - [ ] If all steps complete, verify units are ready for design stages
 - [ ] Mark Units Generation stage as complete
@@ -145,16 +167,19 @@ If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
 ```
 
 ## Step 17: Wait for Explicit Approval
+
 - Do not proceed until the user explicitly approves the units generation
 - Approval must be clear and unambiguous
 - If user requests changes, update the units and repeat the approval process
 
 ## Step 18: Record Approval Response
+
 - Log the user's approval response with timestamp in `aidlc-docs/audit.md`
 - Include the exact user response text
 - Mark the approval status clearly
 
 ## Step 19: Update Progress
+
 - Mark Units Generation stage complete in `aidlc-docs/aidlc-state.md`
 - Update the "Current Status" section
 - Prepare for transition to CONSTRUCTION PHASE
@@ -164,6 +189,7 @@ If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
 ## Critical Rules
 
 ### Planning Phase Rules
+
 - Generate ONLY context-relevant questions
 - Use [Answer]: tag format for all questions
 - Analyze all answers for ambiguities before proceeding
@@ -171,6 +197,7 @@ If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
 - Get explicit user approval before generation
 
 ### Generation Phase Rules
+
 - **NO HARDCODED LOGIC**: Only execute what's written in the unit of work plan
 - **FOLLOW PLAN EXACTLY**: Do not deviate from the step sequence
 - **UPDATE CHECKBOXES**: Mark [x] immediately after completing each step
@@ -178,6 +205,7 @@ If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
 - **VERIFY COMPLETION**: Ensure all unit artifacts are complete before proceeding
 
 ## Completion Criteria
+
 - All planning questions answered and ambiguities resolved
 - User approval obtained for the plan
 - All steps in unit of work plan marked [x]

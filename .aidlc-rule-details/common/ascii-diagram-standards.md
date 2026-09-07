@@ -7,15 +7,18 @@
 ### ✅ ALLOWED: `+` `-` `|` `^` `v` `<` `>` and alphanumeric text
 
 ### ❌ FORBIDDEN: Unicode box-drawing characters
+
 - NO: `┌` `─` `│` `└` `┐` `┘` `├` `┤` `┬` `┴` `┼` `▼` `▲` `►` `◄`
 - Reason: Inconsistent rendering across fonts/platforms
 
 ## Standard ASCII Diagram Patterns
 
 ### CRITICAL: Character Width Rule
+
 **Every line in a box MUST have EXACTLY the same character count (including spaces)**
 
 ✅ CORRECT (all lines = 67 chars):
+
 ```
 +---------------------------------------------------------------+
 |                      Component Name                           |
@@ -24,6 +27,7 @@
 ```
 
 ❌ WRONG (inconsistent widths):
+
 ```
 +---------------------------------------------------------------+
 |                      Component Name                           |
@@ -32,6 +36,7 @@
 ```
 
 ### Box Pattern
+
 ```
 +-----------------------------------------------------+
 |                                                     |
@@ -44,6 +49,7 @@
 ```
 
 ### Nested Boxes
+
 ```
 +-------------------------------------------------------+
 |              Web Server (PHP Runtime)                 |
@@ -59,6 +65,7 @@
 ```
 
 ### Arrows and Connections
+
 ```
 +----------+
 |  Source  |
@@ -72,6 +79,7 @@
 ```
 
 ### Horizontal Flow
+
 ```
 +-------+     +-------+     +-------+
 | Step1 | --> | Step2 | --> | Step3 |
@@ -79,6 +87,7 @@
 ```
 
 ### Vertical Flow with Labels
+
 ```
 User Action Flow:
     |
@@ -103,6 +112,7 @@ User Action Flow:
 ## Validation
 
 Before creating diagrams:
+
 - [ ] Basic ASCII only: `+` `-` `|` `^` `v` `<` `>`
 - [ ] No Unicode box-drawing
 - [ ] Spaces (not tabs) for alignment
@@ -113,4 +123,3 @@ Before creating diagrams:
 ## Alternative
 
 For complex diagrams, use Mermaid (see `content-validation.md`)
-

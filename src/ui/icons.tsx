@@ -17,15 +17,7 @@ const base = 'inline-block shrink-0';
 export function IconCalendar({ className = 'size-4' }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={`${base} ${className}`}>
-      <rect
-        x="3.5"
-        y="5.5"
-        width="17"
-        height="15"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.6"
-      />
+      <rect x="3.5" y="5.5" width="17" height="15" rx="3" stroke="currentColor" strokeWidth="1.6" />
       <path d="M3.5 10h17" stroke="currentColor" strokeWidth="1.6" />
       <path d="M8 3.5v3M16 3.5v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
@@ -51,14 +43,7 @@ export function IconMapPin({ className = 'size-4' }: IconProps) {
 export function IconAround({ className = 'size-4' }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={`${base} ${className}`}>
-      <circle
-        cx="12"
-        cy="12"
-        r="8"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeDasharray="3 3"
-      />
+      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" />
       <circle cx="12" cy="12" r="2.25" fill="currentColor" />
     </svg>
   );

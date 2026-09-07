@@ -11,20 +11,20 @@ Rules, validation logic, and constraints owned by U2. Technology-agnostic. Numbe
 
 **BR-U2-01** — `normalizePhone(input: string): string | null` accepts, in this order:
 
-| # | Step |
-|---|---|
-| 1 | Convert Persian `۰۱۲۳۴۵۶۷۸۹` and Arabic-Indic `٠١٢٣٤٥٦٧٨٩` digits to Latin |
-| 2 | Strip spaces, hyphens, parentheses, and ZWNJ |
-| 3 | Rewrite the prefix: `00989…` → `+989…`, `989…` → `+989…`, `09…` → `+989…`, `9…` (10 digits) → `+989…` |
-| 4 | Accept only if the result matches `^\+989\d{9}$` |
-| 5 | Otherwise return `null` |
+| #   | Step                                                                                                  |
+| --- | ----------------------------------------------------------------------------------------------------- |
+| 1   | Convert Persian `۰۱۲۳۴۵۶۷۸۹` and Arabic-Indic `٠١٢٣٤٥٦٧٨٩` digits to Latin                            |
+| 2   | Strip spaces, hyphens, parentheses, and ZWNJ                                                          |
+| 3   | Rewrite the prefix: `00989…` → `+989…`, `989…` → `+989…`, `09…` → `+989…`, `9…` (10 digits) → `+989…` |
+| 4   | Accept only if the result matches `^\+989\d{9}$`                                                      |
+| 5   | Otherwise return `null`                                                                               |
 
 **Reusing U1's digit conversion is deliberate.** Steps 1's mapping is the same table `normalizePersian` uses (BR-U1-01 steps 4–5). Two independent digit tables in one codebase will disagree eventually.
 
 **BR-U2-02** — the canonical stored form is **`+989XXXXXXXXX`**. Every lookup, comparison, and uniqueness check uses it. Without a single canonical form, one person typing `۰۹۱۲…` and `+98912…` becomes two accounts.
 
 **BR-U2-03** — normalization is **idempotent** and **many-to-one**: every accepted spelling of one number maps to one canonical string, and normalizing that string again returns it unchanged.
-→ *Property test **P-U2-01**, categories: Idempotence, Canonical form.*
+→ _Property test **P-U2-01**, categories: Idempotence, Canonical form._
 
 **BR-U2-04** — validation runs **before any request is made** (US-01 acceptance criterion). A malformed number never reaches `requestCode`.
 
@@ -74,7 +74,7 @@ Bidi overrides are specific to this product: in an RTL interface, an embedded ov
 
 The cap is a ranking decision, not a tidiness one. FR-22's interest feed works by matching against a subset; someone who selects all 24 tags has silently asked for the combined feed back, and U3's interest ranking then has nothing to discriminate on.
 
-**BR-U2-25** — *(amended by CR-02 item 4)* — the profile collects a **city**, not a neighborhood, and it is **optional**. Absent is valid; present-but-unknown is a defect and fails with `city_invalid`.
+**BR-U2-25** — _(amended by CR-02 item 4)_ — the profile collects a **city**, not a neighborhood, and it is **optional**. Absent is valid; present-but-unknown is a defect and fails with `city_invalid`.
 
 > **What this costs.** FR-21 ranks the feed by hop distance from the viewer's NEIGHBOURHOOD, using U1's adjacency graph. A profile holding only a city cannot supply that origin, so for every account created after this change that mode has nothing to rank from. Seeded users keep their neighborhood and still work. `User.homeNeighborhoodId` therefore survives — unused by signup, and the only thing FR-21 can consume.
 
@@ -91,6 +91,7 @@ The cap is a ranking decision, not a tidiness one. FR-22's interest feed works b
 **BR-U2-31** — `profileCompletedAt !== undefined` is the **single definition** of a complete profile. No other code re-derives completeness from the underlying fields. The two conditions are not equivalent — a user who completes setup and later clears their interests is complete-but-editing, not incomplete, and must not be thrown back into onboarding while editing their own profile.
 
 **BR-U2-32** — a user with `profileCompletedAt` unset:
+
 - returns `null` from `getProfile`,
 - appears in **no** feed, listing, search result, or profile view,
 - may not author an activity, send a join request, or submit a rating.
@@ -118,7 +119,7 @@ Past activities survive because other people's history should not develop holes.
 **BR-U2-45** — the consequences screen states, in Persian and in plain words: personal information is removed; past activities remain but without your name; contact details you shared are revoked; you are signed out; **this cannot be undone**.
 
 **BR-U2-46** — after deletion, **no personal field of that user is reachable through any read path**, and no join request from them still carries a contact detail.
-→ *Property test **P-U2-03**, category: Data removal completeness. **Safety-relevant.***
+→ \*Property test **P-U2-03**, category: Data removal completeness. **Safety-relevant.\***
 
 ---
 
@@ -164,14 +165,14 @@ The cache key clause is not theoretical. `['auth', phone]` is the natural key to
 
 ## 9. Error Codes Added by U2
 
-| Code | Meaning | Persian key |
-|---|---|---|
-| `otp_invalid` | Wrong or reserved-failure code | `errors.otpInvalid` |
-| `otp_resend_too_soon` | Resend pressed inside the 60s window | `errors.otpResendTooSoon` |
-| `interests_too_many` | More than 10 interests | `errors.interestsTooMany` |
+| Code                      | Meaning                                       | Persian key                    |
+| ------------------------- | --------------------------------------------- | ------------------------------ |
+| `otp_invalid`             | Wrong or reserved-failure code                | `errors.otpInvalid`            |
+| `otp_resend_too_soon`     | Resend pressed inside the 60s window          | `errors.otpResendTooSoon`      |
+| `interests_too_many`      | More than 10 interests                        | `errors.interestsTooMany`      |
 | `name_invalid_characters` | No letter, or control/bidi characters present | `errors.nameInvalidCharacters` |
-| `profile_incomplete` | An operation requiring a complete profile | `errors.profileIncomplete` |
-| `confirmation_mismatch` | Deletion confirmation word not matched | `errors.confirmationMismatch` |
+| `profile_incomplete`      | An operation requiring a complete profile     | `errors.profileIncomplete`     |
+| `confirmation_mismatch`   | Deletion confirmation word not matched        | `errors.confirmationMismatch`  |
 
 All are **expected refusals** and return through `Result` (BR-U1-50, Q7 `A` of U1). None throws.
 
@@ -181,32 +182,32 @@ All are **expected refusals** and return through `Result` (BR-U1-50, Q7 `A` of U
 
 The story map assigns U2 no properties. That understates it — deletion has a genuine safety property, and two others are cheap.
 
-| ID | Property | Category | Rules |
-|---|---|---|---|
-| **P-U2-01** | `normalizePhone` is idempotent, and every accepted spelling of one number maps to one canonical string | Idempotence, Canonical form | BR-U2-01…03 |
-| **P-U2-02** | For any `User` and any `ProfilePatch`: a key **absent** from the patch leaves its field unchanged; a key **present** always writes. No other field moves | Patch semantics | `ProfilePatch` |
-| **P-U2-03** | ⚠️ For any store state and any user `u`: after `deleteAccount(u)`, no personal field of `u` is reachable through **any** read path, and no `JoinRequest` from `u` carries a contact detail | Data removal completeness | BR-U2-41, 42, 46 |
-| **P-U2-04** | Any `ProfileSetupInput` the validator accepts satisfies: ≤10 valid interests, a `displayName` passing BR-U2-20, and — if a city is present at all — a known one | Validation soundness | BR-U2-20…30 |
+| ID          | Property                                                                                                                                                                                   | Category                    | Rules            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- | ---------------- |
+| **P-U2-01** | `normalizePhone` is idempotent, and every accepted spelling of one number maps to one canonical string                                                                                     | Idempotence, Canonical form | BR-U2-01…03      |
+| **P-U2-02** | For any `User` and any `ProfilePatch`: a key **absent** from the patch leaves its field unchanged; a key **present** always writes. No other field moves                                   | Patch semantics             | `ProfilePatch`   |
+| **P-U2-03** | ⚠️ For any store state and any user `u`: after `deleteAccount(u)`, no personal field of `u` is reachable through **any** read path, and no `JoinRequest` from `u` carries a contact detail | Data removal completeness   | BR-U2-41, 42, 46 |
+| **P-U2-04** | Any `ProfileSetupInput` the validator accepts satisfies: ≤10 valid interests, a `displayName` passing BR-U2-20, and — if a city is present at all — a known one                            | Validation soundness        | BR-U2-20…30      |
 
 **P-U2-02 is the test that justifies `exactOptionalPropertyTypes`.** The compiler flag makes "absent" and "present but `undefined`" different types; this property is what checks the runtime honours the distinction. Without it the flag is a claim rather than a guarantee.
 
-**P-U2-03 is the safety-relevant one.** It must run against *every* read path that exists at U2 — and be re-run, not rewritten, as U3–U6 add more. A deletion that leaves a contact detail reachable through one forgotten path is the failure this catches.
+**P-U2-03 is the safety-relevant one.** It must run against _every_ read path that exists at U2 — and be re-run, not rewritten, as U3–U6 add more. A deletion that leaves a contact detail reachable through one forgotten path is the failure this catches.
 
 ---
 
 ## 11. Rule Summary
 
-| ID range | Area | Property tests |
-|---|---|---|
-| BR-U2-01 … 05 | Phone normalization and validation | 1 (P-U2-01) |
-| BR-U2-10 … 17 | OTP request, verification, resend | — |
-| BR-U2-20 … 27 | Profile field validation | 1 (P-U2-04) |
-| BR-U2-30 … 33 | Profile completion | — |
-| BR-U2-40 … 46 | Account deletion | 1 (P-U2-03) |
-| BR-U2-50 … 55 | Safety guidance | — |
-| BR-U2-60 … 63 | Sensitive data handling | — |
-| BR-U2-70 … 72 | Account types | — |
-| — | Patch semantics | 1 (P-U2-02) |
+| ID range      | Area                               | Property tests |
+| ------------- | ---------------------------------- | -------------- |
+| BR-U2-01 … 05 | Phone normalization and validation | 1 (P-U2-01)    |
+| BR-U2-10 … 17 | OTP request, verification, resend  | —              |
+| BR-U2-20 … 27 | Profile field validation           | 1 (P-U2-04)    |
+| BR-U2-30 … 33 | Profile completion                 | —              |
+| BR-U2-40 … 46 | Account deletion                   | 1 (P-U2-03)    |
+| BR-U2-50 … 55 | Safety guidance                    | —              |
+| BR-U2-60 … 63 | Sensitive data handling            | —              |
+| BR-U2-70 … 72 | Account types                      | —              |
+| —             | Patch semantics                    | 1 (P-U2-02)    |
 
 **43 rules, 4 property tests.**
 

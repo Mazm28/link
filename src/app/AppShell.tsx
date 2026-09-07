@@ -124,7 +124,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             <span aria-hidden="true">{resolved === 'dark' ? '☀️' : '🌙'}</span>
           </button>
         </div>
-
       </header>
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 pb-24 lg:pb-6">{children}</main>
@@ -176,4 +175,3 @@ export function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-

@@ -8,6 +8,7 @@ The following question is automatically included in the Requirements Analysis cl
 
 ```markdown
 ## Question: Property-Based Testing Extension
+
 Should property-based testing (PBT) rules be enforced for this project?
 
 A) Yes — enforce all PBT rules as blocking constraints (recommended for projects with business logic, data transformations, serialization, or stateful components)
@@ -18,5 +19,5 @@ C) No — skip all PBT rules (suitable for simple CRUD applications, UI-only pro
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```

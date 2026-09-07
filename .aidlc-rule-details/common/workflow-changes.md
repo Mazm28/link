@@ -15,6 +15,7 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "Actually, I want to add user stories even though we skipped that stage"
 
 **Handling**:
+
 1. **Confirm Request**: "You want to add User Stories stage. This will create user stories and personas. Confirm?"
 2. **Check Dependencies**: Verify all prerequisite stages are complete
 3. **Update Execution Plan**: Add stage to `execution-plan.md` with rationale
@@ -23,6 +24,7 @@ Users may request changes to the execution plan or stage execution during the wo
 6. **Log Change**: Document in `audit.md` with timestamp and reason
 
 **Considerations**:
+
 - May need to update later stages that could benefit from new artifacts
 - Existing artifacts may need revision to incorporate new information
 - Timeline will be extended
@@ -36,6 +38,7 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "Let's skip the NFR Design stage for now"
 
 **Handling**:
+
 1. **Confirm Request**: "You want to skip NFR Design. This means no NFR patterns or logical components will be incorporated. Confirm?"
 2. **Warn About Impact**: Explain what will be missing and potential consequences
 3. **Get Explicit Confirmation**: User must explicitly confirm understanding of impact
@@ -45,6 +48,7 @@ Users may request changes to the execution plan or stage execution during the wo
 7. **Log Change**: Document in `audit.md` with timestamp and reason
 
 **Considerations**:
+
 - Later stages may fail or require manual intervention
 - User accepts responsibility for missing artifacts
 - Can be added back later if needed
@@ -58,6 +62,7 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "I don't like these user stories. Can we start over?"
 
 **Handling**:
+
 1. **Understand Concern**: "What specifically would you like to change about the stories?"
 2. **Offer Options**:
    - **Option A**: Modify existing artifacts (faster, preserves some work)
@@ -71,6 +76,7 @@ Users may request changes to the execution plan or stage execution during the wo
 4. **Log Change**: Document reason for restart and what will change
 
 **Considerations**:
+
 - Existing work will be lost (but backed up)
 - May need to redo dependent stages
 - Timeline will be extended
@@ -84,6 +90,7 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "I want to change the architectural decision we made earlier"
 
 **Handling**:
+
 1. **Assess Impact**: Identify all stages that depend on the stage to be restarted
 2. **Warn User**: "Restarting Application Design will require redoing: Units Generation, per-unit design (all units), Code Generation. Confirm?"
 3. **Get Explicit Confirmation**: User must understand full impact
@@ -96,6 +103,7 @@ Users may request changes to the execution plan or stage execution during the wo
 5. **Log Change**: Document full impact and reason for restart
 
 **Considerations**:
+
 - Significant rework required
 - All dependent stages must be redone
 - Timeline will be significantly extended
@@ -110,6 +118,7 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "Let's do a comprehensive requirements analysis instead of standard"
 
 **Handling**:
+
 1. **Confirm Request**: "You want to change Requirements Analysis from Standard to Comprehensive depth. This will be more thorough but take longer. Confirm?"
 2. **Update Execution Plan**: Change depth level in `workflow-planning.md`
 3. **Adjust Approach**: Follow comprehensive depth guidelines for the stage
@@ -117,6 +126,7 @@ Users may request changes to the execution plan or stage execution during the wo
 5. **Log Change**: Document depth change and reason
 
 **Considerations**:
+
 - More depth = more time but better quality
 - Less depth = faster but may miss details
 - Can only change before or during stage, not after completion
@@ -130,6 +140,7 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "I need to stop for now and continue tomorrow"
 
 **Handling**:
+
 1. **Complete Current Step**: Finish the current step in progress if possible
 2. **Update Checkboxes**: Mark all completed steps with [x]
 3. **Update State**: Ensure `aidlc-state.md` reflects current status
@@ -137,6 +148,7 @@ Users may request changes to the execution plan or stage execution during the wo
 5. **Provide Resume Instructions**: "When you return, I'll detect your existing project and offer to continue from: [current stage, current step]"
 
 **On Resume**:
+
 1. **Detect Existing Project**: Check for `aidlc-state.md`
 2. **Load Context**: Read all artifacts from completed stages
 3. **Show Status**: Display current stage and next step
@@ -152,8 +164,9 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "Actually, let's do microservices instead of a monolith"
 
 **Handling**:
+
 1. **Assess Current Progress**: Determine how far into workflow
-2. **Explain Impact**: 
+2. **Explain Impact**:
    - If before Units Generation: Minimal impact, just update decision
    - If after Units Generation: Must redo Units Generation, all per-unit design
    - If after Code Generation: Significant rework required
@@ -164,6 +177,7 @@ Users may request changes to the execution plan or stage execution during the wo
 5. **Execute Change**: Follow restart procedures for affected stages
 
 **Considerations**:
+
 - Architectural changes have cascading effects
 - Earlier in workflow = easier to change
 - Later in workflow = consider cost vs. benefit
@@ -177,6 +191,7 @@ Users may request changes to the execution plan or stage execution during the wo
 **Example**: "We need to split the Payment unit into Payment and Billing"
 
 **Handling**:
+
 1. **Assess Impact**: Determine which units have completed design/code
 2. **Explain Consequences**:
    - Adding unit: Need to do full design and code for new unit
@@ -190,6 +205,7 @@ Users may request changes to the execution plan or stage execution during the wo
 5. **Execute Changes**: Follow normal unit design and code process for affected units
 
 **Considerations**:
+
 - Affects all downstream stages for those units
 - May affect other units if dependencies change
 - Timeline impact depends on how many units affected
@@ -260,6 +276,7 @@ User requests change
 
 ```markdown
 ## Change Request - [Stage Name]
+
 **Timestamp**: [ISO timestamp]
 **Request**: [What user wants to change]
 **Current State**: [Where we are in workflow]

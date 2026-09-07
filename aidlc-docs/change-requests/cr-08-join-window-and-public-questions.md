@@ -21,12 +21,12 @@ The user asked how لینک differs from AmUp and what is worth learning from it
 
 Expiry is **not** missing. It is derived and it is enforced:
 
-| Mechanism | Where |
-|---|---|
-| `past` derived from `startsAt` against the start of the Tehran day, never stored | `core/rules/activityLifecycle.ts` — `deriveState`, BR-U1-17 |
-| Same-day activities become `past` at their actual start time, not at midnight | same function, final branch |
-| Past activities leave discovery entirely | `core/services/activityService.ts:165` sets `excludePast: true` on every discovery read; `app/FeedFilterProvider.tsx` deliberately does not expose it as a user filter |
-| Past activities remain reachable in their author's own history | `features/activities/MyActivitiesScreen.tsx` |
+| Mechanism                                                                        | Where                                                                                                                                                                  |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `past` derived from `startsAt` against the start of the Tehran day, never stored | `core/rules/activityLifecycle.ts` — `deriveState`, BR-U1-17                                                                                                            |
+| Same-day activities become `past` at their actual start time, not at midnight    | same function, final branch                                                                                                                                            |
+| Past activities leave discovery entirely                                         | `core/services/activityService.ts:165` sets `excludePast: true` on every discovery read; `app/FeedFilterProvider.tsx` deliberately does not expose it as a user filter |
+| Past activities remain reachable in their author's own history                   | `features/activities/MyActivitiesScreen.tsx`                                                                                                                           |
 
 So "stale activities pile up in the feed" — the problem this was raised to solve — **is already solved**, and was solved in U1/U3.
 
@@ -55,7 +55,7 @@ Under CR-07 contact sharing is **mandatory**. There is therefore no way to ask t
 
 **The disclosure is a one-way door placed at the start of the interaction rather than at the point of commitment.** A person who would have asked one clarifying question and then walked away cannot: their only options are to disclose or to leave.
 
-This is the same underlying problem CR-06 identified and it did not go away. CR-06's own closing note says so: *"the strongest point in it was that in-app messaging dissolves the problem that a request sharing nothing is unactionable."* CR-07 resolved that by removing the ability to share nothing — which closes one direction and **tightens** this one.
+This is the same underlying problem CR-06 identified and it did not go away. CR-06's own closing note says so: _"the strongest point in it was that in-app messaging dissolves the problem that a request sharing nothing is unactionable."_ CR-07 resolved that by removing the ability to share nothing — which closes one direction and **tightens** this one.
 
 ### 3.2 Proposed shape
 
@@ -71,7 +71,7 @@ A **public, poster-answered question list on the activity**. Explicitly:
 
 This is not a free addition and the following are consequences, not risks to be mitigated later:
 
-- **A new user-generated content surface with no moderation console until Round 3.** U6 owns reporting; a question channel needs reporting *from day one*, which makes Part B depend on U6 rather than shipping beside it.
+- **A new user-generated content surface with no moderation console until Round 3.** U6 owns reporting; a question channel needs reporting _from day one_, which makes Part B depend on U6 rather than shipping beside it.
 - **INV-4 applies**: questions are user-visible content, so every read of them takes a viewer identity and is subject to INV-1 blocking in both directions. A blocked user's questions must not be returned — and that is a repository-level obligation, not a rendering one.
 - **Public by design means public forever.** A question is authored by a real account against a real activity; unlike a request, it is not addressed to one person. That is the price of not building DMs, and it should be said in the UI rather than discovered.
 
@@ -87,16 +87,16 @@ CR-06 proposed **a message thread on each join request**: private, two-party, po
 
 ## 5. What would change if adopted
 
-| Artifact | Change |
-|---|---|
-| `requirements.md` | New FRs (next free id: **FR-73**) for the join window and, separately, for the question channel |
-| `stories.md` | New stories (next free id: **US-93**) |
-| `core/domain` | `Activity.joinsCloseAt?`; a `Question` entity + `QuestionView` if Part B is adopted |
-| `core/rules/activityLifecycle.ts` | `isJoinOpen(activity, now)` — pure, Tehran-time, property-tested |
-| `core/repositories` | Repository refusal on a late request; a questions read that takes a viewer identity (INV-4) and honours INV-1 |
-| Store schema | v3 → v4 |
-| AR-02 | **Part A slightly reduces the accepted risk** (fewer disclosures that cannot lead anywhere). **Part B changes its shape** — it adds a surface where contact details can be published rather than disclosed, so AR-02 would need re-accepting a second time, as CR-07 required |
-| U6 | Reporting extends to questions |
+| Artifact                          | Change                                                                                                                                                                                                                                                                        |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `requirements.md`                 | New FRs (next free id: **FR-73**) for the join window and, separately, for the question channel                                                                                                                                                                               |
+| `stories.md`                      | New stories (next free id: **US-93**)                                                                                                                                                                                                                                         |
+| `core/domain`                     | `Activity.joinsCloseAt?`; a `Question` entity + `QuestionView` if Part B is adopted                                                                                                                                                                                           |
+| `core/rules/activityLifecycle.ts` | `isJoinOpen(activity, now)` — pure, Tehran-time, property-tested                                                                                                                                                                                                              |
+| `core/repositories`               | Repository refusal on a late request; a questions read that takes a viewer identity (INV-4) and honours INV-1                                                                                                                                                                 |
+| Store schema                      | v3 → v4                                                                                                                                                                                                                                                                       |
+| AR-02                             | **Part A slightly reduces the accepted risk** (fewer disclosures that cannot lead anywhere). **Part B changes its shape** — it adds a surface where contact details can be published rather than disclosed, so AR-02 would need re-accepting a second time, as CR-07 required |
+| U6                                | Reporting extends to questions                                                                                                                                                                                                                                                |
 
 **Nothing here is Round 1 unless the answers below say so.** Part A is small and self-contained. Part B is a unit-sized piece of work with a safety review attached, and putting the two in one document is a convenience of origin, not a claim that they ship together.
 
@@ -105,36 +105,39 @@ CR-06 proposed **a message thread on each join request**: private, two-party, po
 ## 6. Questions
 
 **Q1 — Part A, adopt?**
+
 - **A)** Adopt as described in §2.3 — optional `joinsCloseAt`, defaults to `startsAt`, gates the join action only
 - **B)** Adopt, but make it a fixed rule rather than author-set (e.g. joining always closes N hours before start) — no new field on the author's form
 - **C)** Reject — joining until start is correct, and the useless-disclosure case in §2.2 is acceptable
 - **D)** Defer to Round 2
 
-[Answer]:A
+[Answer]: A
 
 **Q2 — Part A, open-ended activities (§2.2 item 2)?**
+
 - **A)** Out of scope for this CR — `startsAt` stays mandatory
 - **B)** In scope — design activities with no start time
 - **C)** Separate CR
 
-[Answer]: C  *(revised from `B` in the clarification round — see §7.2)*
+[Answer]: C _(revised from `B` in the clarification round — see §7.2)_
 
 **Q3 — Part B, contact details inside questions?**
 This decides whether Part B is safe at all.
+
 - **A)** Reject at write time — a question containing a phone number or Telegram handle is refused by the repository, using the existing `core/rules/phone.ts` normalizer so the check cannot drift from the one that already exists
 - **B)** Strip and warn
 - **C)** Allow — the channel is public and people can say what they want
 
-[Answer]: A  *(revised from `C` in the clarification round — `C` violated INV-3; see §7.1)*
+[Answer]: A _(revised from `C` in the clarification round — `C` violated INV-3; see §7.1)_
 
 **Q4 — Part B, scope and timing?**
+
 - **A)** Adopt as §3.2 — public, author-answered only, and **sequenced after U6** so reporting exists on day one
 - **B)** Adopt now, alongside U5, accepting an unmoderated content surface until Round 3
 - **C)** Reject — the one-way-door problem in §3.1 is accepted as a consequence of CR-07
 - **D)** This is CR-06 in disguise; withdraw CR-08 Part B and re-open CR-06 instead (see §4)
 
-[Answer]:A
-
+[Answer]: A
 
 ---
 
@@ -144,33 +147,33 @@ This decides whether Part B is safe at all.
 
 ### 7.1 ⚠️ Q3 was answered `C` and revised to `A`, because `C` violated INV-3
 
-`C` would have allowed contact details inside public questions. **INV-3 permits exactly one exception** — *"`sharedContact` on a JoinRequestView addressed to the viewer"* — scoped to a single person. A public questions channel accepting phone numbers is a **second exception scoped to nobody**: the value is returned to every viewer of that activity.
+`C` would have allowed contact details inside public questions. **INV-3 permits exactly one exception** — _"`sharedContact` on a JoinRequestView addressed to the viewer"_ — scoped to a single person. A public questions channel accepting phone numbers is a **second exception scoped to nobody**: the value is returned to every viewer of that activity.
 
-That is a different category from the changes this project has made before. CR-07 changed a requirement and re-accepted a risk; this would have changed an **invariant**, and the five invariants are what Round 2's server is built to reproduce. Under CR-07 it would also have upgraded harvesting from *"collect what requesters disclose to me"* to *"let people publish their numbers to everyone, including me"* — the bad actor stops needing requests at all.
+That is a different category from the changes this project has made before. CR-07 changed a requirement and re-accepted a risk; this would have changed an **invariant**, and the five invariants are what Round 2's server is built to reproduce. Under CR-07 it would also have upgraded harvesting from _"collect what requesters disclose to me"_ to _"let people publish their numbers to everyone, including me"_ — the bad actor stops needing requests at all.
 
 **Adopted instead**: a question containing a phone number or Telegram handle is **refused at write time by the repository**, reusing `core/rules/phone.ts` so the check cannot drift from the one that already exists. INV-3 stands untouched, and Part B stays buildable.
 
-*(`C` remained available — INV-3 could have been amended openly, with AR-02 re-accepted a third time. It was not chosen.)*
+_(`C` remained available — INV-3 could have been amended openly, with AR-02 re-accepted a third time. It was not chosen.)_
 
 ### 7.2 Q2 revised `B` → `C`: open-ended activities become CR-09
 
-`B` would have designed activities with no `startsAt`. This document already called that *"scope growth wearing item 1's clothes"*, and `startsAt` turns out to be load-bearing in four approved places:
+`B` would have designed activities with no `startsAt`. This document already called that _"scope growth wearing item 1's clothes"_, and `startsAt` turns out to be load-bearing in four approved places:
 
-| Depends on `startsAt` | Consequence if optional |
-|---|---|
-| `deriveState` (BR-U1-17) | The three-state model has no answer for a dateless activity |
-| `excludePast: true` on every discovery read | Nothing to compare — such activities never leave the feed |
-| Ranking's `recency` term (BR-U3-60) | The 0.20-weight term has no input |
-| `canRate` — *"the activity date has passed"* | ⚠️ **Rating can never open.** Attending one earns nobody reputation |
+| Depends on `startsAt`                        | Consequence if optional                                             |
+| -------------------------------------------- | ------------------------------------------------------------------- |
+| `deriveState` (BR-U1-17)                     | The three-state model has no answer for a dateless activity         |
+| `excludePast: true` on every discovery read  | Nothing to compare — such activities never leave the feed           |
+| Ranking's `recency` term (BR-U3-60)          | The 0.20-weight term has no input                                   |
+| `canRate` — _"the activity date has passed"_ | ⚠️ **Rating can never open.** Attending one earns nobody reputation |
 
 Split to **CR-09**, where those four rules are the design rather than a footnote. **Part A ships as `joinsCloseAt` only**, exactly as §2.3 describes.
 
 ### 7.3 What is now adopted
 
-| | |
-|---|---|
-| **Part A** | Optional author-set `joinsCloseAt`, defaults to `startsAt`, `<= startsAt`, gates the join action only. `isJoinOpen` lives in `core/rules/activityLifecycle.ts` and the repository refuses a late request regardless of what the client renders (NFR-S6). `startsAt` stays mandatory. |
-| **Part B** | Public, author-answered questions. **Contact details refused at write time.** Sequenced **after U6**, so reporting exists on day one. |
-| **Not adopted** | Open-ended activities → **CR-09**. |
+|                 |                                                                                                                                                                                                                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Part A**      | Optional author-set `joinsCloseAt`, defaults to `startsAt`, `<= startsAt`, gates the join action only. `isJoinOpen` lives in `core/rules/activityLifecycle.ts` and the repository refuses a late request regardless of what the client renders (NFR-S6). `startsAt` stays mandatory. |
+| **Part B**      | Public, author-answered questions. **Contact details refused at write time.** Sequenced **after U6**, so reporting exists on day one.                                                                                                                                                |
+| **Not adopted** | Open-ended activities → **CR-09**.                                                                                                                                                                                                                                                   |
 
 **End of CR-08.**

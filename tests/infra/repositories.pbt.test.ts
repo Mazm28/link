@@ -256,10 +256,7 @@ describe('mock repositories — oracle and invariant properties', () => {
           const author = authorOf.get(activityId);
           if (author === undefined) continue;
 
-          const actual = await repos.connections.listRequestsForActivity(
-            author as UserId,
-            A(n),
-          );
+          const actual = await repos.connections.listRequestsForActivity(author as UserId, A(n));
           const actualLive = new Set(
             actual.filter((r) => r.status === 'sent').map((r) => String(r.requester.id)),
           );

@@ -56,17 +56,17 @@ export function AppRouter() {
                 <Route path="/search" element={<SearchScreen />} />
                 <Route path="/categories" element={<CategoryBrowseScreen />} />
                 {/* ⚠️ THE KEYS ARE LOAD-BEARING, NOT DECORATION.
-                  * Both routes render the same component type in the same
-                  * position, so React reconciles them as ONE element and keeps
-                  * the instance — and its draft — mounted across the route
-                  * change. Editing an activity and then pressing «ساخت فعالیت»
-                  * therefore opened the composer fully populated with that
-                  * activity, exact address and coordinate included, and
-                  * submitting would have CREATED A DUPLICATE rather than saved
-                  * an edit.
-                  * A distinct key forces a remount, which retires the whole
-                  * class of bug rather than the one instance — the same reason
-                  * CR-04 chose a portal over deleting one `backdrop-blur`. */}
+                 * Both routes render the same component type in the same
+                 * position, so React reconciles them as ONE element and keeps
+                 * the instance — and its draft — mounted across the route
+                 * change. Editing an activity and then pressing «ساخت فعالیت»
+                 * therefore opened the composer fully populated with that
+                 * activity, exact address and coordinate included, and
+                 * submitting would have CREATED A DUPLICATE rather than saved
+                 * an edit.
+                 * A distinct key forces a remount, which retires the whole
+                 * class of bug rather than the one instance — the same reason
+                 * CR-04 chose a portal over deleting one `backdrop-blur`. */}
                 <Route path="/create" element={<ActivityComposerScreen key="create" />} />
                 <Route path="/activity/:id" element={<ActivityDetailScreen />} />
                 <Route path="/activity/:id/edit" element={<ActivityComposerScreen key="edit" />} />
@@ -82,10 +82,7 @@ export function AppRouter() {
                 <Route path="/requests" element={<RequestsInboxScreen />} />
                 <Route path="/requests/sent" element={<SentRequestsScreen />} />
                 <Route path="/notifications" element={<NotificationsScreen />} />
-                <Route
-                  path="/activity/:id/attendance"
-                  element={<AttendanceConfirmationScreen />}
-                />
+                <Route path="/activity/:id/attendance" element={<AttendanceConfirmationScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </AppShell>

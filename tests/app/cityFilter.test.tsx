@@ -105,7 +105,9 @@ describe('BR-U3-51 — the default, and what persists', () => {
      * where you say you live (the same separation US-21 requires for the
      * neighborhood filter). */
     const backend = createMockBackend();
-    const before = backend.store.read().users.find((x) => x.id === backend.store.read().currentUserId);
+    const before = backend.store
+      .read()
+      .users.find((x) => x.id === backend.store.read().currentUserId);
     const homeBefore = before?.homeCityId;
 
     const user = userEvent.setup();

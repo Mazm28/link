@@ -47,8 +47,8 @@ export function ActivityDetailScreen() {
   const when = formatJalali(new Date(data.startsAt), 'd MMMM yyyy — HH:mm');
   const place = locationLabel(data);
 
-  const mapCenter =
-    data.coordinate ?? data.approximateArea?.center ?? { lat: 35.6997, lng: 51.4015 };
+  const mapCenter = data.coordinate ??
+    data.approximateArea?.center ?? { lat: 35.6997, lng: 51.4015 };
 
   /* ⚠️ US-30 / BR-U4-30…35 — WHEN THE JOIN ACTION EXISTS AT ALL.
    *
@@ -62,10 +62,7 @@ export function ActivityDetailScreen() {
    * omission. */
   const isAuthor = data.author.id === viewerId;
   const canJoin =
-    viewerId !== null &&
-    !isAuthor &&
-    data.derivedState === 'upcoming' &&
-    !data.viewerHasRequested;
+    viewerId !== null && !isAuthor && data.derivedState === 'upcoming' && !data.viewerHasRequested;
 
   return (
     <article className="mx-auto flex w-full max-w-2xl flex-col gap-3 py-3">

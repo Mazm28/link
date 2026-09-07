@@ -45,7 +45,10 @@ export function Skeleton({ lines = 3, variant = 'text', 'data-testid': testId }:
         // attribute. NFR-S3 requires a CSP with no `unsafe-inline`, and inline
         // style attributes are exactly what `style-src-attr` blocks — one
         // decorative shimmer is not worth weakening the policy for.
-        <div key={i} className={`h-3 rounded bg-surface-sunken ${LINE_WIDTHS[i % LINE_WIDTHS.length]}`} />
+        <div
+          key={i}
+          className={`h-3 rounded bg-surface-sunken ${LINE_WIDTHS[i % LINE_WIDTHS.length]}`}
+        />
       ))}
     </div>
   );

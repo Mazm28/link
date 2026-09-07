@@ -64,7 +64,8 @@ export const fa = {
   'errors.nameInvalidLength': 'نام باید بین ۲ تا ۴۰ نویسه باشد.',
   'errors.bioTooLong': 'درباره‌ی من نباید بیشتر از ۲۰۰ نویسه باشد.',
   'errors.phoneInvalidFormat': 'شماره موبایل معتبر نیست. نمونه: ۰۹۱۲۳۴۵۶۷۸۹',
-  'errors.telegramInvalidFormat': 'شناسه تلگرام باید بین ۵ تا ۳۲ نویسه و شامل حروف انگلیسی، عدد و _ باشد.',
+  'errors.telegramInvalidFormat':
+    'شناسه تلگرام باید بین ۵ تا ۳۲ نویسه و شامل حروف انگلیسی، عدد و _ باشد.',
   'errors.interestsRequired': 'حداقل یک علاقه‌مندی انتخاب کن.',
   'errors.neighborhoodInvalid': 'محله‌ی انتخاب‌شده معتبر نیست.',
   'errors.dateInvalid': 'تاریخ معتبر نیست.',
@@ -186,7 +187,8 @@ export const fa = {
   'profile.bioCounter': '{{count}} از ۲۰۰',
   'profile.interestsLabel': 'علاقه‌مندی‌ها',
   'profile.interestsHint': 'حداقل یکی و حداکثر ده تا انتخاب کن.',
-  'profile.interestsHintOptional': 'اختیاری است. تا ده تا می‌توانی انتخاب کنی و کمک می‌کند فعالیت‌های مرتبط‌تری ببینی.',
+  'profile.interestsHintOptional':
+    'اختیاری است. تا ده تا می‌توانی انتخاب کنی و کمک می‌کند فعالیت‌های مرتبط‌تری ببینی.',
   'profile.cityLabel': 'شهر من (اختیاری)',
   'profile.cityHint': 'شهرت را خودت انتخاب می‌کنی؛ لینک هیچ‌وقت موقعیت مکانی دستگاهت را نمی‌خواند.',
   'profile.cityChoose': 'انتخاب شهر',
@@ -194,14 +196,17 @@ export const fa = {
   'profile.cityEmpty': 'شهری پیدا نشد.',
   'profile.cityNone': 'ترجیح می‌دهم نگویم',
   'profile.interestsCount': '{{selected}} از {{max}}',
-  'profile.interestsAtMax': 'بیشتر از ده علاقه‌مندی نمی‌شود انتخاب کرد. برای انتخاب مورد تازه، یکی را بردار.',
+  'profile.interestsAtMax':
+    'بیشتر از ده علاقه‌مندی نمی‌شود انتخاب کرد. برای انتخاب مورد تازه، یکی را بردار.',
   'profile.neighborhoodLabel': 'محله‌ی من',
-  'profile.neighborhoodHint': 'محله‌ات را خودت انتخاب می‌کنی؛ لینک هیچ‌وقت موقعیت مکانی دستگاهت را نمی‌خواند.',
+  'profile.neighborhoodHint':
+    'محله‌ات را خودت انتخاب می‌کنی؛ لینک هیچ‌وقت موقعیت مکانی دستگاهت را نمی‌خواند.',
   'profile.neighborhoodSearch': 'جست‌وجوی محله',
   'profile.neighborhoodEmpty': 'محله‌ای پیدا نشد.',
   'profile.neighborhoodChoose': 'انتخاب محله',
   'profile.telegramLabel': 'شناسه‌ی تلگرام (اختیاری)',
-  'profile.telegramPrivacy': 'این شناسه هیچ‌جا نمایش داده نمی‌شود. فقط اگر خودت هنگام ارسال درخواست انتخابش کنی، برای همان یک نفر فرستاده می‌شود.',
+  'profile.telegramPrivacy':
+    'این شناسه هیچ‌جا نمایش داده نمی‌شود. فقط اگر خودت هنگام ارسال درخواست انتخابش کنی، برای همان یک نفر فرستاده می‌شود.',
   'profile.setupSubmit': 'ادامه',
   'profile.editTitle': 'ویرایش پروفایل',
   'profile.editSave': 'ذخیره',
@@ -219,7 +224,8 @@ export const fa = {
   'delete.title': 'حذف حساب کاربری',
   'delete.lead': 'پیش از ادامه، بدان که با حذف حساب چه اتفاقی می‌افتد:',
   'delete.point1': 'اطلاعات شخصی‌ات پاک می‌شود: نام، تصویر، درباره‌ی من و راه‌های تماس.',
-  'delete.point2': 'فعالیت‌هایی که ساخته‌ای می‌مانند، اما بدون نام تو — تا سابقه‌ی کسانی که در آن‌ها شرکت کرده‌اند از بین نرود.',
+  'delete.point2':
+    'فعالیت‌هایی که ساخته‌ای می‌مانند، اما بدون نام تو — تا سابقه‌ی کسانی که در آن‌ها شرکت کرده‌اند از بین نرود.',
   'delete.point3': 'راه‌های تماسی که قبلاً با کسی به اشتراک گذاشته‌ای، باطل می‌شود.',
   'delete.point4': 'همین حالا از حساب خارج می‌شوی.',
   'delete.point5': 'این کار قابل بازگشت نیست.',
@@ -234,15 +240,20 @@ export const fa = {
 
   /* ----------------------------------------------------- safety guidance */
   'safety.title': 'راهنمای ایمنی',
-  'safety.lead': 'لینک تو را به آدم‌های تازه وصل می‌کند. چند نکته‌ی ساده هست که خوب است همیشه رعایت کنی.',
+  'safety.lead':
+    'لینک تو را به آدم‌های تازه وصل می‌کند. چند نکته‌ی ساده هست که خوب است همیشه رعایت کنی.',
   'safety.s1Title': 'جای شلوغ و عمومی قرار بگذار',
-  'safety.s1Body': 'کافه، پارک، جایی که آدم‌های دیگر هم هستند. برای دیدار اول، خانه‌ی کسی یا جای خلوت نه.',
+  'safety.s1Body':
+    'کافه، پارک، جایی که آدم‌های دیگر هم هستند. برای دیدار اول، خانه‌ی کسی یا جای خلوت نه.',
   'safety.s2Title': 'به یک نفر بگو کجا می‌روی',
-  'safety.s2Body': 'به یک دوست یا یکی از خانواده بگو با چه کسی، کجا و چه ساعتی قرار داری. می‌توانی همان فعالیت را برایش بفرستی.',
+  'safety.s2Body':
+    'به یک دوست یا یکی از خانواده بگو با چه کسی، کجا و چه ساعتی قرار داری. می‌توانی همان فعالیت را برایش بفرستی.',
   'safety.s3Title': 'می‌توانی گزارش بدهی یا مسدود کنی',
-  'safety.s3Body': 'هر کسی، هر وقت، به هر دلیلی. مسدود کردن فوری انجام می‌شود و آن شخص خبردار نمی‌شود.',
+  'safety.s3Body':
+    'هر کسی، هر وقت، به هر دلیلی. مسدود کردن فوری انجام می‌شود و آن شخص خبردار نمی‌شود.',
   'safety.s4Title': 'لینک هویت کسی را تأیید نمی‌کند',
-  'safety.s4Body': 'ما مدرک شناسایی نمی‌گیریم و سابقه‌ی کسی را بررسی نمی‌کنیم. هر پروفایل همان چیزی است که خود آن شخص نوشته. امتیازها از کسانی می‌آید که تأیید کرده‌اند همدیگر را دیده‌اند — کمک‌کننده است، اما مدرک نیست.',
+  'safety.s4Body':
+    'ما مدرک شناسایی نمی‌گیریم و سابقه‌ی کسی را بررسی نمی‌کنیم. هر پروفایل همان چیزی است که خود آن شخص نوشته. امتیازها از کسانی می‌آید که تأیید کرده‌اند همدیگر را دیده‌اند — کمک‌کننده است، اما مدرک نیست.',
   'safety.acknowledge': 'خواندم',
   'safety.readAnytime': 'هر وقت خواستی از منو می‌توانی دوباره این صفحه را ببینی.',
 
@@ -250,7 +261,8 @@ export const fa = {
   'errors.otpInvalid': 'کد وارد‌شده درست نیست.',
   'errors.otpResendTooSoon': 'کمی صبر کن و بعد دوباره امتحان کن.',
   'errors.interestsTooMany': 'حداکثر ده علاقه‌مندی می‌توانی انتخاب کنی.',
-  'errors.nameInvalidCharacters': 'نام باید دست‌کم یک حرف داشته باشد و نویسه‌های غیرمجاز نداشته باشد.',
+  'errors.nameInvalidCharacters':
+    'نام باید دست‌کم یک حرف داشته باشد و نویسه‌های غیرمجاز نداشته باشد.',
   'errors.profileIncomplete': 'اول پروفایلت را کامل کن.',
   'errors.confirmationMismatch': 'واژه‌ی تأیید درست نیست.',
   'errors.cityInvalid': 'شهر انتخاب‌شده معتبر نیست.',
@@ -270,12 +282,14 @@ export const fa = {
   'activity.timeLabel': 'ساعت',
   'activity.neighborhoodLabel': 'محله',
   'activity.capacityLabel': 'ظرفیت (اختیاری)',
-  'activity.capacityHint': 'فقط برای اطلاع است؛ لینک جای کسی را نگه نمی‌دارد و درخواستی را رد نمی‌کند.',
+  'activity.capacityHint':
+    'فقط برای اطلاع است؛ لینک جای کسی را نگه نمی‌دارد و درخواستی را رد نمی‌کند.',
   'activity.submit': 'انتشار',
   'activity.saveChanges': 'ذخیره‌ی تغییرات',
   'activity.cancelActivity': 'لغو فعالیت',
   'activity.cancelConfirmTitle': 'لغو این فعالیت؟',
-  'activity.cancelConfirmBody': 'همه‌ی کسانی که درخواست داده‌اند باخبر می‌شوند و فعالیت از فهرست‌ها برداشته می‌شود.',
+  'activity.cancelConfirmBody':
+    'همه‌ی کسانی که درخواست داده‌اند باخبر می‌شوند و فعالیت از فهرست‌ها برداشته می‌شود.',
   'activity.cancelConfirm': 'بله، لغو کن',
   'activity.cancelKeep': 'بی‌خیال',
   'activity.pastEditNotice': 'این فعالیت برگزار شده. فقط توضیحش را می‌توانی تغییر دهی.',
@@ -291,15 +305,18 @@ export const fa = {
   'activity.addressPlaceholder': 'خیابان، کوچه، پلاک',
   'activity.addressOnlyYou': 'این آدرس را فقط خودت می‌بینی.',
   'activity.pickOnMap': 'انتخاب روی نقشه',
-  'activity.pickOnMapHint': 'اختیاری است. اگر نقطه‌ای انتخاب نکنی، فعالیت روی محدوده‌ی محله نشان داده می‌شود.',
+  'activity.pickOnMapHint':
+    'اختیاری است. اگر نقطه‌ای انتخاب نکنی، فعالیت روی محدوده‌ی محله نشان داده می‌شود.',
   'activity.clearPoint': 'برداشتن نقطه',
 
   /* ---------------------------------------------------------------- feed */
   'feed.modeCombined': 'برای تو',
   'feed.modeNeighborhood': 'نزدیک من',
   'feed.modeInterest': 'علاقه‌مندی‌ها',
-  'feed.fallbackNeighborhood': 'برای مرتب‌سازی بر اساس نزدیکی، محله‌ات را انتخاب کن. فعلاً فهرست عمومی را می‌بینی.',
-  'feed.fallbackInterest': 'برای دیدن فعالیت‌های مرتبط، علاقه‌مندی‌هایت را انتخاب کن. فعلاً فهرست عمومی را می‌بینی.',
+  'feed.fallbackNeighborhood':
+    'برای مرتب‌سازی بر اساس نزدیکی، محله‌ات را انتخاب کن. فعلاً فهرست عمومی را می‌بینی.',
+  'feed.fallbackInterest':
+    'برای دیدن فعالیت‌های مرتبط، علاقه‌مندی‌هایت را انتخاب کن. فعلاً فهرست عمومی را می‌بینی.',
   'feed.fallbackAction': 'انتخاب کن',
   'feed.viewList': 'فهرست',
   'feed.viewMap': 'نقشه',
@@ -397,7 +414,8 @@ export const fa = {
   'join.sharePhone': 'شماره تلفن',
   'join.shareTelegram': 'آی‌دی تلگرام',
   'join.telegramPrompt': 'آی‌دی تلگرامت را وارد کن',
-  'join.telegramHint': 'این آی‌دی فقط برای همین درخواست استفاده می‌شود و در پروفایلت ذخیره نمی‌شود.',
+  'join.telegramHint':
+    'این آی‌دی فقط برای همین درخواست استفاده می‌شود و در پروفایلت ذخیره نمی‌شود.',
   'join.submit': 'ارسال درخواست',
   'join.cancel': 'انصراف',
   'join.sent': 'درخواستت فرستاده شد.',
@@ -408,17 +426,20 @@ export const fa = {
   /* ⚠️ VERBATIM — BR-U4-22. AFTER the warning, never before it. Leading with
    * "sharing is required" frames the screen as a demand and invites skimming
    * past the warning, which IS the weakening US-31 prohibits. */
-  'join.disclosureRequired': 'برای پیوستن به این فعالیت، اشتراک‌گذاری یکی از راه‌های تماس الزامی است.',
+  'join.disclosureRequired':
+    'برای پیوستن به این فعالیت، اشتراک‌گذاری یکی از راه‌های تماس الزامی است.',
 
   /* ------------------------------------------- join refusals (BR-U4-30…36) */
   'join.errorDuplicate': 'قبلاً برای این فعالیت درخواست فرستاده‌ای.',
-  'join.errorRerequestExhausted': 'یک بار درخواستت را پس گرفتی و دوباره فرستادی. امکان درخواست دوباره وجود ندارد.',
+  'join.errorRerequestExhausted':
+    'یک بار درخواستت را پس گرفتی و دوباره فرستادی. امکان درخواست دوباره وجود ندارد.',
   'join.errorNotUpcoming': 'این فعالیت دیگر پذیرای درخواست نیست.',
   'join.errorOwnActivity': 'این فعالیت خودت است.',
   'join.errorDailyLimit': 'امروز به سقف ۵ درخواست رسیده‌ای. فردا دوباره تلاش کن.',
   'join.errorNoPhone': 'شماره‌ای در پروفایلت ثبت نشده است.',
   'join.errorNoTelegram': 'آی‌دی تلگرامی ثبت نشده است. همین‌جا واردش کن.',
-  'join.errorTelegramFormat': 'آی‌دی تلگرام باید بین ۵ تا ۳۲ نویسه و شامل حروف انگلیسی، عدد یا زیرخط باشد.',
+  'join.errorTelegramFormat':
+    'آی‌دی تلگرام باید بین ۵ تا ۳۲ نویسه و شامل حروف انگلیسی، عدد یا زیرخط باشد.',
   'join.errorSharingRequired': 'برای فرستادن درخواست باید یک راه تماس انتخاب کنی.',
 
   /* ------------------------------------------------ sent requests (US-33) */
@@ -531,7 +552,6 @@ export const fa = {
   /* ⚠️ BR-U6-50/51 — renders AFTER both disclosure lines, outside the notice,
    * visually subordinate, and is NOT a dismiss control. See GuidanceLink. */
   'safety.guidanceLink': 'راهنمای ایمنی را بخوان',
-
 } as const;
 
 export type MessageKey = keyof typeof fa;

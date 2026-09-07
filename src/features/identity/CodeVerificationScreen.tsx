@@ -76,7 +76,10 @@ export function CodeVerificationScreen({
   }
 
   return (
-    <form onSubmit={(event) => void submit(event)} className="mx-auto flex w-full max-w-sm flex-col gap-5 py-8">
+    <form
+      onSubmit={(event) => void submit(event)}
+      className="mx-auto flex w-full max-w-sm flex-col gap-5 py-8"
+    >
       <header className="flex flex-col gap-1">
         <h1 className="text-xl font-semibold text-fg">{t('auth.verifyTitle')}</h1>
         <p className="text-sm text-fg-muted">{t('auth.verifySubtitle')}</p>
@@ -107,7 +110,11 @@ export function CodeVerificationScreen({
           {t('auth.resendIn', { seconds: toPersianDigits(secondsLeft) })}
         </p>
       ) : (
-        <Button variant="ghost" onClick={() => void resend()} data-testid="code-verification-resend">
+        <Button
+          variant="ghost"
+          onClick={() => void resend()}
+          data-testid="code-verification-resend"
+        >
           {t('auth.resend')}
         </Button>
       )}

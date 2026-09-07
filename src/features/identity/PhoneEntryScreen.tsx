@@ -53,7 +53,10 @@ export function PhoneEntryScreen({ onCodeSent }: PhoneEntryScreenProps) {
   }
 
   return (
-    <form onSubmit={(event) => void submit(event)} className="mx-auto flex w-full max-w-sm flex-col gap-5 py-8">
+    <form
+      onSubmit={(event) => void submit(event)}
+      className="mx-auto flex w-full max-w-sm flex-col gap-5 py-8"
+    >
       <header className="flex flex-col gap-1">
         <h1 className="text-xl font-semibold text-fg">{t('auth.phoneTitle')}</h1>
         <p className="text-sm text-fg-muted">{t('auth.phoneSubtitle')}</p>

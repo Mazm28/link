@@ -19,14 +19,14 @@ The work is coherent and well-commented. It is not junk. It is simply **outside 
 
 **Six changes, reconstructed from the diff:**
 
-| # | Change | Files | Concern |
-|---|---|---|---|
-| 1 | **City browsing now defaults to ALL cities.** `CityProvider` gained `ActiveCity = CityId \| null`; `null` means every city, and `composeCityId` supplies a concrete city for posting. `CitySwitcher` gained a «همه‌ی شهرها» chip. `FilterPanel` hides the neighborhood picker when no city is chosen. | `CityProvider`, `CitySwitcher`, `FilterPanel`, `FeedScreen`, `CategoryBrowseScreen`, `activityService` | **Reverses an approved decision.** BR-U3-50/51 and Units-Gen answer CQ2 `A` established city-first scoping. The in-code rationale is sound (Round-1 content is almost all Tehran, so scoping hid the product), but this is a requirements amendment, not an implementation detail. |
-| 2 | **Activity editing.** `/activity/:id/edit` reuses `ActivityComposerScreen`, prefilled from `getActivity`. | `AppRouter`, `ActivityComposerScreen` | New user-facing capability. `editActivity` existed in the service but had no caller. |
-| 3 | **Profile split into a hub.** `/profile` is now a summary + links; the edit form moved to `/profile/edit`. `MyActivitiesScreen` gained an `embedded` prop and is reused inside it. | `ProfileScreen` (new), `AppRouter`, `MyActivitiesScreen`, `ProfileEditScreen`, `identity/index.ts` | New screen, no tests. |
-| 4 | **`/requests` now renders a real `RequestsInboxScreen`** instead of `FoundationDemo`. | `connections/RequestsInboxScreen` (new), `connections/index.ts`, `AppRouter`, `fa.ts` | **This is US-40, a U4 story**, built during U3's open gate. Its own header comment states it "carries the one INV-3 exception" — `sharedContact` is the single place another person's contact detail is legitimately disclosed. **It has zero tests.** |
-| 5 | **Map sizing.** `ActivityMap` gained a `height` prop (default 420); the detail page passes 180 and tightened its spacing. | `ActivityMap`, `ActivityDetailScreen` | Cosmetic. |
-| 6 | **Signatures narrowed to `Pick<...>`.** `deriveState`, `editableFields`, `editActivity`, `cancelActivity` now take only the fields they read, so they accept an `ActivityView`. | `activityLifecycle`, `activityService` | Follows the `matchTier` precedent recorded at U3 completion. Low risk. |
+| #   | Change                                                                                                                                                                                                                                                                                                | Files                                                                                                  | Concern                                                                                                                                                                                                                                                                            |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **City browsing now defaults to ALL cities.** `CityProvider` gained `ActiveCity = CityId \| null`; `null` means every city, and `composeCityId` supplies a concrete city for posting. `CitySwitcher` gained a «همه‌ی شهرها» chip. `FilterPanel` hides the neighborhood picker when no city is chosen. | `CityProvider`, `CitySwitcher`, `FilterPanel`, `FeedScreen`, `CategoryBrowseScreen`, `activityService` | **Reverses an approved decision.** BR-U3-50/51 and Units-Gen answer CQ2 `A` established city-first scoping. The in-code rationale is sound (Round-1 content is almost all Tehran, so scoping hid the product), but this is a requirements amendment, not an implementation detail. |
+| 2   | **Activity editing.** `/activity/:id/edit` reuses `ActivityComposerScreen`, prefilled from `getActivity`.                                                                                                                                                                                             | `AppRouter`, `ActivityComposerScreen`                                                                  | New user-facing capability. `editActivity` existed in the service but had no caller.                                                                                                                                                                                               |
+| 3   | **Profile split into a hub.** `/profile` is now a summary + links; the edit form moved to `/profile/edit`. `MyActivitiesScreen` gained an `embedded` prop and is reused inside it.                                                                                                                    | `ProfileScreen` (new), `AppRouter`, `MyActivitiesScreen`, `ProfileEditScreen`, `identity/index.ts`     | New screen, no tests.                                                                                                                                                                                                                                                              |
+| 4   | **`/requests` now renders a real `RequestsInboxScreen`** instead of `FoundationDemo`.                                                                                                                                                                                                                 | `connections/RequestsInboxScreen` (new), `connections/index.ts`, `AppRouter`, `fa.ts`                  | **This is US-40, a U4 story**, built during U3's open gate. Its own header comment states it "carries the one INV-3 exception" — `sharedContact` is the single place another person's contact detail is legitimately disclosed. **It has zero tests.**                             |
+| 5   | **Map sizing.** `ActivityMap` gained a `height` prop (default 420); the detail page passes 180 and tightened its spacing.                                                                                                                                                                             | `ActivityMap`, `ActivityDetailScreen`                                                                  | Cosmetic.                                                                                                                                                                                                                                                                          |
+| 6   | **Signatures narrowed to `Pick<...>`.** `deriveState`, `editableFields`, `editActivity`, `cancelActivity` now take only the fields they read, so they accept an `ActivityView`.                                                                                                                       | `activityLifecycle`, `activityService`                                                                 | Follows the `matchTier` precedent recorded at U3 completion. Low risk.                                                                                                                                                                                                             |
 
 **Verification actually run just now**: typecheck clean; **228/228 tests pass**.
 
@@ -40,6 +40,7 @@ the approved design treats as load-bearing. The Property-Based Testing extension
 ---
 
 ## Question 1
+
 How should the undocumented work in the tree be treated?
 
 A) **Adopt it as CR-05.** I write `change-requests/cr-05-navigation-and-requests.md`
@@ -58,6 +59,7 @@ D) Other (please describe after [Answer]: tag below)
 [Answer]:
 
 ## Question 2
+
 The all-cities default (change 1) contradicts BR-U3-50/51 and Units-Gen answer CQ2 `A`, both
 approved. How should that be recorded?
 
@@ -76,6 +78,7 @@ D) Other (please describe after [Answer]: tag below)
 [Answer]:
 
 ## Question 3
+
 Tests for whatever is adopted — when?
 
 A) **Before U3 approval.** I add coverage for the adopted changes now (all-cities feed request,
@@ -89,6 +92,7 @@ C) Other (please describe after [Answer]: tag below)
 [Answer]:
 
 ## Question 4
+
 Two items from U3 completion are still open and need your call regardless of the above:
 
 - **DEV-U3-02** — `FilterPanel` lives in `app/routes/` but is rendered by

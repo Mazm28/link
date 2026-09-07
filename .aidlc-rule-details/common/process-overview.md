@@ -3,25 +3,30 @@
 **Purpose**: Technical reference for AI model and developers to understand complete workflow structure.
 
 **Note**: Similar content exists in welcome-message.md (user welcome message) and README.md (documentation). This duplication is INTENTIONAL - each file serves a different purpose:
+
 - **This file**: Detailed technical reference with Mermaid diagram for AI model context loading
 - **welcome-message.md**: User-facing welcome message with ASCII diagram
 - **README.md**: Human-readable documentation for repository
 
 ## The Three-Phase Lifecycle:
+
 • **INCEPTION PHASE**: Planning and architecture (Workspace Detection + conditional phases + Workflow Planning)
 • **CONSTRUCTION PHASE**: Design, implementation, build and test (per-unit design + Code Generation + Build & Test)
 • **OPERATIONS PHASE**: Placeholder for future deployment and monitoring workflows
 
 ## The Adaptive Workflow:
+
 • **Workspace Detection** (always) → **Reverse Engineering** (brownfield only) → **Requirements Analysis** (always, adaptive depth) → **Conditional Phases** (as needed) → **Workflow Planning** (always) → **Code Generation** (always, per-unit) → **Build and Test** (always)
 
 ## How It Works:
+
 • **AI analyzes** your request, workspace, and complexity to determine which stages are needed
 • **These stages always execute**: Workspace Detection, Requirements Analysis (adaptive depth), Workflow Planning, Code Generation (per-unit), Build and Test
 • **All other stages are conditional**: Reverse Engineering, User Stories, Application Design, Units Generation, per-unit design stages (Functional Design, NFR Requirements, NFR Design, Infrastructure Design)
 • **No fixed sequences**: Stages execute in the order that makes sense for your specific task
 
 ## Your Team's Role:
+
 • **Answer questions** in dedicated question files using [Answer]: tags with letter choices (A, B, C, D, E)
 • **Option E available**: Choose "Other" and describe your custom response if provided options don't match
 • **Work as a team** to review and approve each phase before proceeding
@@ -33,7 +38,7 @@
 ```mermaid
 flowchart TD
     Start(["User Request"])
-    
+
     subgraph INCEPTION["🔵 INCEPTION PHASE"]
         WD["Workspace Detection<br/><b>ALWAYS</b>"]
         RE["Reverse Engineering<br/><b>CONDITIONAL</b>"]
@@ -43,7 +48,7 @@ flowchart TD
         AppDesign["Application Design<br/><b>CONDITIONAL</b>"]
         UnitsG["Units Generation<br/><b>CONDITIONAL</b>"]
     end
-    
+
     subgraph CONSTRUCTION["🟢 CONSTRUCTION PHASE"]
         FD["Functional Design<br/><b>CONDITIONAL</b>"]
         NFRA["NFR Requirements<br/><b>CONDITIONAL</b>"]
@@ -52,20 +57,20 @@ flowchart TD
         CG["Code Generation<br/><b>ALWAYS</b>"]
         BT["Build and Test<br/><b>ALWAYS</b>"]
     end
-    
+
     subgraph OPERATIONS["🟡 OPERATIONS PHASE"]
         OPS["Operations<br/><b>PLACEHOLDER</b>"]
     end
-    
+
     Start --> WD
     WD -.-> RE
     WD --> RA
     RE --> RA
-    
+
     RA -.-> Stories
     RA --> WP
     Stories --> WP
-    
+
     WP -.-> AppDesign
     WP -.-> UnitsG
     AppDesign -.-> UnitsG
@@ -73,7 +78,7 @@ flowchart TD
     FD -.-> NFRA
     NFRA -.-> NFRD
     NFRD -.-> ID
-    
+
     WP --> CG
     FD --> CG
     NFRA --> CG
@@ -83,7 +88,7 @@ flowchart TD
     CG --> BT
     BT -.-> OPS
     BT --> End(["Complete"])
-    
+
     style WD fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
     style RA fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
     style WP fill:#4CAF50,stroke:#1B5E20,stroke-width:3px,color:#fff
@@ -105,13 +110,14 @@ flowchart TD
     style OPERATIONS fill:#FFF59D,stroke:#F57F17,stroke-width:3px, color:#000
     style Start fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000
     style End fill:#CE93D8,stroke:#6A1B9A,stroke-width:3px,color:#000
-    
+
     linkStyle default stroke:#333,stroke-width:2px
 ```
 
 **Stage Descriptions:**
 
 **🔵 INCEPTION PHASE** - Planning and Architecture
+
 - Workspace Detection: Analyze workspace state and project type (ALWAYS)
 - Reverse Engineering: Analyze existing codebase (CONDITIONAL - Brownfield only)
 - Requirements Analysis: Gather and validate requirements (ALWAYS - Adaptive depth)
@@ -121,6 +127,7 @@ flowchart TD
 - Units Generation: Decompose into units of work (CONDITIONAL)
 
 **🟢 CONSTRUCTION PHASE** - Design, Implementation, Build and Test
+
 - Functional Design: Detailed business logic design per unit (CONDITIONAL, per-unit)
 - NFR Requirements: Determine NFRs and select tech stack (CONDITIONAL, per-unit)
 - NFR Design: Incorporate NFR patterns and logical components (CONDITIONAL, per-unit)
@@ -129,9 +136,11 @@ flowchart TD
 - Build and Test: Build all units and execute comprehensive testing (ALWAYS)
 
 **🟡 OPERATIONS PHASE** - Placeholder
+
 - Operations: Placeholder for future deployment and monitoring workflows (PLACEHOLDER)
 
 **Key Principles:**
+
 - Phases execute only when they add value
 - Each phase independently evaluated
 - INCEPTION focuses on "what" and "why"

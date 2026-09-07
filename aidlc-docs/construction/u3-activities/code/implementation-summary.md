@@ -11,27 +11,27 @@
 
 ## 1. What Was Built
 
-| Area | Path | Contents |
-|---|---|---|
-| Domain | `core/domain/` | `GeoPoint`, `GeoArea`, `Activity.coordinate`, `Neighborhood.cityId`/`center`/`radiusMeters`, `City.center` |
-| Contracts | `core/repositories/` | **INV-5** in the invariant header, `ActivityFilters.cityId`, `ActivityDraft.coordinate` |
-| Rules | `core/rules/` | `geo`, `ranking`, `filters`, `activityValidation`, extended `activityLifecycle`, `projection` |
-| Reference | `core/reference/` | **77 neighborhood coordinates + radii**, 25 city centres |
-| Service | `core/services/activityService` | create, edit, cancel, feed with visible fallback |
-| Mock | `infra/mock/` | schema v3, real ranking in the pipeline, seeded coordinates |
-| Feature | `features/activities/` | 12 components |
-| Shell | `app/` | `CityProvider`, `CitySwitcher`, `FilterPanel` extended, real routes |
+| Area      | Path                            | Contents                                                                                                   |
+| --------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Domain    | `core/domain/`                  | `GeoPoint`, `GeoArea`, `Activity.coordinate`, `Neighborhood.cityId`/`center`/`radiusMeters`, `City.center` |
+| Contracts | `core/repositories/`            | **INV-5** in the invariant header, `ActivityFilters.cityId`, `ActivityDraft.coordinate`                    |
+| Rules     | `core/rules/`                   | `geo`, `ranking`, `filters`, `activityValidation`, extended `activityLifecycle`, `projection`              |
+| Reference | `core/reference/`               | **77 neighborhood coordinates + radii**, 25 city centres                                                   |
+| Service   | `core/services/activityService` | create, edit, cancel, feed with visible fallback                                                           |
+| Mock      | `infra/mock/`                   | schema v3, real ranking in the pipeline, seeded coordinates                                                |
+| Feature   | `features/activities/`          | 12 components                                                                                              |
+| Shell     | `app/`                          | `CityProvider`, `CitySwitcher`, `FilterPanel` extended, real routes                                        |
 
 ---
 
 ## 2. Verification
 
-| Gate | Result |
-|---|---|
-| `npm run typecheck` | Clean |
-| `npm run lint` | Clean — 0 errors, 0 warnings |
-| `npm test` | **228 passed / 228**, 30 files (was 208) |
-| `npm run build` | 128.6 KB gzipped total |
+| Gate                | Result                                   |
+| ------------------- | ---------------------------------------- |
+| `npm run typecheck` | Clean                                    |
+| `npm run lint`      | Clean — 0 errors, 0 warnings             |
+| `npm test`          | **228 passed / 228**, 30 files (was 208) |
+| `npm run build`     | 128.6 KB gzipped total                   |
 
 **Browser, 1280px and 375px**: feed at 19 activities (past excluded), city «تهران», three modes, filter rail on the right at desktop and a sheet on mobile, map with **9 pins and 8 areas**, no horizontal overflow, no console errors.
 
@@ -82,13 +82,13 @@ The host block rendered an avatar, a name and a star rating with nothing saying 
 
 ## 5. Decisions Recorded
 
-| Decision | Reason |
-|---|---|
-| Ranking lives **in the repository pipeline**, not injected by the caller | The pipeline is what Round 2's server must reproduce. If ranking were injected, the server could be given a different one and the oracle test would still pass |
-| A **missing term is dropped**, not scored zero | A zero drags everything down equally and still consumes its weight. After CR-02 made interests and location optional, missing inputs are the normal case — this is why the weighted form beat a tiered one |
-| `matchTier` takes `{title, description}`, not `Activity` | So it works on a view as well as a record. Widening it would force call sites holding a *view* to fabricate fields a view deliberately lacks — the sort of cast that erodes INV-2 one convenience at a time |
-| Coordinates are **hand-authored approximations** | Accepted openly, and safe **only because of INV-5**: the circle is the neighborhood, so an imprecise centre gives an imprecise circle, never a leak. Centring circles on each activity's point would have made the same imprecision a privacy defect |
-| Map is **provider-agnostic**, tile-free by default | Round 1 has no API key and no network. Satisfies NFR-R10 by construction rather than by promise |
+| Decision                                                                 | Reason                                                                                                                                                                                                                                               |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ranking lives **in the repository pipeline**, not injected by the caller | The pipeline is what Round 2's server must reproduce. If ranking were injected, the server could be given a different one and the oracle test would still pass                                                                                       |
+| A **missing term is dropped**, not scored zero                           | A zero drags everything down equally and still consumes its weight. After CR-02 made interests and location optional, missing inputs are the normal case — this is why the weighted form beat a tiered one                                           |
+| `matchTier` takes `{title, description}`, not `Activity`                 | So it works on a view as well as a record. Widening it would force call sites holding a _view_ to fabricate fields a view deliberately lacks — the sort of cast that erodes INV-2 one convenience at a time                                          |
+| Coordinates are **hand-authored approximations**                         | Accepted openly, and safe **only because of INV-5**: the circle is the neighborhood, so an imprecise centre gives an imprecise circle, never a leak. Centring circles on each activity's point would have made the same imprecision a privacy defect |
+| Map is **provider-agnostic**, tile-free by default                       | Round 1 has no API key and no network. Satisfies NFR-R10 by construction rather than by promise                                                                                                                                                      |
 
 ---
 
@@ -102,16 +102,16 @@ The host block rendered an avatar, a name and a star rating with nothing saying 
 
 ## 7. Carried Into Later Units
 
-| Item | Owner |
-|---|---|
-| `cancelActivity` defines the notification trigger; delivery is unimplemented | **U4** |
-| Attendance-pending flags on my-activities need real attendance data | **U4** |
-| Past activities reachable via my-activities and sent-requests — the only two routes left | **U4** |
-| **`RequestsInboxScreen` is a MOCK — rebuild it.** Its test file is the acceptance criteria | **U4** |
-| Venue publishing reuses the composer but skips the precision choice (FR-54) | **U5** |
-| `INV-1` blocking already filters the pipeline; U6 populates the block set | **U6** |
-| Neshan tiles — the component supports them, no key configured | Round 2 |
-| ~~**CR-01 change A**, the neighborhood filter~~ — **wired in `FilterPanel` under CR-05** | ✅ done |
+| Item                                                                                       | Owner   |
+| ------------------------------------------------------------------------------------------ | ------- |
+| `cancelActivity` defines the notification trigger; delivery is unimplemented               | **U4**  |
+| Attendance-pending flags on my-activities need real attendance data                        | **U4**  |
+| Past activities reachable via my-activities and sent-requests — the only two routes left   | **U4**  |
+| **`RequestsInboxScreen` is a MOCK — rebuild it.** Its test file is the acceptance criteria | **U4**  |
+| Venue publishing reuses the composer but skips the precision choice (FR-54)                | **U5**  |
+| `INV-1` blocking already filters the pipeline; U6 populates the block set                  | **U6**  |
+| Neshan tiles — the component supports them, no key configured                              | Round 2 |
+| ~~**CR-01 change A**, the neighborhood filter~~ — **wired in `FilterPanel` under CR-05**   | ✅ done |
 
 ---
 

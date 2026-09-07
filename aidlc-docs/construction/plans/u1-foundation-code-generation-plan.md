@@ -14,13 +14,13 @@
 
 ### 1.1 Stories Implemented
 
-| Story | Title | Acceptance verified by |
-|---|---|---|
+| Story     | Title                                          | Acceptance verified by                   |
+| --------- | ---------------------------------------------- | ---------------------------------------- |
 | **US-90** | Use the app entirely in Persian, right to left | Steps 4, 5, 7, 19, 20, 29–33, 35, 37, 39 |
-| **US-91** | See and pick dates in the Jalali calendar | Steps 15, 16, 32, 37 |
-| **US-92** | Search Persian text reliably | Steps 13, 14, 37 |
+| **US-91** | See and pick dates in the Jalali calendar      | Steps 15, 16, 32, 37                     |
+| **US-92** | Search Persian text reliably                   | Steps 13, 14, 37                         |
 
-*(Detailed per-criterion mapping in §4.)*
+_(Detailed per-criterion mapping in §4.)_
 
 U1 also lays the **types and interfaces that make U3/U4/U6's safety guarantees structural** — `ActivityView.exactAddress` optional, `ProfileView` with no contact fields, `SentRequestView` with no poster contact. Those are U1 decisions the later units depend on but do not themselves implement.
 
@@ -57,12 +57,12 @@ All 10 domain entities are **defined** in U1 (`core/domain`) and **seeded** in U
 
 ### 1.6 Boundaries Enforced Mechanically
 
-| Rule | Constraint | Enforced by |
-|---|---|---|
-| DEP-1 | `core/domain` imports nothing from the application | ESLint (Step 1.5) |
+| Rule      | Constraint                                                                  | Enforced by       |
+| --------- | --------------------------------------------------------------------------- | ----------------- |
+| DEP-1     | `core/domain` imports nothing from the application                          | ESLint (Step 1.5) |
 | **DEP-2** | `features/`, `app/`, `ui/` never import `infra/` — **except** `app/App.tsx` | ESLint (Step 1.5) |
-| DEP-3 | `ui/` imports nothing from `core/`, `features/`, `infra/` | ESLint (Step 1.5) |
-| DEP-4 | `core/services` imports repository interfaces only | ESLint (Step 1.5) |
+| DEP-3     | `ui/` imports nothing from `core/`, `features/`, `infra/`                   | ESLint (Step 1.5) |
+| DEP-4     | `core/services` imports repository interfaces only                          | ESLint (Step 1.5) |
 
 A `features/` → `infra/` import is precisely the mistake that silently breaks the Round-2 backend swap: it fails no test, is invisible in the running app, and surfaces only when the swap is attempted. It must fail the build.
 
@@ -72,16 +72,16 @@ A `features/` → `infra/` import is precisely the mistake that silently breaks 
 
 The generic step categories in `code-generation.md` Step 2 are resolved for this unit as follows. Categories marked N/A are recorded, not silently dropped.
 
-| Category | Status | Reason |
-|---|---|---|
-| Project Structure Setup | **EXECUTE** | Greenfield — Phase A |
-| Business Logic Generation + Testing + Summary | **EXECUTE** | `core/rules`, `core/domain` — Phases B, C |
-| **API Layer** Generation + Testing + Summary | **N/A** | No backend exists in Round 1 (CQ1 `A`). The repository interface *is* the API contract, generated in Phase D. Real HTTP API lands in Round 2. |
-| Repository Layer Generation + Testing + Summary | **EXECUTE** | Phases D, E |
-| Frontend Components Generation + Testing + Summary | **EXECUTE** | Phases F, G |
-| **Database Migration Scripts** | **N/A** | No database in Round 1. Persistence is versioned `localStorage`; schema mismatch resets to seed (BR-U1-40), no migration by design. |
-| Documentation Generation | **EXECUTE** | Phase H |
-| Deployment Artifacts Generation | **EXECUTE (scoped)** | Static build config + the NFR-S3 security-header configuration. No infrastructure-as-code — that is Round 2. |
+| Category                                           | Status               | Reason                                                                                                                                        |
+| -------------------------------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project Structure Setup                            | **EXECUTE**          | Greenfield — Phase A                                                                                                                          |
+| Business Logic Generation + Testing + Summary      | **EXECUTE**          | `core/rules`, `core/domain` — Phases B, C                                                                                                     |
+| **API Layer** Generation + Testing + Summary       | **N/A**              | No backend exists in Round 1 (CQ1 `A`). The repository interface _is_ the API contract, generated in Phase D. Real HTTP API lands in Round 2. |
+| Repository Layer Generation + Testing + Summary    | **EXECUTE**          | Phases D, E                                                                                                                                   |
+| Frontend Components Generation + Testing + Summary | **EXECUTE**          | Phases F, G                                                                                                                                   |
+| **Database Migration Scripts**                     | **N/A**              | No database in Round 1. Persistence is versioned `localStorage`; schema mismatch resets to seed (BR-U1-40), no migration by design.           |
+| Documentation Generation                           | **EXECUTE**          | Phase H                                                                                                                                       |
+| Deployment Artifacts Generation                    | **EXECUTE (scoped)** | Static build config + the NFR-S3 security-header configuration. No infrastructure-as-code — that is Round 2.                                  |
 
 ---
 
@@ -141,11 +141,11 @@ React 19 · TypeScript `strict: true` · Vite · Tailwind CSS v4 (logical proper
   - Round-3 admin methods (`listPendingApplications`, `listReports`, `setAccountStatus`, `unpublishActivity`) are **declared now** so no interface change is needed later.
 - [x] **Step 24** — `src/infra/mock/LocalStore.ts`: versioned `localStorage` store. `schemaVersion` mismatch → **reset to seed + dev-menu warning, no migration** (BR-U1-40, Q8 `A`). Atomic whole-store writes (BR-U1-43). **In-memory fallback when `localStorage` is unavailable** — private browsing or quota — with a non-blocking notice (BR-U1-44). Serialization must preserve **absent keys as absent**.
 - [x] **Step 25** — `tests/infra/LocalStore.pbt.test.ts` + `LocalStore.test.ts`: **P-U1-12** (round-trip deep-equality) and **P-U1-13** (a field absent before serialization is absent after — never `null`, never present-with-`undefined`). Domain generators for all 10 entities producing optional fields **both present and absent**.
-  - P-U1-13 matters more than it looks: INV-2 depends on `exactAddress` being an absent *key*. A JSON round-trip that turns absent → `undefined` → present would silently weaken the safety invariant while every other test still passed.
+  - P-U1-13 matters more than it looks: INV-2 depends on `exactAddress` being an absent _key_. A JSON round-trip that turns absent → `undefined` → present would silently weaken the safety invariant while every other test still passed.
 - [x] **Step 26** — `src/infra/mock/seed.ts`: the hand-authored seed dataset per `business-logic-model.md` §5 — 12 users, 3 approved venues, 25 activities (~15 upcoming / ~8 past / ~2 cancelled, roughly half each precision, one recurring), ~18 join requests **spanning all three share kinds including `none`**, ~12 attendance records **including some left unconfirmed**, ~10 ratings **only between confirmed attendees**, 1 block pair, 2 reports, ~8 notifications with unread ones.
   - **Realistic Persian only.** Real Tehran neighborhood names, plausible titles (`شب بازی رومیزی`, `پیاده‌روی صبحگاهی`). Lorem ipsum and generated filler are prohibited — they hide the text-length and RTL problems that only genuine Persian reveals (NFR-A3).
   - The seed must itself satisfy every domain invariant. A rating from an unconfirmed attendee would make U4's property test fail against data we authored ourselves — and it would be right to fail.
-  - Includes at least one activity with **no interest match and a distant neighborhood** for the default viewer, so U3's ranking has something to rank *down*.
+  - Includes at least one activity with **no interest match and a distant neighborhood** for the default viewer, so U3's ranking has something to rank _down_.
 - [x] **Step 27** — `src/infra/mock/repositories/`: the six mock implementations. Each read follows the **normative scoped-read pipeline** — load → filter blocks → filter query → rank → paginate → project (`business-logic-model.md` §2). Simulated latency 150–300 ms jittered, disabled in tests (BR-U1-45).
   - Pipeline order is **contractual**, not stylistic: blocking before ranking so suppressed content cannot occupy a page slot or influence order; projection last so ranking may use fields the viewer must never receive. Round 2's server must reproduce it exactly for PBT-05 oracle testing to hold.
   - U1 wires the pipeline and its projection seam. `filterVisibleActivities` (U6) and `projectActivity` (U3) are called through **stub rule modules that already enforce the conservative case** — the block filter is a no-op only because U1's seed has the block pair and U6 replaces the stub with the real index; the projection stub **already omits `exactAddress` for non-authors**, so INV-2 holds from the first commit rather than being switched on later.
@@ -177,28 +177,28 @@ React 19 · TypeScript `strict: true` · Vite · Tailwind CSS v4 (logical proper
 
 ## 4. Story Traceability
 
-| Story | Steps | Acceptance criteria covered |
-|---|---|---|
-| **US-90** Persian RTL | 4, 5, 7, 19, 20, 29–33, 35, 37, 39 | `dir="rtl"`/`lang="fa"` at root; logical properties enforced by lint; self-hosted Vazirmatn; no untranslated string (lint-enforced); `<bdi>` for mixed Persian/Latin |
-| **US-91** Jalali dates | 15, 16, 32, 37 | Jalali display with Persian month names and digits; Jalali picker; ISO-8601 UTC storage; round-trip property P-U1-04 |
-| **US-92** Persian search | 13, 14, 37 | ک/ك and ی/ي variants match both ways; ZWNJ-insensitive matching; idempotence property P-U1-01; identical normalization of index and query |
+| Story                    | Steps                              | Acceptance criteria covered                                                                                                                                          |
+| ------------------------ | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **US-90** Persian RTL    | 4, 5, 7, 19, 20, 29–33, 35, 37, 39 | `dir="rtl"`/`lang="fa"` at root; logical properties enforced by lint; self-hosted Vazirmatn; no untranslated string (lint-enforced); `<bdi>` for mixed Persian/Latin |
+| **US-91** Jalali dates   | 15, 16, 32, 37                     | Jalali display with Persian month names and digits; Jalali picker; ISO-8601 UTC storage; round-trip property P-U1-04                                                 |
+| **US-92** Persian search | 13, 14, 37                         | ک/ك and ی/ي variants match both ways; ZWNJ-insensitive matching; idempotence property P-U1-01; identical normalization of index and query                            |
 
 ---
 
 ## 5. PBT Coverage (PBT-01 … PBT-10 at Planning)
 
-| Rule | How this plan satisfies it |
-|---|---|
-| **PBT-01** | All 14 identified properties have a dedicated generation step. Components with no properties are covered by Step 39's example tests, per their recorded rationale. |
-| **PBT-02** Round-trip | Steps 16 (P-U1-04 Jalali), 25 (P-U1-12 store) |
-| **PBT-03** Invariant | Steps 14 (P-U1-02/03), 16 (P-U1-05/06), 18 (P-U1-07…11), 25 (P-U1-13) |
-| **PBT-04** Idempotency | Step 14 (P-U1-01) |
-| **PBT-05** Oracle / model | Step 28 (P-U1-14) — the mock as the Round-2 oracle |
-| **PBT-06** Stateful | Step 28 — random valid command sequences against a reference model |
-| **PBT-07** Generator quality | Steps 14, 16, 25 each specify a **domain-appropriate** generator with an explicit note on why primitive generators would test nothing |
-| **PBT-08** Shrinking + reproducibility | Step 6 — shrinking enabled and never disabled; seeds logged every run |
-| **PBT-09** Framework | fast-check, configured in Step 6 |
-| **PBT-10** Complementary | Every PBT step pairs a `.pbt.test.ts` with an example-based `.test.ts` |
+| Rule                                   | How this plan satisfies it                                                                                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **PBT-01**                             | All 14 identified properties have a dedicated generation step. Components with no properties are covered by Step 39's example tests, per their recorded rationale. |
+| **PBT-02** Round-trip                  | Steps 16 (P-U1-04 Jalali), 25 (P-U1-12 store)                                                                                                                      |
+| **PBT-03** Invariant                   | Steps 14 (P-U1-02/03), 16 (P-U1-05/06), 18 (P-U1-07…11), 25 (P-U1-13)                                                                                              |
+| **PBT-04** Idempotency                 | Step 14 (P-U1-01)                                                                                                                                                  |
+| **PBT-05** Oracle / model              | Step 28 (P-U1-14) — the mock as the Round-2 oracle                                                                                                                 |
+| **PBT-06** Stateful                    | Step 28 — random valid command sequences against a reference model                                                                                                 |
+| **PBT-07** Generator quality           | Steps 14, 16, 25 each specify a **domain-appropriate** generator with an explicit note on why primitive generators would test nothing                              |
+| **PBT-08** Shrinking + reproducibility | Step 6 — shrinking enabled and never disabled; seeds logged every run                                                                                              |
+| **PBT-09** Framework                   | fast-check, configured in Step 6                                                                                                                                   |
+| **PBT-10** Complementary               | Every PBT step pairs a `.pbt.test.ts` with an example-based `.test.ts`                                                                                             |
 
 **Property count**: 14 properties, 6 owned and executed by U1; 3 invariant contracts (INV-1/2/3) declared on the interfaces in Step 23 and property-tested by U3 and U6 when the surfaces they govern exist.
 
@@ -206,11 +206,11 @@ React 19 · TypeScript `strict: true` · Vite · Tailwind CSS v4 (logical proper
 
 ## 6. Extension Compliance — Code Generation (Planning)
 
-| Extension | Status | Evidence |
-|---|---|---|
-| **SECURITY** | **Compliant — 0 blocking findings** | **SECURITY-04**: five HTTP headers, Step 40. **SECURITY-05**: validation with code-point-based lengths, Steps 12/20/29. **SECURITY-09**: generic errors and no stack traces, Steps 12/31/35; no secrets in source. **SECURITY-10**: pinned lock file + CI vulnerability scan, Steps 1/40. **SECURITY-11**: safety logic isolated in `core/rules`; INV-1…INV-4 on the interfaces, Step 23. **SECURITY-15**: fail-closed `Result` taxonomy, Step 12. **NFR-S1**: contact fields structurally absent from `ProfileView`, Step 11. **NFR-S2**: `dangerouslySetInnerHTML` banned by lint, Step 5. |
-| **PBT** | **Compliant — 0 blocking findings** | Full mapping in §5; every rule PBT-01 … PBT-10 has a named step. |
-| **RESILIENCY** | **N/A — 0 blocking findings** | Rules govern deployed infrastructure; U1 deploys nothing. Step 24's in-memory fallback is graceful degradation in the spirit of RESILIENCY-10, though the rule targets server-side dependencies. Round-2 obligations remain recorded, not waived. |
+| Extension      | Status                              | Evidence                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| -------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **SECURITY**   | **Compliant — 0 blocking findings** | **SECURITY-04**: five HTTP headers, Step 40. **SECURITY-05**: validation with code-point-based lengths, Steps 12/20/29. **SECURITY-09**: generic errors and no stack traces, Steps 12/31/35; no secrets in source. **SECURITY-10**: pinned lock file + CI vulnerability scan, Steps 1/40. **SECURITY-11**: safety logic isolated in `core/rules`; INV-1…INV-4 on the interfaces, Step 23. **SECURITY-15**: fail-closed `Result` taxonomy, Step 12. **NFR-S1**: contact fields structurally absent from `ProfileView`, Step 11. **NFR-S2**: `dangerouslySetInnerHTML` banned by lint, Step 5. |
+| **PBT**        | **Compliant — 0 blocking findings** | Full mapping in §5; every rule PBT-01 … PBT-10 has a named step.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **RESILIENCY** | **N/A — 0 blocking findings**       | Rules govern deployed infrastructure; U1 deploys nothing. Step 24's in-memory fallback is graceful degradation in the spirit of RESILIENCY-10, though the rule targets server-side dependencies. Round-2 obligations remain recorded, not waived.                                                                                                                                                                                                                                                                                                                                            |
 
 ---
 
@@ -226,22 +226,22 @@ Per `unit-of-work.md`, U1 is complete when **all** of the following hold:
 6. **The repository-swap test (Step 38) passes with zero screen modifications** — the proof of NFR-A1.
 7. It is demoable in a browser in Persian (Q8 `A`).
 
-Tests are *written* in this stage and *executed* in the Build and Test stage, per `code-generation.md`'s completion criteria — but the swap test and the property tests are the ones that decide whether U1 actually met its purpose.
+Tests are _written_ in this stage and _executed_ in the Build and Test stage, per `code-generation.md`'s completion criteria — but the swap test and the property tests are the ones that decide whether U1 actually met its purpose.
 
 ---
 
 ## 8. Scope Summary
 
-| Measure | Count |
-|---|---|
-| Steps | 41 across 8 phases |
-| Application source files (approx.) | ~70 |
-| Test files (approx.) | ~25, of which 5 are property-based suites |
-| Stories completed | 3 (US-90, US-91, US-92) |
-| Domain entities defined | 10 (+2 reference taxonomies) |
-| Repository interfaces defined | 6 |
-| UI primitives built | 16 |
-| Properties implemented | 6 owned by U1, 3 invariant contracts declared for U3/U6 |
+| Measure                            | Count                                                   |
+| ---------------------------------- | ------------------------------------------------------- |
+| Steps                              | 41 across 8 phases                                      |
+| Application source files (approx.) | ~70                                                     |
+| Test files (approx.)               | ~25, of which 5 are property-based suites               |
+| Stories completed                  | 3 (US-90, US-91, US-92)                                 |
+| Domain entities defined            | 10 (+2 reference taxonomies)                            |
+| Repository interfaces defined      | 6                                                       |
+| UI primitives built                | 16                                                      |
+| Properties implemented             | 6 owned by U1, 3 invariant contracts declared for U3/U6 |
 
 **Highest-risk steps**: Step 23 (a wrong interface shape damages Round 2), Step 24/25 (absent-key preservation underpins INV-2), Step 27 (the pipeline order is a cross-round contract), Step 38 (the only real proof of NFR-A1).
 

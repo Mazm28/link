@@ -67,7 +67,7 @@ export function MapCanvas({
     const lngSpan = spanDegrees / Math.cos((center.lat * Math.PI) / 180);
 
     const toX = (lng: number) => ((lng - (center.lng - lngSpan)) / (2 * lngSpan)) * VIEW_W;
-    const toY = (lat: number) => (((center.lat + latSpan) - lat) / (2 * latSpan)) * VIEW_H;
+    const toY = (lat: number) => ((center.lat + latSpan - lat) / (2 * latSpan)) * VIEW_H;
     /* Metres to viewport units, via the latitude span. */
     const metersToUnits = (m: number) => (m / (latSpan * 111_320)) * (VIEW_H / 2);
 
@@ -132,7 +132,12 @@ export function MapCanvas({
             ))}
           </g>
         ) : (
-          <image href={tileUrl} width={VIEW_W} height={VIEW_H} preserveAspectRatio="xMidYMid slice" />
+          <image
+            href={tileUrl}
+            width={VIEW_W}
+            height={VIEW_H}
+            preserveAspectRatio="xMidYMid slice"
+          />
         )}
 
         {/* AREAS first, so a pin is never hidden under a circle. */}

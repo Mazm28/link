@@ -11,7 +11,12 @@ import { createSafetyRepository } from './repositories/safetyRepository';
 import { createNotificationRepository } from './repositories/notificationRepository';
 import { createReferenceRepository } from './repositories/referenceRepository';
 
-export { LocalStore, SCHEMA_VERSION, setMockLatencyEnabled, isMockLatencyEnabled } from './LocalStore';
+export {
+  LocalStore,
+  SCHEMA_VERSION,
+  setMockLatencyEnabled,
+  isMockLatencyEnabled,
+} from './LocalStore';
 export type { StoreShape, StoreDiagnostics } from './LocalStore';
 export { createSeed } from './seed';
 export { MockContext } from './repositories/context';

@@ -7,18 +7,18 @@
 
 ## 1. Component inventory
 
-| Component | Route / host | Story | Status |
-|---|---|---|---|
-| `JoinRequestSheet` | opens from `ActivityDetailScreen` | ⚠️ US-30, US-31 | **New** |
-| `ContactShareSelector` | inside the sheet | ⚠️ US-30 | **New** |
-| `DisclosureNotice` | inside the sheet | ⚠️ **US-31 — safety-critical** | **New** |
-| `RequestsInboxScreen` | `/requests` | US-40, US-41 | **Rebuilt from scratch** — §3 |
-| `SentRequestsScreen` | `/requests/sent` | US-33 | **New** |
-| `AttendanceConfirmationScreen` | `/activity/:id/attendance` | US-50 | **New** |
-| `RatingSheet` | opens from the activity | US-51, US-52 | **New** |
-| `NotificationsScreen` | `/notifications` | US-40, FR-70 | **New** |
-| `RatingSummaryBadge` | profile hub, activity detail, inbox | US-53 | **New** |
-| `RequestsNavBadge` | `AppShell` | US-40, FR-71 | **Extends existing** |
+| Component                      | Route / host                        | Story                          | Status                        |
+| ------------------------------ | ----------------------------------- | ------------------------------ | ----------------------------- |
+| `JoinRequestSheet`             | opens from `ActivityDetailScreen`   | ⚠️ US-30, US-31                | **New**                       |
+| `ContactShareSelector`         | inside the sheet                    | ⚠️ US-30                       | **New**                       |
+| `DisclosureNotice`             | inside the sheet                    | ⚠️ **US-31 — safety-critical** | **New**                       |
+| `RequestsInboxScreen`          | `/requests`                         | US-40, US-41                   | **Rebuilt from scratch** — §3 |
+| `SentRequestsScreen`           | `/requests/sent`                    | US-33                          | **New**                       |
+| `AttendanceConfirmationScreen` | `/activity/:id/attendance`          | US-50                          | **New**                       |
+| `RatingSheet`                  | opens from the activity             | US-51, US-52                   | **New**                       |
+| `NotificationsScreen`          | `/notifications`                    | US-40, FR-70                   | **New**                       |
+| `RatingSummaryBadge`           | profile hub, activity detail, inbox | US-53                          | **New**                       |
+| `RequestsNavBadge`             | `AppShell`                          | US-40, FR-71                   | **Extends existing**          |
 
 ---
 
@@ -57,29 +57,29 @@ The screen where a real person hands their phone number to a stranger. Every rul
 
 ### 2.1 Binding constraints
 
-| Rule | Constraint |
-|---|---|
-| BR-U4-12 | **Neither option is pre-selected.** Send is disabled until one is chosen |
-| BR-U4-20 | Disclosure text **verbatim**. Not paraphrased, not shortened, not localised again |
+| Rule     | Constraint                                                                                                            |
+| -------- | --------------------------------------------------------------------------------------------------------------------- |
+| BR-U4-12 | **Neither option is pre-selected.** Send is disabled until one is chosen                                              |
+| BR-U4-20 | Disclosure text **verbatim**. Not paraphrased, not shortened, not localised again                                     |
 | BR-U4-21 | **Visible without scrolling, adjacent to send, never collapsed** behind a link, tooltip or accordion. Not dismissible |
-| BR-U4-22 | The **warning comes first**; the "required" line follows it. ⚠️ Reversing this is the weakening US-31 prohibits |
-| BR-U4-13 | Selecting Telegram with none stored opens an **inline field** — it never falls back to the phone number |
-| BR-U4-14 | That Telegram ID is **not** saved to the profile |
-| Q2 `B` | A visible **انصراف** — the choice is "share or do not join", stated, not a dead end |
+| BR-U4-22 | The **warning comes first**; the "required" line follows it. ⚠️ Reversing this is the weakening US-31 prohibits       |
+| BR-U4-13 | Selecting Telegram with none stored opens an **inline field** — it never falls back to the phone number               |
+| BR-U4-14 | That Telegram ID is **not** saved to the profile                                                                      |
+| Q2 `B`   | A visible **انصراف** — the choice is "share or do not join", stated, not a dead end                                   |
 
-> **⚠️ Do not "improve" this component.** US-31 is the primary mitigation for AR-02, and CR-07 made it *more* load-bearing by retiring the share-nothing alternative. `stories.md`: if this disclosure is weakened, watered down, or made dismissible, **the risk acceptance no longer holds and must be revisited.** A future session tidying this sheet — collapsing the notice, moving it below the fold, pre-selecting an option "for convenience" — is changing a risk decision, not a layout.
+> **⚠️ Do not "improve" this component.** US-31 is the primary mitigation for AR-02, and CR-07 made it _more_ load-bearing by retiring the share-nothing alternative. `stories.md`: if this disclosure is weakened, watered down, or made dismissible, **the risk acceptance no longer holds and must be revisited.** A future session tidying this sheet — collapsing the notice, moving it below the fold, pre-selecting an option "for convenience" — is changing a risk decision, not a layout.
 
 ### 2.2 States
 
-| State | Renders |
-|---|---|
-| Already requested | Existing request state, no form (BR-U4-32) |
-| Withdrawn once | Form, with a note that this is the final attempt (BR-U4-33) |
-| Withdrawn twice | Refusal — permanently closed for that activity |
-| Blocked either way | Join action absent entirely (BR-U4-31) |
-| Own activity | Join action absent (BR-U4-35) |
-| Past / unpublished | Join action absent (BR-U4-30) |
-| Quota reached | Refusal naming the limit and when it resets (BR-U4-36) |
+| State              | Renders                                                     |
+| ------------------ | ----------------------------------------------------------- |
+| Already requested  | Existing request state, no form (BR-U4-32)                  |
+| Withdrawn once     | Form, with a note that this is the final attempt (BR-U4-33) |
+| Withdrawn twice    | Refusal — permanently closed for that activity              |
+| Blocked either way | Join action absent entirely (BR-U4-31)                      |
+| Own activity       | Join action absent (BR-U4-35)                               |
+| Past / unpublished | Join action absent (BR-U4-30)                               |
+| Quota reached      | Refusal naming the limit and when it resets (BR-U4-36)      |
 
 ---
 
@@ -130,7 +130,7 @@ Same route, second tab. Shows the activity, its date, **what I chose to share**,
 
 US-33's notes are explicit: a withdrawal UI implying the data is recalled would be false, and **worse than not offering withdrawal at all.**
 
-⚠️ **`SentRequestView` has no field for the poster's contact** — FR-35 holds by type (BR-U4-80). `sharedContact` here is the requester's **own** detail, shown back so they can see what they disclosed. *(A test asserting the field's absence was written during CR-05, failed, and was itself wrong — the field is deliberate. Recorded so it is not "fixed" again.)*
+⚠️ **`SentRequestView` has no field for the poster's contact** — FR-35 holds by type (BR-U4-80). `sharedContact` here is the requester's **own** detail, shown back so they can see what they disclosed. _(A test asserting the field's absence was written during CR-05, failed, and was itself wrong — the field is deliberate. Recorded so it is not "fixed" again.)_
 
 ---
 
@@ -155,12 +155,12 @@ Lists **every** requester including withdrawn and legacy-`'none'` ones (BR-U4-52
 
 **Refusals carry their reason** (BR-U4-61), and the copy differs per reason — `not_confirmed_attendee` reads differently depending on whether an `Attendance` row exists at all:
 
-| Reason | Message |
-|---|---|
-| `activity_not_past` | امتیازدهی پس از برگزاری فعالیت ممکن است. |
-| no attendance row | میزبان هنوز حضور را تأیید نکرده است. |
-| `attended: false` | حضور تو در این فعالیت تأیید نشده است. |
-| `already_rated` | قبلاً به این شخص برای این فعالیت امتیاز داده‌ای. |
+| Reason              | Message                                          |
+| ------------------- | ------------------------------------------------ |
+| `activity_not_past` | امتیازدهی پس از برگزاری فعالیت ممکن است.         |
+| no attendance row   | میزبان هنوز حضور را تأیید نکرده است.             |
+| `attended: false`   | حضور تو در این فعالیت تأیید نشده است.            |
+| `already_rated`     | قبلاً به این شخص برای این فعالیت امتیاز داده‌ای. |
 
 ⚠️ The comment field must carry **no hint that it will be published**, because it will not be. Placeholder copy implying an audience would be a lie about where the text goes.
 
@@ -192,14 +192,14 @@ Rendered on the profile hub, the activity detail host block, and each inbox row.
 
 ## 9. Data flow
 
-| Component | Reads | Writes |
-|---|---|---|
-| `JoinRequestSheet` | `getActivity`, `getCurrentUser`, quota | `sendJoinRequest` |
-| `RequestsInboxScreen` | `listIncomingRequests` ⚠️ **the INV-3 gate** | `markRead` |
-| `SentRequestsScreen` | `listSentRequests` | `withdrawRequest` |
-| `AttendanceConfirmationScreen` | `listRequestsForActivity`, `listAttendance` | `confirmAttendance` |
-| `RatingSheet` | `listRateableParticipants`, `canRate` | `submitRating` |
-| `NotificationsScreen` | `list`, `getUnreadCount` | `markRead` |
-| `RatingSummaryBadge` | `getRatingSummary` | — |
+| Component                      | Reads                                        | Writes              |
+| ------------------------------ | -------------------------------------------- | ------------------- |
+| `JoinRequestSheet`             | `getActivity`, `getCurrentUser`, quota       | `sendJoinRequest`   |
+| `RequestsInboxScreen`          | `listIncomingRequests` ⚠️ **the INV-3 gate** | `markRead`          |
+| `SentRequestsScreen`           | `listSentRequests`                           | `withdrawRequest`   |
+| `AttendanceConfirmationScreen` | `listRequestsForActivity`, `listAttendance`  | `confirmAttendance` |
+| `RatingSheet`                  | `listRateableParticipants`, `canRate`        | `submitRating`      |
+| `NotificationsScreen`          | `list`, `getUnreadCount`                     | `markRead`          |
+| `RatingSummaryBadge`           | `getRatingSummary`                           | —                   |
 
 Every component fetches through the repository. **None reaches for a contact detail by any route other than `listIncomingRequests`** (BR-U4-91).

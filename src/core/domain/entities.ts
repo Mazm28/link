@@ -331,12 +331,7 @@ export interface Rating {
  * ⚠️ `other` is kept on purpose. A taxonomy with no escape hatch makes people
  * pick the nearest wrong box, which corrupts the categories that matter.
  */
-export type ReportReason =
-  | 'harassment'
-  | 'harvesting'
-  | 'fake_activity'
-  | 'spam'
-  | 'other';
+export type ReportReason = 'harassment' | 'harvesting' | 'fake_activity' | 'spam' | 'other';
 
 export interface Report {
   id: ReportId;

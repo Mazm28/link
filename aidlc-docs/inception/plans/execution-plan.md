@@ -10,31 +10,33 @@
 ## 1. Detailed Analysis Summary
 
 ### 1.1 Transformation Scope
+
 **N/A — greenfield project.** No existing codebase, no packages to transform, no deployment model to migrate. Workspace Detection confirmed an empty workspace and Reverse Engineering was correctly skipped.
 
 ### 1.2 Change Impact Assessment
 
-| Impact area | Applies | Detail |
-|---|---|---|
-| **User-facing changes** | **Yes — total** | The entire Round-1 deliverable is user-facing: 35 Round-1 stories across a consumer web app and a venue dashboard, in Persian RTL. There is no internal-only component. |
-| **Structural changes** | **Yes — foundational** | Establishes the whole architecture: repository abstraction layer (NFR-A1), shared domain types (NFR-A2), pure business-logic modules (NFR-A4), routing, and role gating. Every later round builds on choices made here. |
-| **Data model changes** | **Yes — defines the model** | Seven core entities: User, Activity, JoinRequest, Attendance, Rating, Report, Venue, plus Neighborhood reference data. Two forward-compatibility obligations carried from stories: the inert promotion field (FR-56) and the `suspended`/`unpublished` states needed by Round 3. |
-| **API changes** | **No in Round 1** | No backend exists. However, the repository interface defined in Round 1 **is the de facto API contract** — Round 2 implements against it. Getting it wrong is the main way Round 1 could damage Round 2. |
-| **NFR impact** | **Yes — significant** | Localization (RTL, Jalali, Persian normalization) touches every screen. Performance targets assume constrained Iranian mobile networks. Security applies to contact-detail handling, content escaping, and headers. |
+| Impact area             | Applies                     | Detail                                                                                                                                                                                                                                                                           |
+| ----------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **User-facing changes** | **Yes — total**             | The entire Round-1 deliverable is user-facing: 35 Round-1 stories across a consumer web app and a venue dashboard, in Persian RTL. There is no internal-only component.                                                                                                          |
+| **Structural changes**  | **Yes — foundational**      | Establishes the whole architecture: repository abstraction layer (NFR-A1), shared domain types (NFR-A2), pure business-logic modules (NFR-A4), routing, and role gating. Every later round builds on choices made here.                                                          |
+| **Data model changes**  | **Yes — defines the model** | Seven core entities: User, Activity, JoinRequest, Attendance, Rating, Report, Venue, plus Neighborhood reference data. Two forward-compatibility obligations carried from stories: the inert promotion field (FR-56) and the `suspended`/`unpublished` states needed by Round 3. |
+| **API changes**         | **No in Round 1**           | No backend exists. However, the repository interface defined in Round 1 **is the de facto API contract** — Round 2 implements against it. Getting it wrong is the main way Round 1 could damage Round 2.                                                                         |
+| **NFR impact**          | **Yes — significant**       | Localization (RTL, Jalali, Persian normalization) touches every screen. Performance targets assume constrained Iranian mobile networks. Security applies to contact-detail handling, content escaping, and headers.                                                              |
 
 ### 1.3 Component Relationships
-**N/A — greenfield.** No existing components. The dependency structure between the *new* units is defined in §4.
+
+**N/A — greenfield.** No existing components. The dependency structure between the _new_ units is defined in §4.
 
 ### 1.4 Risk Assessment
 
 Risk splits into two genuinely different profiles, so recording a single level would be misleading:
 
-| Dimension | Level | Reasoning |
-|---|---|---|
-| **Engineering / delivery risk** | **Medium** | Greenfield, no production system, no users, no data to lose. Nothing to break. Complexity comes from breadth and from RTL/Jalali correctness, not from integration danger. |
-| **Rollback complexity** | **Easy** | Nothing deployed in Round 1. Version-pinned rollback (NFR-R6) applies from Round 2. |
-| **Testing complexity** | **Moderate to Complex** | Property-based testing is a blocking requirement (PBT extension), and seven invariants must hold universally rather than for sampled cases. RTL and bidirectional text add real test surface. |
-| **Product / safety risk** | **High** | This is the honest number. The product arranges in-person meetings between strangers, discloses contact details with no approval gate (AR-02), and has no age restriction (AR-01). Four safety-critical stories (US-11, US-31, US-52, US-72) must be correct, not approximately correct. A defect here harms a person rather than degrading a feature. |
+| Dimension                       | Level                   | Reasoning                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Engineering / delivery risk** | **Medium**              | Greenfield, no production system, no users, no data to lose. Nothing to break. Complexity comes from breadth and from RTL/Jalali correctness, not from integration danger.                                                                                                                                                                             |
+| **Rollback complexity**         | **Easy**                | Nothing deployed in Round 1. Version-pinned rollback (NFR-R6) applies from Round 2.                                                                                                                                                                                                                                                                    |
+| **Testing complexity**          | **Moderate to Complex** | Property-based testing is a blocking requirement (PBT extension), and seven invariants must hold universally rather than for sampled cases. RTL and bidirectional text add real test surface.                                                                                                                                                          |
+| **Product / safety risk**       | **High**                | This is the honest number. The product arranges in-person meetings between strangers, discloses contact details with no approval gate (AR-02), and has no age restriction (AR-01). Four safety-critical stories (US-11, US-31, US-52, US-72) must be correct, not approximately correct. A defect here harms a person rather than degrading a feature. |
 
 **Consequence for planning**: the plan below deliberately keeps Functional Design in scope for every unit that touches a safety invariant, even where the code volume is small.
 
@@ -178,14 +180,14 @@ OPERATIONS PHASE
 
 Indicative only — Units Generation will confirm, split, or merge these.
 
-| Unit | Name | Stories | Depends on | Why it is a unit |
-|---|---|---|---|---|
-| **U1** | Foundation and Localization | US-90, US-91, US-92 | — | Domain types, repository interface plus mock, seeded Tehran neighborhood data, RTL layout system, self-hosted Vazirmatn, Jalali date utilities, Persian text normalization, routing shell, design primitives. **Everything else depends on this.** Also where two PBT properties live (Jalali round-trip, normalization idempotence). |
-| **U2** | Identity and Profile | US-01, US-02, US-03, US-04, US-73 | U1 | Authentication shell (mocked OTP), profile setup and editing, neighborhood and interest selection, account deletion, safety guidance screen. Establishes the current-user context every other unit reads. |
-| **U3** | Activities and Discovery | US-10, US-11, US-12, US-13, US-20, US-21, US-22, US-23, US-24, US-25 | U1, U2 | Activity creation and lifecycle, **per-activity location precision (US-11, safety-critical)**, feed with three ranking modes, search, filters, categories, detail view. Contains the ranking module and two PBT invariants. |
-| **U4** | Connections | US-30, US-31, US-32, US-33, US-40, US-41, US-50, US-51, US-52, US-53 | U1, U2, U3 | The full lifecycle from join request through contact disclosure, requests inbox, attendance confirmation, to ratings. Grouped as one unit because it is one continuous state machine — splitting it would scatter a single lifecycle. Contains **US-31 and US-52, both safety-critical**. |
-| **U5** | Venue Dashboard | US-60, US-61, US-62, US-63, US-64 | U1, U2, U3 | Venue registration, approval-status states, role-gated dashboard, venue activity publishing with mandatory exact address, recurring activities, metrics. Separated because it is a distinct persona with a distinct surface. |
-| **U6** | Safety and Trust | US-70, US-71, US-72 | U1, U2, U3, U4 | Reporting users and activities with full-context capture for Round 3, and **bidirectional blocking (US-72, safety-critical)**. Last because blocking must suppress visibility across every surface the earlier units created — it can only be verified once they exist. |
+| Unit   | Name                        | Stories                                                              | Depends on     | Why it is a unit                                                                                                                                                                                                                                                                                                                      |
+| ------ | --------------------------- | -------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **U1** | Foundation and Localization | US-90, US-91, US-92                                                  | —              | Domain types, repository interface plus mock, seeded Tehran neighborhood data, RTL layout system, self-hosted Vazirmatn, Jalali date utilities, Persian text normalization, routing shell, design primitives. **Everything else depends on this.** Also where two PBT properties live (Jalali round-trip, normalization idempotence). |
+| **U2** | Identity and Profile        | US-01, US-02, US-03, US-04, US-73                                    | U1             | Authentication shell (mocked OTP), profile setup and editing, neighborhood and interest selection, account deletion, safety guidance screen. Establishes the current-user context every other unit reads.                                                                                                                             |
+| **U3** | Activities and Discovery    | US-10, US-11, US-12, US-13, US-20, US-21, US-22, US-23, US-24, US-25 | U1, U2         | Activity creation and lifecycle, **per-activity location precision (US-11, safety-critical)**, feed with three ranking modes, search, filters, categories, detail view. Contains the ranking module and two PBT invariants.                                                                                                           |
+| **U4** | Connections                 | US-30, US-31, US-32, US-33, US-40, US-41, US-50, US-51, US-52, US-53 | U1, U2, U3     | The full lifecycle from join request through contact disclosure, requests inbox, attendance confirmation, to ratings. Grouped as one unit because it is one continuous state machine — splitting it would scatter a single lifecycle. Contains **US-31 and US-52, both safety-critical**.                                             |
+| **U5** | Venue Dashboard             | US-60, US-61, US-62, US-63, US-64                                    | U1, U2, U3     | Venue registration, approval-status states, role-gated dashboard, venue activity publishing with mandatory exact address, recurring activities, metrics. Separated because it is a distinct persona with a distinct surface.                                                                                                          |
+| **U6** | Safety and Trust            | US-70, US-71, US-72                                                  | U1, U2, U3, U4 | Reporting users and activities with full-context capture for Round 3, and **bidirectional blocking (US-72, safety-critical)**. Last because blocking must suppress visibility across every surface the earlier units created — it can only be verified once they exist.                                                               |
 
 **Build sequence**: U1 → U2 → U3 → { U4, U5 } → U6. U4 and U5 both depend only on U1–U3 and could proceed in either order or in parallel.
 
@@ -194,6 +196,7 @@ Indicative only — Units Generation will confirm, split, or merge these.
 ---
 
 ## 5. Package Change Sequence
+
 **N/A — greenfield.** No existing packages. Unit sequencing is in §4.
 
 ---
@@ -202,14 +205,14 @@ Indicative only — Units Generation will confirm, split, or merge these.
 
 **Stage count**, which is what this plan can honestly measure:
 
-| Remaining stage | Count |
-|---|---|
-| Application Design | 1 |
-| Units Generation | 1 |
-| Functional Design (per unit, ~6 units) | ~6 |
-| Code Generation (per unit, ~6 units) | ~6 |
-| Build and Test | 1 |
-| **Total remaining stages** | **~15** |
+| Remaining stage                        | Count   |
+| -------------------------------------- | ------- |
+| Application Design                     | 1       |
+| Units Generation                       | 1       |
+| Functional Design (per unit, ~6 units) | ~6      |
+| Code Generation (per unit, ~6 units)   | ~6      |
+| Build and Test                         | 1       |
+| **Total remaining stages**             | **~15** |
 
 Each stage ends in an approval gate, so expect roughly 15 review points before Round 1 is complete.
 
@@ -222,9 +225,11 @@ Each stage ends in an approval gate, so expect roughly 15 review points before R
 ## 7. Success Criteria
 
 ### Primary Goal
+
 A working, clickable Persian RTL responsive web application for Tehran, covering activity discovery, posting, consent-based contact exchange, attendance confirmation, ratings, a venue dashboard, and safety tooling — built on an architecture that accepts a real backend in Round 2 without rewriting screens.
 
 ### Key Deliverables
+
 1. React + TypeScript web application, mobile-first, fully RTL, Persian only
 2. Domain type definitions shared across the mock layer, UI, and future API client
 3. Repository interface with a mock implementation persisting to localStorage
@@ -235,15 +240,16 @@ A working, clickable Persian RTL responsive web application for Tehran, covering
 8. Build, test, and CI instructions for GitHub Actions
 
 ### Quality Gates
-| Gate | Criterion |
-|---|---|
-| **Architecture** | Swapping the mock repository for a stub HTTP repository requires **no change to any screen component**. This is the test that proves NFR-A1 rather than asserting it. |
-| **Safety invariants** | The four safety-critical stories hold universally under property-based testing: exact address never leaks for approximate-precision activities; the contact disclosure is present, unavoidable, and correctly worded; only confirmed attendees and the poster can rate; blocked users appear in no feed, search, or listing in either direction. |
-| **Localization** | No untranslated English string is visible to users; layout is correct RTL throughout; all dates are Jalali; Jalali↔Gregorian round-trips exactly; Persian character variants and ZWNJ normalize correctly in search. |
-| **Requirement coverage** | Every Round-1 requirement traces to generated code or an explicitly recorded deferral. |
-| **Extension compliance** | Zero blocking SECURITY, RESILIENCY, or PBT findings at each stage gate. |
-| **Forward compatibility** | The inert promotion field (FR-56) exists; `suspended` and `unpublished` states exist; report records store full context — so Rounds 2 and 3 need no data migration. |
-| **Tests** | Property-based and example-based tests both present for business-critical paths (PBT-10), passing in CI with seeds logged (PBT-08). |
+
+| Gate                      | Criterion                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Architecture**          | Swapping the mock repository for a stub HTTP repository requires **no change to any screen component**. This is the test that proves NFR-A1 rather than asserting it.                                                                                                                                                                            |
+| **Safety invariants**     | The four safety-critical stories hold universally under property-based testing: exact address never leaks for approximate-precision activities; the contact disclosure is present, unavoidable, and correctly worded; only confirmed attendees and the poster can rate; blocked users appear in no feed, search, or listing in either direction. |
+| **Localization**          | No untranslated English string is visible to users; layout is correct RTL throughout; all dates are Jalali; Jalali↔Gregorian round-trips exactly; Persian character variants and ZWNJ normalize correctly in search.                                                                                                                            |
+| **Requirement coverage**  | Every Round-1 requirement traces to generated code or an explicitly recorded deferral.                                                                                                                                                                                                                                                           |
+| **Extension compliance**  | Zero blocking SECURITY, RESILIENCY, or PBT findings at each stage gate.                                                                                                                                                                                                                                                                          |
+| **Forward compatibility** | The inert promotion field (FR-56) exists; `suspended` and `unpublished` states exist; report records store full context — so Rounds 2 and 3 need no data migration.                                                                                                                                                                              |
+| **Tests**                 | Property-based and example-based tests both present for business-critical paths (PBT-10), passing in CI with seeds logged (PBT-08).                                                                                                                                                                                                              |
 
 ---
 
@@ -251,20 +257,20 @@ A working, clickable Persian RTL responsive web application for Tehran, covering
 
 Recorded so nothing skipped here is silently lost.
 
-| Deferred item | Deferred from | Due at | Why |
-|---|---|---|---|
-| NFR Requirements stage | Round 1 Construction | **Round 2** | NFRs and tech stack fully settled at Requirements; real per-unit NFR decisions arrive with the backend |
-| NFR Design stage | Round 1 Construction | **Round 2** | Server-side NFR patterns need server-side components |
-| **RESILIENCY-14** chaos/DR testing question | NFR Design | **Round 2 NFR Design** | Nothing deployed in Round 1 whose failover could be tested. **Deferred, not waived.** |
-| Infrastructure Design stage | Round 1 Construction | **Round 2** | No compute, database, or network in a static frontend |
-| SECURITY-01, -02, -06, -07, -14 | Requirements (marked N/A → captured) | **Round 2 Infrastructure Design** | Encryption at rest, intermediary logging, IAM, network config, alerting all require deployed infrastructure |
-| RESILIENCY-05, -06, -07, -09, -12, -13 | Requirements (marked N/A → captured) | **Round 2 Infrastructure Design** | Monitoring, health checks, auto-scaling, backups, failover all require deployed services |
-| **Venue approval has no approver** | User Stories (US-61) | **Round 2 planning** | FR-51 needs manual admin approval, but the admin console is Round 3. Round 1 seeds approval states in mock data; real signups would strand in Round 2. Needs a minimal approval tool or documented manual process. |
-| Admin and moderation console | Requirements scope decision | **Round 3** | User decision CQ11 `B` |
-| Recommendation engine | Requirements scope decision | **Later** | User decision Q8 `D`; the ranking module (FR-27) preserves the seam |
-| Native mobile apps | Requirements scope decision | **Later** | User decision CQ3 `A`; React chosen to enable code reuse |
-| Push notifications | Requirements scope decision | **Later** | User decisions Q18 `C`, CQ7 `A`; notification records shaped to accept a channel later |
-| **AR-01 age policy review** | Requirements (accepted risk) | **Before public launch** | Recommended, not required. Also mandatory before any app store submission. |
+| Deferred item                               | Deferred from                        | Due at                            | Why                                                                                                                                                                                                                |
+| ------------------------------------------- | ------------------------------------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| NFR Requirements stage                      | Round 1 Construction                 | **Round 2**                       | NFRs and tech stack fully settled at Requirements; real per-unit NFR decisions arrive with the backend                                                                                                             |
+| NFR Design stage                            | Round 1 Construction                 | **Round 2**                       | Server-side NFR patterns need server-side components                                                                                                                                                               |
+| **RESILIENCY-14** chaos/DR testing question | NFR Design                           | **Round 2 NFR Design**            | Nothing deployed in Round 1 whose failover could be tested. **Deferred, not waived.**                                                                                                                              |
+| Infrastructure Design stage                 | Round 1 Construction                 | **Round 2**                       | No compute, database, or network in a static frontend                                                                                                                                                              |
+| SECURITY-01, -02, -06, -07, -14             | Requirements (marked N/A → captured) | **Round 2 Infrastructure Design** | Encryption at rest, intermediary logging, IAM, network config, alerting all require deployed infrastructure                                                                                                        |
+| RESILIENCY-05, -06, -07, -09, -12, -13      | Requirements (marked N/A → captured) | **Round 2 Infrastructure Design** | Monitoring, health checks, auto-scaling, backups, failover all require deployed services                                                                                                                           |
+| **Venue approval has no approver**          | User Stories (US-61)                 | **Round 2 planning**              | FR-51 needs manual admin approval, but the admin console is Round 3. Round 1 seeds approval states in mock data; real signups would strand in Round 2. Needs a minimal approval tool or documented manual process. |
+| Admin and moderation console                | Requirements scope decision          | **Round 3**                       | User decision CQ11 `B`                                                                                                                                                                                             |
+| Recommendation engine                       | Requirements scope decision          | **Later**                         | User decision Q8 `D`; the ranking module (FR-27) preserves the seam                                                                                                                                                |
+| Native mobile apps                          | Requirements scope decision          | **Later**                         | User decision CQ3 `A`; React chosen to enable code reuse                                                                                                                                                           |
+| Push notifications                          | Requirements scope decision          | **Later**                         | User decisions Q18 `C`, CQ7 `A`; notification records shaped to accept a channel later                                                                                                                             |
+| **AR-01 age policy review**                 | Requirements (accepted risk)         | **Before public launch**          | Recommended, not required. Also mandatory before any app store submission.                                                                                                                                         |
 
 ---
 

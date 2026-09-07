@@ -20,14 +20,14 @@ Same format: a letter after each `[Answer]:` tag, or **X** with your own words. 
 
 The approved execution plan proposed a 6-unit decomposition, and the approved Application Design already mapped every component to one of them. The questions below confirm or adjust that, and settle the code-organization details the Construction phase needs.
 
-| Unit | Name | Stories | Depends on |
-|---|---|---|---|
-| **U1** | Foundation and Localization | US-90, US-91, US-92 | — |
-| **U2** | Identity and Profile | US-01 … US-04, US-73 | U1 |
-| **U3** | Activities and Discovery | US-10 … US-13, US-20 … US-25 | U1, U2 |
-| **U4** | Connections | US-30 … US-33, US-40, US-41, US-50 … US-53 | U1, U2, U3 |
-| **U5** | Venue Dashboard | US-60 … US-64 | U1, U2, U3 |
-| **U6** | Safety and Trust | US-70, US-71, US-72 | U1, U2, U3, U4 |
+| Unit   | Name                        | Stories                                    | Depends on     |
+| ------ | --------------------------- | ------------------------------------------ | -------------- |
+| **U1** | Foundation and Localization | US-90, US-91, US-92                        | —              |
+| **U2** | Identity and Profile        | US-01 … US-04, US-73                       | U1             |
+| **U3** | Activities and Discovery    | US-10 … US-13, US-20 … US-25               | U1, U2         |
+| **U4** | Connections                 | US-30 … US-33, US-40, US-41, US-50 … US-53 | U1, U2, U3     |
+| **U5** | Venue Dashboard             | US-60 … US-64                              | U1, U2, U3     |
+| **U6** | Safety and Trust            | US-70, US-71, US-72                        | U1, U2, U3, U4 |
 
 Round-2 and Round-3 stories (US-34, US-80, US-81, US-82) are out of scope for these units and will be assigned when those rounds are planned.
 
@@ -36,9 +36,10 @@ Round-2 and Round-3 stories (US-34, US-80, US-81, US-82) are out of scope for th
 # SECTION A — Decomposition Questions
 
 ## Question 1 — Story Grouping
+
 **Is the 6-unit decomposition right?**
 
-A) **Keep 6 units as proposed** *(my recommendation)* — each is independently demonstrable, boundaries follow the Application Design component map, and dependencies form a clean chain. U4 and U5 can be built in either order.
+A) **Keep 6 units as proposed** _(my recommendation)_ — each is independently demonstrable, boundaries follow the Application Design component map, and dependencies form a clean chain. U4 and U5 can be built in either order.
 
 B) **Coarsen to 4 units** — merge U5 Venues into U3 Activities (venue activities are activities) and U6 Safety into U4 Connections. Fewer approval gates, but bundles unrelated concerns and makes each unit harder to verify.
 
@@ -46,20 +47,22 @@ C) **Split further into 8** — separate discovery from activity authoring, and 
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 2 — Story Grouping (follow-up)
+
 **Should U4 Connections be split?** It is the largest unit — 10 stories covering join requests, the poster inbox, attendance confirmation, and ratings.
 
-A) **Keep U4 whole** *(my recommendation)* — it is one continuous state machine: request → disclosure → inbox → attendance → rating. Splitting it puts a unit boundary in the middle of a lifecycle, and the rating-eligibility rule needs the request and attendance data together to be testable at all.
+A) **Keep U4 whole** _(my recommendation)_ — it is one continuous state machine: request → disclosure → inbox → attendance → rating. Splitting it puts a unit boundary in the middle of a lifecycle, and the rating-eligibility rule needs the request and attendance data together to be testable at all.
 
 B) **Split into U4a Contact Exchange** (US-30 … US-33, US-40, US-41) **and U4b Reputation** (US-50 … US-53) — smaller units, earlier demo of the core loop, at the cost of cutting the lifecycle in two.
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
-## Question 3 — Code Organization ⚠️ *inconsistency to resolve*
+## Question 3 — Code Organization ⚠️ _inconsistency to resolve_
+
 **There is a genuine conflict between two approved inputs, and I would rather you settle it than pick silently.**
 
 - The AI-DLC `code-generation.md` rules prescribe, for a greenfield multi-unit monolith: **`src/{unit-name}/` and `tests/{unit-name}/`**
@@ -67,7 +70,7 @@ X) Other (please describe after [Answer]: tag below)
 
 These are different shapes. The rule's pattern also has no natural slot for shared foundation code, which U1 is almost entirely made of.
 
-A) **Keep the approved Application Design structure; treat units as planning constructs, not folders** *(my recommendation)* — `src/features/{feature}/` already fulfils the intent of `src/{unit-name}/` for U2 … U6, with U1 being `core/`, `ui/`, `app/`, and `infra/`. The unit-to-directory mapping gets documented explicitly in `unit-of-work.md` so traceability is preserved. Nothing about the approved architecture changes.
+A) **Keep the approved Application Design structure; treat units as planning constructs, not folders** _(my recommendation)_ — `src/features/{feature}/` already fulfils the intent of `src/{unit-name}/` for U2 … U6, with U1 being `core/`, `ui/`, `app/`, and `infra/`. The unit-to-directory mapping gets documented explicitly in `unit-of-work.md` so traceability is preserved. Nothing about the approved architecture changes.
 
 B) **Follow the rule pattern literally** — restructure to `src/u1-foundation/`, `src/u2-identity/`, etc. Matches the rule text, but discards the layered dependency rules (DEP-1 … DEP-4) that make NFR-A1 enforceable, and puts shared types inside a unit folder that everything else must import from.
 
@@ -75,12 +78,13 @@ C) **Hybrid** — `src/features/{unit}/` for U2 … U6, `src/core|ui|app|infra/`
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 4 — Technical Considerations
+
 **Deployment model.** AS-05 assumed the venue dashboard is a role-gated section of the same application.
 
-A) **Single deployable web app, role-gated routes** *(my recommendation)* — one build, one deploy, shared components and types. Matches AS-05 and the approved design. The venue dashboard is `/venue/*` behind `RoleGuard`.
+A) **Single deployable web app, role-gated routes** _(my recommendation)_ — one build, one deploy, shared components and types. Matches AS-05 and the approved design. The venue dashboard is `/venue/*` behind `RoleGuard`.
 
 B) **Two separate applications** sharing a package — a genuinely separate venue product. More deployment and build complexity for a dashboard with 6 components.
 
@@ -88,12 +92,13 @@ C) **Single app now, split later if the venue side grows** — same as A, but no
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 5 — Code Organization (follow-up)
+
 **Repository structure.**
 
-A) **Single package** *(my recommendation)* — one `package.json`, one `tsconfig.json`, one build. Simplest thing that works for a single deployable app, and nothing in Round 1 needs independent versioning.
+A) **Single package** _(my recommendation)_ — one `package.json`, one `tsconfig.json`, one build. Simplest thing that works for a single deployable app, and nothing in Round 1 needs independent versioning.
 
 B) **Monorepo with workspaces** (pnpm or npm workspaces) — separate packages for `core`, `ui`, and the app. Better isolation, and it would let Round 2's backend import `core` directly. Costs tooling setup now.
 
@@ -101,12 +106,13 @@ C) **Single package now; extract `core` to a workspace in Round 2** when the bac
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 6 — Dependencies
+
 **How should unit boundaries be enforced?** The Application Design defines four dependency rules (DEP-1 … DEP-4), including the one that makes NFR-A1 real: `features/` must never import `infra/`.
 
-A) **ESLint import-boundary rules, failing the build on violation** *(my recommendation)* — the rules become mechanically enforced rather than documented. A violation of DEP-2 is exactly the mistake that would silently break the Round-2 swap, and it is much cheaper to catch in CI than in review.
+A) **ESLint import-boundary rules, failing the build on violation** _(my recommendation)_ — the rules become mechanically enforced rather than documented. A violation of DEP-2 is exactly the mistake that would silently break the Round-2 swap, and it is much cheaper to catch in CI than in review.
 
 B) **Documented convention only** — rely on review discipline.
 
@@ -114,12 +120,13 @@ C) **TypeScript project references** — compiler-enforced, stronger, but requir
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 7 — Team Alignment
+
 **Who is building this?** This affects whether parallelizable units matter and how much boundary ceremony is worth it.
 
-A) **Solo — just me** *(assumed from earlier answers: change management exempt, informal incident response)* — units are for sequencing and reviewable progress, not for parallel ownership.
+A) **Solo — just me** _(assumed from earlier answers: change management exempt, informal incident response)_ — units are for sequencing and reviewable progress, not for parallel ownership.
 
 B) **Small team, 2–3 people** — unit boundaries become ownership boundaries; U4 and U5 being parallelizable actually matters.
 
@@ -127,12 +134,13 @@ C) **Larger team** — stronger boundaries and interface contracts needed betwee
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 8 — Business Domain
+
 **Unit completion criteria.** What must be true before a unit is considered done and the next one starts?
 
-A) **Code + tests passing + demoable in the browser** *(my recommendation)* — each unit ends with something you can actually click through in Persian. Keeps progress visible and catches RTL problems early rather than at the end.
+A) **Code + tests passing + demoable in the browser** _(my recommendation)_ — each unit ends with something you can actually click through in Persian. Keeps progress visible and catches RTL problems early rather than at the end.
 
 B) **Code + tests passing** — no demo requirement; faster gates, less visibility.
 
@@ -140,15 +148,13 @@ C) **Code + tests + demo + a written summary** of what was built and any deviati
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
-
----
+[Answer]: ---
 
 ## Shortcut
 
 If you agree with every recommendation, write `all recommended` here and leave the tags above blank. **Note**: Question 7 has no recommendation marked — it is a fact about your situation, not a preference. Using the shortcut will record it as `A` (solo), consistent with your earlier answers. Correct it below if that is wrong.
 
-[All Recommended]: 
+[All Recommended]:
 
 ## Anything to add?
 

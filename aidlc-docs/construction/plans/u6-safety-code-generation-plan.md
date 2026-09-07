@@ -13,12 +13,12 @@
 
 ### 1.1 Stories — 3, plus one inherited gap
 
-| Story | Title | Steps |
-|---|---|---|
-| **US-70** | Report a user | 6, 14, 16 |
-| **US-71** | Report an activity | 6, 14, 16 |
-| **US-72** ⚠️ | **Block a user — SAFETY-CRITICAL, implements INV-1** | 4, 5, 7–13, 15, 17, 22–24 |
-| **US-73** crit. 4 | Safety-guidance link on the join sheet — unmet since U4 | 18 |
+| Story             | Title                                                   | Steps                     |
+| ----------------- | ------------------------------------------------------- | ------------------------- |
+| **US-70**         | Report a user                                           | 6, 14, 16                 |
+| **US-71**         | Report an activity                                      | 6, 14, 16                 |
+| **US-72** ⚠️      | **Block a user — SAFETY-CRITICAL, implements INV-1**    | 4, 5, 7–13, 15, 17, 22–24 |
+| **US-73** crit. 4 | Safety-guidance link on the join sheet — unmet since U4 | 18                        |
 
 ### 1.2 Dependencies
 
@@ -65,18 +65,20 @@ Each must now carry a viewer.
 
 **`viewerId` is a REQUIRED parameter, not an optional one.** A default would let a forgotten call site silently return an **unfiltered** summary — and a filter that fails silently is worse than one that fails loudly. Required means the compiler enumerates the work, the same discipline `areaOf(neighborhoodId)` used in U3 to make a coordinate-derived area unwriteable.
 
-⚠️ **Consequence to honour (`business-logic-model.md` §3.2)**: `getRatingSummary` is now a function of *(subject, viewer)*, so it **must not be memoized by subject id alone**. Doing so is a cross-viewer leak.
+⚠️ **Consequence to honour (`business-logic-model.md` §3.2)**: `getRatingSummary` is now a function of _(subject, viewer)_, so it **must not be memoized by subject id alone**. Doing so is a cross-viewer leak.
 
 ---
 
 ## 4. Steps
 
 ### Domain and rules
+
 - [ ] **Step 1** — `ReportReason` union in `core/domain/entities.ts`: `harassment | harvesting | fake_activity | spam | other`. Narrow `Report.reasonCode` from `string`. Keep the comment explaining why `harvesting` is separate from `fake_activity` (AR-02 monitoring).
 - [ ] **Step 2** — verify the five seeded reports already use these codes; adjust the seed only if one does not.
 - [ ] **Step 3** — `core/rules/visibility.ts`: add `isHiddenFrom(viewerId, otherId, blocks)` as the single predicate every new call site uses. **Do not modify** `buildBlockIndex`, `isMutuallyUnblocked` or `filterVisibleActivities`.
 
 ### ⚠️ The block filter — the substance of the unit
+
 - [ ] **Step 4** — `ctx.ratingSummary(subjectId, viewerId)` — **required** viewer; exclude ratings whose `raterId` is hidden from the viewer (**AR-05**).
 - [ ] **Step 5** — thread the viewer through `profileOrNull` and `profileOf`; fix all 9 call sites the compiler reports.
 - [ ] **Step 6** — `getProfile` returns `null` for a blocked user (BR-U6-31).
@@ -89,20 +91,25 @@ Each must now carry a viewer.
 - [ ] **Step 13** — ⚠️ audit every one of the nine paths against `business-logic-model.md` §3 and confirm each filters **before** pagination (BR-U6-32).
 
 ### Service
+
 - [ ] **Step 14** — `core/services/safetyService.ts` — `reportUser`, `reportActivity`, with BR-U6-47 (no self-report).
 - [ ] **Step 15** — `blockUser`, `unblockUser`, `listBlocks`; idempotent block (BR-U6-13), no self-block (BR-U6-14).
 
 ### i18n
-- [ ] **Step 16** — ~35 Persian keys. ⚠️ The report confirmation says **«ثبت شد»**, never «بررسی خواهد شد» (BR-U6-44). The block confirmation states *not notified* and *contact details already sent are not recalled* (BR-U6-12, BR-U6-35), and **must not mention the rating effect** (AR-05 — stating it advertises the vector).
+
+- [ ] **Step 16** — ~35 Persian keys. ⚠️ The report confirmation says **«ثبت شد»**, never «بررسی خواهد شد» (BR-U6-44). The block confirmation states _not notified_ and _contact details already sent are not recalled_ (BR-U6-12, BR-U6-35), and **must not mention the rating effect** (AR-05 — stating it advertises the vector).
 
 ### Frontend
+
 - [ ] **Step 17** — `SafetyMenu`, `ReportSheet`, `BlockConfirmation`, `BlockedUsersScreen`; route `/profile/blocked`; entry points on profile, activity detail, and request cards. ⚠️ Absent on own content (BR-U6-47), and the blocked list shows **only people the viewer blocked** (BR-U6-22).
 - [ ] **Step 18** — ⚠️ `GuidanceLink` in `JoinRequestSheet`: **after** both disclosure lines, outside the notice, subordinate, not a dismiss control, and it must not lose the sheet's state. **`DisclosureNotice` is not modified.**
 
 ### Seed
+
 - [ ] **Step 19** — verify the seeded blocks make every filtered path observable; add rows only where a path would otherwise be untested. ⚠️ **Check the seed against reality before adding** — the U4 attempt at this added a row contradicting existing data.
 
 ### Tests
+
 - [ ] **Step 20** — ⚠️ **P-U6-01** across **all nine** read paths, for every user and every block set.
 - [ ] **Step 21** — **P-U6-02** symmetry · **P-U6-03** unblock restores exactly · **P-U6-04** a block deletes nothing · **P-U6-05** reports never surface.
 - [ ] **Step 22** — ⚠️ **Verify P-U6-01 against a deliberately broken filter** before keeping it. A safety property never seen to fail is a guess.
@@ -110,6 +117,7 @@ Each must now carry a viewer.
 - [ ] **Step 24** — ⚠️ guidance-link tests: present in the sheet, **after** both disclosure lines in document order, not a dismiss control, and the disclosure still satisfies U4's assertions.
 
 ### Verification and documentation
+
 - [ ] **Step 25** — `npm run typecheck`, `lint`, `test`, `build`. ⚠️ **Record the test count.**
 - [ ] **Step 26** — browser verification: block someone, then confirm on the wire that they are absent from **all nine** surfaces; unblock and confirm restoration.
 - [ ] **Step 27** — `construction/u6-safety/code/implementation-summary.md` + `extension-compliance.md`; update `aidlc-state.md`.

@@ -34,20 +34,20 @@
 ## 3. ⚠️ Block scope — the complete read-path rule (US-72, INV-1)
 
 **BR-U6-30** — ⚠️ **THE CORE RULE.** No read of user-visible content returns anything authored by, about, or attributable to a user blocked in either direction. This holds for **every** read path, not only activity feeds.
-→ *Property test P-U6-01, across every read path.*
+→ _Property test P-U6-01, across every read path._
 
 **BR-U6-31** — the paths this covers, exhaustively. Answer Q1 `A`, maximum separation:
 
-| Path | Behaviour under a block |
-|---|---|
-| feed, search, category browse, map | Activity absent (INV-1, since U1) |
-| `listIncomingRequests` | Request absent entirely (Q2 `A`) |
-| `listSentRequests` | Request absent entirely |
-| `listRateableParticipants` | Person not offered |
-| `listAttendance` | Person absent from the viewer's rendering |
-| `getRatingSummary` | ⚠️ Their rating excluded from the aggregate — **AR-05** |
-| notifications | Notifications originating from them absent |
-| `getProfile` | Returns `null` |
+| Path                               | Behaviour under a block                                 |
+| ---------------------------------- | ------------------------------------------------------- |
+| feed, search, category browse, map | Activity absent (INV-1, since U1)                       |
+| `listIncomingRequests`             | Request absent entirely (Q2 `A`)                        |
+| `listSentRequests`                 | Request absent entirely                                 |
+| `listRateableParticipants`         | Person not offered                                      |
+| `listAttendance`                   | Person absent from the viewer's rendering               |
+| `getRatingSummary`                 | ⚠️ Their rating excluded from the aggregate — **AR-05** |
+| notifications                      | Notifications originating from them absent              |
+| `getProfile`                       | Returns `null`                                          |
 
 **BR-U6-32** — ⚠️ **the filter runs INSIDE the repository read, before projection and before pagination.** Filtering afterwards produces short pages and leaks the existence of hidden content through result counts. This is the same placement U1 chose for activities (`context.readActivities` step 2) and the reason it was chosen.
 
@@ -65,7 +65,7 @@
 
 **BR-U6-41** — the reason taxonomy is `harassment` · `harvesting` · `fake_activity` · `spam` · `other`. See `domain-entities.md` §4.1 for why `harvesting` is separate from `fake_activity` and why `other` is kept.
 
-**BR-U6-42** — ⚠️ **`harvesting` is offered on both users and activities**, and is the code AR-02's *"monitor for harvesting patterns after launch"* depends on. Under CR-07 every requester must disclose, so this is the highest-value signal the system collects.
+**BR-U6-42** — ⚠️ **`harvesting` is offered on both users and activities**, and is the code AR-02's _"monitor for harvesting patterns after launch"_ depends on. Under CR-07 every requester must disclose, so this is the highest-value signal the system collects.
 
 **BR-U6-43** — ⚠️ **free text is the only evidence in Round 1** (answer Q3 `A`). `evidenceUrls` stays empty and the form **says** screenshots come later, rather than offering an input that silently drops them. Because there is no in-app chat (AR-04), `detail` is the only record moderation will ever have of abuse that happened on Telegram or in person — so the field is generous (2000 characters) and the prompt asks what happened, not for a category restatement.
 
@@ -73,7 +73,7 @@
 
 **BR-U6-45** — **no moderation outcome is ever revealed** (US-70). The reporter learns nothing about the subject's account, then or later.
 
-**BR-U6-46** — reporting is **independent of blocking**. Reporting does not block, and blocking does not report. The report flow may *offer* blocking as a next step, but must not perform it silently — a person reporting a stranger's spam post has not necessarily asked to never see them again.
+**BR-U6-46** — reporting is **independent of blocking**. Reporting does not block, and blocking does not report. The report flow may _offer_ blocking as a next step, but must not perform it silently — a person reporting a stranger's spam post has not necessarily asked to never see them again.
 
 **BR-U6-47** — a user cannot report themselves or their own activity.
 
@@ -91,13 +91,13 @@
 
 ## 6. Property Tests (PBT-01)
 
-| ID | Property | Category |
-|---|---|---|
-| **P-U6-01** | ⚠️ For any store, any block set and any viewer, **no read path** returns content authored by or about anyone blocked in either direction — feeds, search, requests, sent requests, rateable participants, attendance, notifications, and profiles | Safety — US-72, INV-1 |
-| **P-U6-02** | Block symmetry: for any block, `has(x,y) === has(y,x)`, and each side's visibility of the other is identical | Invariant — US-72 |
-| **P-U6-03** | ⚠️ Unblock restores exactly: for any store and any pair, block-then-unblock leaves every read path returning what it returned before the block | Reversibility — BR-U6-15/20 |
-| **P-U6-04** | A block deletes nothing: entity counts in the store are unchanged by any block or unblock | Non-destruction — BR-U6-15 |
-| **P-U6-05** | Reports are never surfaced: for any store and any viewer, no read path returns a `Report` or any field of one | Write-only — FR-63 |
+| ID          | Property                                                                                                                                                                                                                                          | Category                    |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **P-U6-01** | ⚠️ For any store, any block set and any viewer, **no read path** returns content authored by or about anyone blocked in either direction — feeds, search, requests, sent requests, rateable participants, attendance, notifications, and profiles | Safety — US-72, INV-1       |
+| **P-U6-02** | Block symmetry: for any block, `has(x,y) === has(y,x)`, and each side's visibility of the other is identical                                                                                                                                      | Invariant — US-72           |
+| **P-U6-03** | ⚠️ Unblock restores exactly: for any store and any pair, block-then-unblock leaves every read path returning what it returned before the block                                                                                                    | Reversibility — BR-U6-15/20 |
+| **P-U6-04** | A block deletes nothing: entity counts in the store are unchanged by any block or unblock                                                                                                                                                         | Non-destruction — BR-U6-15  |
+| **P-U6-05** | Reports are never surfaced: for any store and any viewer, no read path returns a `Report` or any field of one                                                                                                                                     | Write-only — FR-63          |
 
 **⚠️ P-U6-01 is the reason this unit is last.** It enumerates read paths, so it is only complete once they all exist. **With U5 deferred, the venue dashboard's paths are not in it** — the property is complete for what exists and must be extended when U5 lands. Recorded so "verified across every read path" is not later read as a stronger claim than it was.
 
@@ -107,10 +107,10 @@
 
 ## 7. Rule Index
 
-| Range | Area |
-|---|---|
-| BR-U6-10…15 | Blocking — the write |
-| BR-U6-20…22 | Unblocking and the blocked list |
+| Range       | Area                                  |
+| ----------- | ------------------------------------- |
+| BR-U6-10…15 | Blocking — the write                  |
+| BR-U6-20…22 | Unblocking and the blocked list       |
 | BR-U6-30…35 | ⚠️ Block scope across every read path |
-| BR-U6-40…47 | Reporting |
-| BR-U6-50…52 | ⚠️ Safety guidance on the join sheet |
+| BR-U6-40…47 | Reporting                             |
+| BR-U6-50…52 | ⚠️ Safety guidance on the join sheet  |

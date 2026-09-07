@@ -8,7 +8,7 @@
 
 Three stories, two screens, and **one cross-cutting filter applied in eight more places than it is today.**
 
-The screens are the small part. The design is the table in §3: which reads consult the block index, where the filter sits in each pipeline, and what a block deliberately does *not* touch.
+The screens are the small part. The design is the table in §3: which reads consult the block index, where the filter sits in each pipeline, and what a block deliberately does _not_ touch.
 
 ```
   REPORT ──▶ stored with full context ──▶ (nothing reads it until Round 3)
@@ -25,9 +25,9 @@ The screens are the small part. The design is the table in §3: which reads cons
 
 ## 2. Why the filter is one index, consulted everywhere
 
-`buildBlockIndex` is already symmetric: it links `blocker → blocked` **and** `blocked → blocker`, so `has(x,y) === has(y,x)`. Every consumer therefore asks one question — *"is this person invisible to that person?"* — and never has to reason about who did the blocking.
+`buildBlockIndex` is already symmetric: it links `blocker → blocked` **and** `blocked → blocker`, so `has(x,y) === has(y,x)`. Every consumer therefore asks one question — _"is this person invisible to that person?"_ — and never has to reason about who did the blocking.
 
-That symmetry is what makes US-72's second criterion (*"my activities are likewise absent from every view they see"*) fall out rather than needing its own implementation. It is also what made `canSendRequestTo` survive U4's transposition audit: swapping its two `UserId` arguments is a no-op.
+That symmetry is what makes US-72's second criterion (_"my activities are likewise absent from every view they see"_) fall out rather than needing its own implementation. It is also what made `canSendRequestTo` survive U4's transposition audit: swapping its two `UserId` arguments is a no-op.
 
 ⚠️ **The directional record is kept and deliberately unused for visibility.** Who blocked whom is real information a Round-3 moderator needs; it is simply not a visibility input.
 
@@ -37,17 +37,17 @@ That symmetry is what makes US-72's second criterion (*"my activities are likewi
 
 Answer **Q1 `A`** — maximum separation, two-way. The middle column is where the filter goes; getting that wrong is BR-U6-32's failure mode.
 
-| Read path | Filter position | Effect |
-|---|---|---|
-| `readActivities` (feed, search, category, map) | Step 2, before rank and paginate | ✅ already correct (U1) |
-| `listIncomingRequests` | Before projection | Request absent entirely |
-| `listRequestsForActivity` | Before projection | Request absent entirely |
-| `listSentRequests` | Before projection | Request absent entirely |
-| `listRateableParticipants` | Inside candidate assembly | Person not offered |
-| `listAttendance` | On read, per viewer | Person absent from the viewer's rendering |
-| `ctx.ratingSummary` | Before aggregation | ⚠️ Rating excluded — **AR-05** |
-| `notifications.list` / unread count | Before return | Notification absent |
-| `getProfile` | Before projection | Returns `null` |
+| Read path                                      | Filter position                  | Effect                                    |
+| ---------------------------------------------- | -------------------------------- | ----------------------------------------- |
+| `readActivities` (feed, search, category, map) | Step 2, before rank and paginate | ✅ already correct (U1)                   |
+| `listIncomingRequests`                         | Before projection                | Request absent entirely                   |
+| `listRequestsForActivity`                      | Before projection                | Request absent entirely                   |
+| `listSentRequests`                             | Before projection                | Request absent entirely                   |
+| `listRateableParticipants`                     | Inside candidate assembly        | Person not offered                        |
+| `listAttendance`                               | On read, per viewer              | Person absent from the viewer's rendering |
+| `ctx.ratingSummary`                            | Before aggregation               | ⚠️ Rating excluded — **AR-05**            |
+| `notifications.list` / unread count            | Before return                    | Notification absent                       |
+| `getProfile`                                   | Before projection                | Returns `null`                            |
 
 ### 3.1 ⚠️ Position matters, and this is not a style preference
 
@@ -61,7 +61,7 @@ Filtering after pagination produces **short pages**, and a short page leaks the 
 
 ### 3.2 Two paths that are not simply "filter the list"
 
-**`ctx.ratingSummary`** aggregates rather than lists. Filtering means excluding the blocked rater's row *before* computing the average and count — which is precisely what makes AR-05 exploitable, and precisely what Round 2 must undo server-side. The exclusion is viewer-scoped: the summary is now a function of *(subject, viewer)*, not of subject alone.
+**`ctx.ratingSummary`** aggregates rather than lists. Filtering means excluding the blocked rater's row _before_ computing the average and count — which is precisely what makes AR-05 exploitable, and precisely what Round 2 must undo server-side. The exclusion is viewer-scoped: the summary is now a function of _(subject, viewer)_, not of subject alone.
 
 ⚠️ **`getRatingSummary` therefore stops being cacheable across viewers.** Anything that memoizes it by subject id alone becomes a cross-viewer leak — the wrong person's filtered average shown to someone else.
 
@@ -83,7 +83,7 @@ Filtering after pagination produces **short pages**, and a short page leaks the 
             because there is no prior state to reconstruct.
 ```
 
-**Reversibility is a property of the design, not a feature that was implemented.** If a block deleted rows, unblocking would need to resurrect them — and would fail, because the information to do so would be gone. Filtering on read makes US-72's last criterion (*"normal visibility resumes"*) true by construction, and P-U6-03 pins it.
+**Reversibility is a property of the design, not a feature that was implemented.** If a block deleted rows, unblocking would need to resurrect them — and would fail, because the information to do so would be gone. Filtering on read makes US-72's last criterion (_"normal visibility resumes"_) true by construction, and P-U6-03 pins it.
 
 ---
 
@@ -133,4 +133,4 @@ Filtering after pagination produces **short pages**, and a short page leaks the 
 - **No moderation console.** Round 3. `listReports`, `resolveReport`, `setAccountStatus` and `unpublishActivity` stay on the interface with no caller.
 - **No account suspension.** `accountStatus` exists and U6 never writes it.
 - **No automatic action.** No threshold of reports does anything. A count that silently suspends an account is a moderation policy, and there is no moderator yet to own it.
-- **No CR-08 Part B.** The public question channel is sequenced *after* U6 precisely so reporting exists on day one (CR-08 Q4 `A`).
+- **No CR-08 Part B.** The public question channel is sequenced _after_ U6 precisely so reporting exists on day one (CR-08 Q4 `A`).

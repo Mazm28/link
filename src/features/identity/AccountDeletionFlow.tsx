@@ -68,7 +68,10 @@ export function AccountDeletionFlow() {
       {/* BR-U2-45 — the consequences in plain Persian. This is also the only
           place the anonymize-not-erase behaviour becomes visible to the person
           it affects; leaving it in the code would make it a surprise. */}
-      <ul className="flex list-disc flex-col gap-2 ps-5 text-sm text-fg" data-testid="deletion-consequences">
+      <ul
+        className="flex list-disc flex-col gap-2 ps-5 text-sm text-fg"
+        data-testid="deletion-consequences"
+      >
         <li>{t('delete.point1')}</li>
         <li>{t('delete.point2')}</li>
         <li>{t('delete.point3')}</li>
@@ -79,7 +82,11 @@ export function AccountDeletionFlow() {
       <div className="flex gap-3">
         {/* Cancel first and visually primary. For an irreversible action the
             safe option is the one a stray tap or Enter should land on. */}
-        <Button variant="secondary" onClick={() => void navigate('/profile')} data-testid="deletion-cancel">
+        <Button
+          variant="secondary"
+          onClick={() => void navigate('/profile')}
+          data-testid="deletion-cancel"
+        >
           {t('delete.cancel')}
         </Button>
         <Button variant="danger" onClick={() => setStep('confirm')} data-testid="deletion-continue">

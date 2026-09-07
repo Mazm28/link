@@ -10,8 +10,8 @@
 
 ## 1. Changes to `Activity`
 
-| Field | Now | Why |
-|---|---|---|
+| Field                   | Now     | Why                                                                                                      |
+| ----------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
 | `coordinate?: GeoPoint` | **new** | CQ2/CQ3 — the composer picks a point on a map. Optional, because seeded and pre-map activities have none |
 
 Everything else is unchanged. `locationPrecision`, `exactAddress`, `neighborhoodId`, `capacity`, `promotion`, `recurrence` all stay exactly as U1 defined them.
@@ -33,10 +33,10 @@ It is stored for every activity regardless of precision — the poster picked a 
 
 ## 2. Changes to `Neighborhood`
 
-| Field | Now | Why |
-|---|---|---|
-| `cityId: CityId` | **new, required** | CQ2 — browsing is scoped to a city, so every neighborhood must know which one it is in |
-| `center: GeoPoint` | **new, required** | INV-5 — the approximate area is derived from the neighborhood, so each needs one anchor point |
+| Field                  | Now               | Why                                                                                                                                        |
+| ---------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `cityId: CityId`       | **new, required** | CQ2 — browsing is scoped to a city, so every neighborhood must know which one it is in                                                     |
+| `center: GeoPoint`     | **new, required** | INV-5 — the approximate area is derived from the neighborhood, so each needs one anchor point                                              |
 | `radiusMeters: number` | **new, required** | INV-5 — how large that area is. Per-neighborhood rather than a constant, because یوسف‌آباد and a district-sized area are not the same size |
 
 `CityId` and `City` already exist — CR-02 added them for the profile. U3 gives them a second job.
@@ -46,21 +46,21 @@ It is stored for every activity regardless of precision — the poster picked a 
 ## 3. ⚠️ INV-5 — The Fifth Contract Invariant
 
 > **INV-5** — No read returns a `coordinate` for a `neighborhood`-precision activity, unless the viewer is the author. Such an activity carries an `approximateArea` instead, and **that area is derived only from the neighborhood** — never from the activity's own coordinate.
-> *[US-11, CR-01 §5.4, BR-U3-20]*
+> _[US-11, CR-01 §5.4, BR-U3-20]_
 
 ### 3.1 Why the second clause is the whole invariant
 
 The first clause is obvious once INV-2 exists. The second is the one that gets built wrong.
 
-The natural implementation of the Divar model — and it *is* the right UI model — is: store the exact point, and draw a circle around it for approximate listings. That fails twice over:
+The natural implementation of the Divar model — and it _is_ the right UI model — is: store the exact point, and draw a circle around it for approximate listings. That fails twice over:
 
-**The coordinate is still in the payload.** US-11 does not say "do not render the address"; it says the address must be absent *"from the underlying data delivered to the client, not merely hidden with CSS"*. A circle drawn client-side from an exact point ships the exact point.
+**The coordinate is still in the payload.** US-11 does not say "do not render the address"; it says the address must be absent _"from the underlying data delivered to the client, not merely hidden with CSS"_. A circle drawn client-side from an exact point ships the exact point.
 
 **A circle centred on the true point IS the true point.** Even computed server-side and sent as `{center, radius}`, if the centre is the real location then the payload discloses it to within nothing at all. The radius is decoration.
 
 **Jitter does not fix it.** Offsetting the centre randomly feels safer and is not: two viewers comparing screens, or one viewer refreshing, narrows the true point back down. Any per-activity randomness is an information leak measured in observations.
 
-**The safe construction** is that the area carries *no information the neighborhood name did not already carry*. Every `neighborhood`-precision activity in یوسف‌آباد resolves to **the same circle** — یوسف‌آباد's own centre and radius. The map then says exactly what «حوالی یوسف‌آباد» says, in a different medium, and nothing more.
+**The safe construction** is that the area carries _no information the neighborhood name did not already carry_. Every `neighborhood`-precision activity in یوسف‌آباد resolves to **the same circle** — یوسف‌آباد's own centre and radius. The map then says exactly what «حوالی یوسف‌آباد» says, in a different medium, and nothing more.
 
 ### 3.2 Stated as a testable property
 
@@ -101,13 +101,13 @@ export interface GeoArea {
 
 ## 5. What U3 Does NOT Change
 
-| Type | Status |
-|---|---|
-| `ActivityRepository` | Unchanged — every method U3 needs exists |
-| `ActivityFilters` | Adds `cityId`; the other six are already filtering |
-| `ActivityStatus` | Unchanged — `draft`, `published`, `cancelled`, `unpublished` |
+| Type                   | Status                                                                 |
+| ---------------------- | ---------------------------------------------------------------------- |
+| `ActivityRepository`   | Unchanged — every method U3 needs exists                               |
+| `ActivityFilters`      | Adds `cityId`; the other six are already filtering                     |
+| `ActivityStatus`       | Unchanged — `draft`, `published`, `cancelled`, `unpublished`           |
 | `DerivedActivityState` | Unchanged — U1's `deriveState` already computes it from the Tehran day |
-| `ProfileView` | Unchanged. CR-02 already added `cityId` |
+| `ProfileView`          | Unchanged. CR-02 already added `cityId`                                |
 
 ---
 
@@ -115,7 +115,7 @@ export interface GeoArea {
 
 The user's decision: past activities are removed from every discovery surface and remain visible on the **author's public profile** (CQ4 `A`).
 
-**No type changes.** `DerivedActivityState` already distinguishes `past`, and `deriveState` already computes it. This is a *rule* about which reads include it (BR-U3-40), not a shape.
+**No type changes.** `DerivedActivityState` already distinguishes `past`, and `deriveState` already computes it. This is a _rule_ about which reads include it (BR-U3-40), not a shape.
 
 **It restores US-20 rather than amending it.** US-20 always said the feed shows "published, non-past, non-cancelled" activities. Past activities entered the feed through a U1 change request, defaulted to visible on my recommendation. The decision puts the product back on the story as written, and the `excludePast` filter flag becomes the always-on default for discovery instead of a user-facing toggle.
 
@@ -123,14 +123,14 @@ The user's decision: past activities are removed from every discovery surface an
 
 ## 7. Entity Summary
 
-| Type | Status | Owner |
-|---|---|---|
-| `GeoPoint`, `GeoArea` | **New** | U3 |
-| `Activity.coordinate` | **New field** | U3 |
-| `Neighborhood.cityId`, `.center`, `.radiusMeters` | **New fields** | U1 model, U3 change |
-| `ActivityView.coordinate`, `.approximateArea` | **New fields** | U3 |
-| **INV-5** | **New invariant** | U3 |
-| `ActivityFilters.cityId` | **New field** | U3 |
+| Type                                              | Status            | Owner               |
+| ------------------------------------------------- | ----------------- | ------------------- |
+| `GeoPoint`, `GeoArea`                             | **New**           | U3                  |
+| `Activity.coordinate`                             | **New field**     | U3                  |
+| `Neighborhood.cityId`, `.center`, `.radiusMeters` | **New fields**    | U1 model, U3 change |
+| `ActivityView.coordinate`, `.approximateArea`     | **New fields**    | U3                  |
+| **INV-5**                                         | **New invariant** | U3                  |
+| `ActivityFilters.cityId`                          | **New field**     | U3                  |
 
 ---
 

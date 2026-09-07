@@ -96,14 +96,22 @@ export function FeedFilterProvider({ children }: { children: ReactNode }) {
      * is hard to express in the first place. */
     setDateFrom: (iso) => {
       setDateFrom(iso);
-      if (iso !== null && dateUntil !== null && new Date(iso).getTime() > new Date(dateUntil).getTime()) {
+      if (
+        iso !== null &&
+        dateUntil !== null &&
+        new Date(iso).getTime() > new Date(dateUntil).getTime()
+      ) {
         setDateUntil(iso);
       }
     },
     dateUntil,
     setDateUntil: (iso) => {
       setDateUntil(iso);
-      if (iso !== null && dateFrom !== null && new Date(iso).getTime() < new Date(dateFrom).getTime()) {
+      if (
+        iso !== null &&
+        dateFrom !== null &&
+        new Date(iso).getTime() < new Date(dateFrom).getTime()
+      ) {
         setDateFrom(iso);
       }
     },

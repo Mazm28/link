@@ -209,17 +209,17 @@ export function ActivityComposerScreen() {
       />
 
       {/* Only the five cities with a neighborhood dataset offer the choice.
-        * Showing an empty picker elsewhere would ask a question the product
-        * cannot answer. */}
+       * Showing an empty picker elsewhere would ask a question the product
+       * cannot answer. */}
       {cityHasNeighborhoods(draft.cityId) && (
-      <NeighborhoodSelector
-        cityId={draft.cityId}
-        mode="single"
-        value={draft.neighborhoodId}
-        onChange={(id: NeighborhoodId | null) => set('neighborhoodId', id)}
-        label={t('activity.neighborhoodLabel')}
-        error={errorFor('neighborhoodId')}
-      />
+        <NeighborhoodSelector
+          cityId={draft.cityId}
+          mode="single"
+          value={draft.neighborhoodId}
+          onChange={(id: NeighborhoodId | null) => set('neighborhoodId', id)}
+          label={t('activity.neighborhoodLabel')}
+          error={errorFor('neighborhoodId')}
+        />
       )}
 
       <LocationPicker

@@ -57,7 +57,10 @@ export function ProfileSetupScreen() {
   }
 
   return (
-    <form onSubmit={(event) => void submit(event)} className="mx-auto flex w-full max-w-md flex-col gap-6 py-6">
+    <form
+      onSubmit={(event) => void submit(event)}
+      className="mx-auto flex w-full max-w-md flex-col gap-6 py-6"
+    >
       <header className="flex flex-col gap-1">
         <h1 className="text-xl font-semibold text-fg">{t('profile.setupTitle')}</h1>
         <p className="text-sm text-fg-muted">{t('profile.setupSubtitle')}</p>

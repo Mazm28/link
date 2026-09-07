@@ -21,7 +21,10 @@ export function ActivityCard({ activity }: { activity: ActivityView }) {
   const when = formatJalali(new Date(activity.startsAt), 'd MMMM yyyy — HH:mm');
 
   return (
-    <article data-testid={`activity-card-${activity.id}`} className="rounded-[var(--radius-card)] border border-border bg-surface p-4">
+    <article
+      data-testid={`activity-card-${activity.id}`}
+      className="rounded-[var(--radius-card)] border border-border bg-surface p-4"
+    >
       <Link to={`/activity/${activity.id}`} className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
           {activity.derivedState === 'cancelled' && (
@@ -35,11 +38,11 @@ export function ActivityCard({ activity }: { activity: ActivityView }) {
         <h3 className="text-base font-semibold text-fg">{activity.title}</h3>
 
         {/* A description list, not two bare paragraphs.
-          *
-          * Carried over from U1's card: without the labels a screen-reader
-          * user hears a date and a place name with nothing saying which is
-          * which. `sr-only-text` keeps them out of the visual design, where
-          * the layout already makes it obvious. */}
+         *
+         * Carried over from U1's card: without the labels a screen-reader
+         * user hears a date and a place name with nothing saying which is
+         * which. `sr-only-text` keeps them out of the visual design, where
+         * the layout already makes it obvious. */}
         <dl className="flex flex-col gap-1 text-sm text-fg-muted">
           <div>
             <dt className="sr-only-text">{t('date.heldOn')}</dt>

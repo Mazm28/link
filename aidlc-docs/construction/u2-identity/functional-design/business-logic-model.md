@@ -237,32 +237,32 @@ The question proposed 300. U1's approved rules, the `bio_too_long` error, and th
 
 Every U2 failure is an **expected refusal** returning through `Result` (U1 Q7 `A`). Nothing in U2 throws except genuine defects, which `GlobalErrorBoundary` catches.
 
-| Situation | Code | Surface |
-|---|---|---|
-| Malformed phone | `phone_invalid_format` | Inline, under the field, before any request |
-| Wrong or reserved code | `otp_invalid` | Inline, generic, stays on screen |
-| Suspended account | `otp_invalid` | **Identical to wrong code** — BR-U2-72 |
-| Resend too soon | `otp_resend_too_soon` | Countdown state, button disabled |
-| Name too short/long | `name_invalid_length` | Inline |
-| Name has no letter, or control/bidi chars | `name_invalid_characters` | Inline |
-| Bio too long | `bio_too_long` | Inline, with a live counter |
-| No interests | `interests_required` | Inline, on the selector |
-| More than 10 interests | `interests_too_many` | Selector blocks the 11th, with a Persian explanation |
-| Invalid neighborhood | `neighborhood_invalid` | Inline |
-| Invalid telegram id | `telegram_invalid_format` | Inline |
-| Deletion word mismatch | `confirmation_mismatch` | In the dialog, which stays open |
-| Store unavailable | `store_unavailable` | `ErrorState` with retry |
+| Situation                                 | Code                      | Surface                                              |
+| ----------------------------------------- | ------------------------- | ---------------------------------------------------- |
+| Malformed phone                           | `phone_invalid_format`    | Inline, under the field, before any request          |
+| Wrong or reserved code                    | `otp_invalid`             | Inline, generic, stays on screen                     |
+| Suspended account                         | `otp_invalid`             | **Identical to wrong code** — BR-U2-72               |
+| Resend too soon                           | `otp_resend_too_soon`     | Countdown state, button disabled                     |
+| Name too short/long                       | `name_invalid_length`     | Inline                                               |
+| Name has no letter, or control/bidi chars | `name_invalid_characters` | Inline                                               |
+| Bio too long                              | `bio_too_long`            | Inline, with a live counter                          |
+| No interests                              | `interests_required`      | Inline, on the selector                              |
+| More than 10 interests                    | `interests_too_many`      | Selector blocks the 11th, with a Persian explanation |
+| Invalid neighborhood                      | `neighborhood_invalid`    | Inline                                               |
+| Invalid telegram id                       | `telegram_invalid_format` | Inline                                               |
+| Deletion word mismatch                    | `confirmation_mismatch`   | In the dialog, which stays open                      |
+| Store unavailable                         | `store_unavailable`       | `ErrorState` with retry                              |
 
 ---
 
 ## 9. Cache Keys and Invalidation
 
-| Key | Written by | Invalidated by |
-|---|---|---|
-| `['session']` | `SessionProvider` | verify, completeSetup, updateProfile, guidance ack, signOut, delete |
-| `['profile', userId]` | profile reads | completeSetup, updateProfile, delete |
-| `['feed']`, `['activity', *]` | U3 | updateProfile (author name), delete |
-| `['reference', *]` | U1 | never — static |
+| Key                           | Written by        | Invalidated by                                                      |
+| ----------------------------- | ----------------- | ------------------------------------------------------------------- |
+| `['session']`                 | `SessionProvider` | verify, completeSetup, updateProfile, guidance ack, signOut, delete |
+| `['profile', userId]`         | profile reads     | completeSetup, updateProfile, delete                                |
+| `['feed']`, `['activity', *]` | U3                | updateProfile (author name), delete                                 |
+| `['reference', *]`            | U1                | never — static                                                      |
 
 **No cache key contains a phone number, a code, or a contact detail** (BR-U2-60). Sign-in state is component state, not a cached query, precisely because it would need the phone in its key.
 
@@ -270,38 +270,38 @@ Every U2 failure is an **expected refusal** returning through `Result` (U1 Q7 `A
 
 ## 10. Traceability
 
-| Story | Criteria | Where satisfied |
-|---|---|---|
-| **US-01** | Valid number → code screen | §2, BR-U2-01…04 |
-| | Wrong code → generic error, stays | BR-U2-14, §8 |
-| | Malformed → rejected before any request | BR-U2-04 |
-| | First sign-in → setup, not feed | §1, §2 |
-| | Phone never displayed | BR-U2-05 |
-| | No phone/OTP in logs or analytics | BR-U2-60 |
-| | *Round 2*: throttling | BR-U2-17, deferred |
-| **US-02** | Name, avatar, bio, interests, neighborhood | §3 |
-| | Real Tehran neighborhoods, **no location permission** | §3, U1 reference data |
-| | Blocked without ≥1 interest and a neighborhood | BR-U2-24, 25, 30 |
-| | Lands on a ranked feed | §1 → ONBOARDED |
-| **US-03** | Edit reflected everywhere, incl. published activities | §4.1 |
-| | Explicit confirmation, anonymize, sign out | §5, BR-U2-40…43 |
-| | Activity stays visible, author anonymized, no contact route | BR-U2-41, 42 |
-| **US-73** | Shown once after setup | BR-U2-50 |
-| | States the four points | BR-U2-53 |
-| | Always reachable | BR-U2-51 |
-| | Linked from the join sheet | BR-U2-52 (U4 places it) |
+| Story     | Criteria                                                    | Where satisfied         |
+| --------- | ----------------------------------------------------------- | ----------------------- |
+| **US-01** | Valid number → code screen                                  | §2, BR-U2-01…04         |
+|           | Wrong code → generic error, stays                           | BR-U2-14, §8            |
+|           | Malformed → rejected before any request                     | BR-U2-04                |
+|           | First sign-in → setup, not feed                             | §1, §2                  |
+|           | Phone never displayed                                       | BR-U2-05                |
+|           | No phone/OTP in logs or analytics                           | BR-U2-60                |
+|           | _Round 2_: throttling                                       | BR-U2-17, deferred      |
+| **US-02** | Name, avatar, bio, interests, neighborhood                  | §3                      |
+|           | Real Tehran neighborhoods, **no location permission**       | §3, U1 reference data   |
+|           | Blocked without ≥1 interest and a neighborhood              | BR-U2-24, 25, 30        |
+|           | Lands on a ranked feed                                      | §1 → ONBOARDED          |
+| **US-03** | Edit reflected everywhere, incl. published activities       | §4.1                    |
+|           | Explicit confirmation, anonymize, sign out                  | §5, BR-U2-40…43         |
+|           | Activity stays visible, author anonymized, no contact route | BR-U2-41, 42            |
+| **US-73** | Shown once after setup                                      | BR-U2-50                |
+|           | States the four points                                      | BR-U2-53                |
+|           | Always reachable                                            | BR-U2-51                |
+|           | Linked from the join sheet                                  | BR-U2-52 (U4 places it) |
 
-| Requirement | Where |
-|---|---|
-| FR-01 phone + OTP | §2 |
-| FR-02 phone never displayed | BR-U2-05, 60 |
-| FR-03 profile contents | §3, §4 |
-| FR-04 no age restriction | No date-of-birth field; BR-U2-54 is the compensating control |
-| FR-05 three account types | BR-U2-70, 71 |
-| FR-06 edit and delete | §4, §5 |
-| FR-65 safety guidance | §6 |
-| NFR-S1 sensitive data | BR-U2-60…63 |
-| NFR-S6 client is not the boundary | §11 |
+| Requirement                       | Where                                                        |
+| --------------------------------- | ------------------------------------------------------------ |
+| FR-01 phone + OTP                 | §2                                                           |
+| FR-02 phone never displayed       | BR-U2-05, 60                                                 |
+| FR-03 profile contents            | §3, §4                                                       |
+| FR-04 no age restriction          | No date-of-birth field; BR-U2-54 is the compensating control |
+| FR-05 three account types         | BR-U2-70, 71                                                 |
+| FR-06 edit and delete             | §4, §5                                                       |
+| FR-65 safety guidance             | §6                                                           |
+| NFR-S1 sensitive data             | BR-U2-60…63                                                  |
+| NFR-S6 client is not the boundary | §11                                                          |
 
 ---
 
@@ -309,9 +309,9 @@ Every U2 failure is an **expected refusal** returning through `Result` (U1 Q7 `A
 
 Every check in this unit is a **client-side** check, and the client is not the security boundary.
 
-`AuthRepository.verifyCode` accepting any 5-digit code is a mock. The account-enumeration protection in BR-U2-11 is real only when the *server* returns identical responses. The suspended-account refusal in BR-U2-72 is currently a branch a determined user could edit out of their own bundle.
+`AuthRepository.verifyCode` accepting any 5-digit code is a mock. The account-enumeration protection in BR-U2-11 is real only when the _server_ returns identical responses. The suspended-account refusal in BR-U2-72 is currently a branch a determined user could edit out of their own bundle.
 
-None of that makes the Round-1 work pointless: it fixes the *shape* of the interface, so Round 2 implements the same contract server-side and the same property tests run against both. But nothing here should be described as a control until it is enforced somewhere the user cannot reach.
+None of that makes the Round-1 work pointless: it fixes the _shape_ of the interface, so Round 2 implements the same contract server-side and the same property tests run against both. But nothing here should be described as a control until it is enforced somewhere the user cannot reach.
 
 ---
 

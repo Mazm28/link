@@ -98,66 +98,63 @@ export function FoundationDemo() {
           </p>
         ) : null}
 
-
-      {/* ---- results ------------------------------------------------------ */}
-      {feed.isPending ? (
-        <div
-          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          data-testid="demo-loading"
-        >
-          <Skeleton variant="card" />
-          <Skeleton variant="card" />
-          <Skeleton variant="card" />
-          <Skeleton variant="card" />
-        </div>
-      ) : feed.isError ? (
-        <ErrorState
-          title={t('state.error.title')}
-          message={t('state.error.message')}
-          retryLabel={t('action.retry')}
-          onRetry={() => void feed.refetch()}
-        />
-      ) : feed.data.items.length === 0 ? (
-        <EmptyState
-          title={t('state.empty.search.title')}
-          message={t('state.empty.search.message')}
-          action={{ label: t('state.empty.search.action'), onClick: clear }}
-          illustration="🔍"
-        />
-      ) : (
-        <section className="flex flex-col gap-4">
-          <p className="text-sm text-text-muted" data-testid="demo-activity-count">
-            {t('demo.activityCount', { count: toPersianDigits(feed.data.items.length) })}
-          </p>
-
+        {/* ---- results ------------------------------------------------------ */}
+        {feed.isPending ? (
           <div
-            data-testid="demo-grid"
             className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            data-testid="demo-loading"
           >
-            {feed.data.items.map((activity) => (
-              <DemoActivityCard
-                key={activity.id}
-                activity={activity}
-                categoryName={categoryName}
-                categoryIcon={categoryIcon}
-                neighborhoodName={neighborhoodName}
-                onOpen={() => setOpenActivityId(String(activity.id))}
-              />
-            ))}
+            <Skeleton variant="card" />
+            <Skeleton variant="card" />
+            <Skeleton variant="card" />
+            <Skeleton variant="card" />
           </div>
-        </section>
-      )}
+        ) : feed.isError ? (
+          <ErrorState
+            title={t('state.error.title')}
+            message={t('state.error.message')}
+            retryLabel={t('action.retry')}
+            onRetry={() => void feed.refetch()}
+          />
+        ) : feed.data.items.length === 0 ? (
+          <EmptyState
+            title={t('state.empty.search.title')}
+            message={t('state.empty.search.message')}
+            action={{ label: t('state.empty.search.action'), onClick: clear }}
+            illustration="🔍"
+          />
+        ) : (
+          <section className="flex flex-col gap-4">
+            <p className="text-sm text-text-muted" data-testid="demo-activity-count">
+              {t('demo.activityCount', { count: toPersianDigits(feed.data.items.length) })}
+            </p>
 
-      <ActivityDetailModal
-        activity={
-          feed.data?.items.find((a) => String(a.id) === openActivityId) ?? null
-        }
-        onClose={() => setOpenActivityId(null)}
-        categoryName={categoryName}
-        categoryIcon={categoryIcon}
-        neighborhoodName={neighborhoodName}
-        tintClass={tintClass}
-      />
+            <div
+              data-testid="demo-grid"
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            >
+              {feed.data.items.map((activity) => (
+                <DemoActivityCard
+                  key={activity.id}
+                  activity={activity}
+                  categoryName={categoryName}
+                  categoryIcon={categoryIcon}
+                  neighborhoodName={neighborhoodName}
+                  onOpen={() => setOpenActivityId(String(activity.id))}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        <ActivityDetailModal
+          activity={feed.data?.items.find((a) => String(a.id) === openActivityId) ?? null}
+          onClose={() => setOpenActivityId(null)}
+          categoryName={categoryName}
+          categoryIcon={categoryIcon}
+          neighborhoodName={neighborhoodName}
+          tintClass={tintClass}
+        />
       </div>
     </div>
   );

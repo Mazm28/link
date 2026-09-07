@@ -42,7 +42,12 @@ export function LocationPicker({
       />
 
       {value !== null && (
-        <Button variant="ghost" size="sm" onClick={() => onChange(null)} data-testid="location-clear">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onChange(null)}
+          data-testid="location-clear"
+        >
           {t('activity.clearPoint')}
         </Button>
       )}

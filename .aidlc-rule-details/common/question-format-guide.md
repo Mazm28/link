@@ -3,11 +3,13 @@
 ## MANDATORY: All Questions Must Use This Format
 
 ### Rule: Never Ask Questions in Chat
+
 **CRITICAL**: You must NEVER ask questions directly in the chat. ALL questions must be placed in dedicated question files.
 
 ### Question File Format
 
 #### File Naming Convention
+
 - Use descriptive names: `{phase-name}-questions.md`
 - Examples:
   - `classification-questions.md`
@@ -16,10 +18,12 @@
   - `design-questions.md`
 
 #### Question Structure
+
 Every question must include meaningful options plus "Other" as the last option:
 
 ```markdown
 ## Question [Number]
+
 [Clear, specific question text]
 
 A) [First meaningful option]
@@ -30,10 +34,11 @@ B) [Second meaningful option]
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```
 
 **CRITICAL**:
+
 - "Other" is MANDATORY as the LAST option for every question
 - Only include meaningful options - don't make up options to fill slots
 - Use as many or as few options as make sense (minimum 2 + Other)
@@ -47,6 +52,7 @@ X) Other (please describe after [Answer]: tag below)
 Please answer the following questions to help clarify the requirements.
 
 ## Question 1
+
 What is the primary user authentication method?
 
 A) Username and password
@@ -59,9 +65,10 @@ D) Multi-factor authentication
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 2
+
 Will this be a web or mobile application?
 
 A) Web application
@@ -72,9 +79,10 @@ C) Both web and mobile
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 3
+
 Is this a new project or existing codebase?
 
 A) New project (greenfield)
@@ -83,14 +91,16 @@ B) Existing codebase (brownfield)
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```
 
 ### User Response Format
+
 Users will answer by filling in the letter choice after [Answer]: tag:
 
 ```markdown
 ## Question 1
+
 What is the primary user authentication method?
 
 A) Username and password
@@ -105,7 +115,9 @@ D) Multi-factor authentication
 ```
 
 ### Reading User Responses
+
 After user confirms completion:
+
 1. Read the question file
 2. Extract answers after [Answer]: tags
 3. Validate all questions are answered
@@ -114,12 +126,14 @@ After user confirms completion:
 ### Multiple Choice Guidelines
 
 #### Option Count
+
 - Minimum: 2 meaningful options + "Other" (A, B, C)
 - Typical: 3-4 meaningful options + "Other" (A, B, C, D, E)
 - Maximum: 5 meaningful options + "Other" (A, B, C, D, E, F)
 - **CRITICAL**: Don't make up options just to fill slots - only include meaningful choices
 
 #### Option Quality
+
 - Make options mutually exclusive
 - Cover the most common scenarios
 - Only include meaningful, realistic options
@@ -128,8 +142,10 @@ After user confirms completion:
 - **Don't make up options to fill A, B, C, D slots**
 
 #### Good Example:
+
 ```markdown
 ## Question 5
+
 What database technology will be used?
 
 A) Relational (PostgreSQL, MySQL)
@@ -142,12 +158,14 @@ D) Graph Database (Neo4j, Neptune)
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```
 
 #### Bad Example (Avoid):
+
 ```markdown
 ## Question 5
+
 What database will you use?
 
 A) Yes
@@ -156,27 +174,31 @@ B) No
 
 C) Maybe
 
-[Answer]: 
+[Answer]:
 ```
 
 ### Workflow Integration
 
 #### Step 1: Create Question File
+
 ```markdown
 Create aidlc-docs/{phase-name}-questions.md with all questions
 ```
 
 #### Step 2: Inform User
+
 ```
-"I've created {phase-name}-questions.md with [X] questions. 
-Please answer each question by filling in the letter choice after the [Answer]: tag. 
+"I've created {phase-name}-questions.md with [X] questions.
+Please answer each question by filling in the letter choice after the [Answer]: tag.
 If none of the options match your needs, choose the last option (Other) and describe your preference. Let me know when you're done."
 ```
 
 #### Step 3: Wait for Confirmation
+
 Wait for user to say "done", "completed", "finished", or similar.
 
 #### Step 4: Read and Analyze
+
 ```
 Read aidlc-docs/{phase-name}-questions.md
 Extract all answers
@@ -187,23 +209,29 @@ Proceed with analysis
 ### Error Handling
 
 #### Missing Answers
+
 If any [Answer]: tag is empty:
+
 ```
-"I noticed Question [X] is not answered. Please provide an answer using one of the letter choices 
+"I noticed Question [X] is not answered. Please provide an answer using one of the letter choices
 for all questions before proceeding."
 ```
 
 #### Invalid Answers
+
 If answer is not a valid letter choice:
+
 ```
-"Question [X] has an invalid answer '[answer]'. 
+"Question [X] has an invalid answer '[answer]'.
 Please use only the letter choices provided in the question."
 ```
 
 #### Ambiguous Answers
+
 If user provides explanation instead of letter:
+
 ```
-"For Question [X], please provide the letter choice that best matches your answer. 
+"For Question [X], please provide the letter choice that best matches your answer.
 If none match, choose 'Other' and add your description after the [Answer]: tag."
 ```
 
@@ -212,19 +240,24 @@ If none match, choose 'Other' and add your description after the [Answer]: tag."
 **MANDATORY**: After reading user responses, you MUST check for contradictions and ambiguities.
 
 #### Detecting Contradictions
+
 Look for logically inconsistent answers:
+
 - Scope mismatch: "Bug fix" but "Entire codebase affected"
 - Risk mismatch: "Low risk" but "Breaking changes"
 - Timeline mismatch: "Quick fix" but "Multiple subsystems"
 - Impact mismatch: "Single component" but "Significant architecture changes"
 
 #### Detecting Ambiguities
+
 Look for unclear or borderline responses:
+
 - Answers that could fit multiple classifications
 - Responses that lack specificity
 - Conflicting indicators across multiple questions
 
 #### Creating Clarification Questions
+
 If contradictions or ambiguities detected:
 
 1. **Create clarification file**: `{phase-name}-clarification-questions.md`
@@ -233,16 +266,19 @@ If contradictions or ambiguities detected:
 4. **Reference original questions**: Show which questions had conflicting answers
 
 **Example**:
+
 ```markdown
 # [Phase Name] Clarification Questions
 
 I detected contradictions in your responses that need clarification:
 
 ## Contradiction 1: [Brief Description]
+
 You indicated "[Answer A]" (Q[X]:[Letter]) but also "[Answer B]" (Q[Y]:[Letter]).
 These responses are contradictory because [explanation].
 
 ### Clarification Question 1
+
 [Specific question to resolve contradiction]
 
 A) [Option that resolves toward first answer]
@@ -253,12 +289,14 @@ C) [Option that provides middle ground]
 
 D) [Option that reframes the question]
 
-[Answer]: 
+[Answer]:
 
 ## Ambiguity 1: [Brief Description]
+
 Your response to Q[X] ("[Answer]") is ambiguous because [explanation].
 
 ### Clarification Question 2
+
 [Specific question to clarify ambiguity]
 
 A) [Clear option 1]
@@ -269,7 +307,7 @@ C) [Clear option 3]
 
 D) [Clear option 4]
 
-[Answer]: 
+[Answer]:
 ```
 
 #### Workflow for Clarifications
@@ -282,6 +320,7 @@ D) [Clear option 4]
 6. **Proceed**: Only move forward when all contradictions are resolved
 
 #### Example User Message
+
 ```
 "I detected 2 contradictions in your responses:
 
@@ -303,8 +342,10 @@ Please answer these clarifying questions before I can proceed with classificatio
 ### Phase-Specific Examples
 
 #### Example with 2 meaningful options:
+
 ```markdown
 ## Question 1
+
 Is this a new project or existing codebase?
 
 A) New project (greenfield)
@@ -313,12 +354,14 @@ B) Existing codebase (brownfield)
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```
 
 #### Example with 3 meaningful options:
+
 ```markdown
 ## Question 2
+
 What is the deployment target?
 
 A) Cloud (AWS, Azure, GCP)
@@ -329,12 +372,14 @@ C) Hybrid (both cloud and on-premises)
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```
 
 #### Example with 4 meaningful options:
+
 ```markdown
 ## Question 3
+
 What architectural pattern should be used?
 
 A) Monolithic architecture
@@ -347,12 +392,13 @@ D) Event-driven architecture
 
 E) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 ```
 
 ## Summary
 
-**Remember**: 
+**Remember**:
+
 - ✅ Always create question files
 - ✅ Always use multiple choice format
 - ✅ **Always include "Other" as the LAST option (MANDATORY)**

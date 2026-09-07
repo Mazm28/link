@@ -51,7 +51,11 @@ export function RatingStars({
           const isFilled = score <= filled;
           if (readonly) {
             return (
-              <span key={score} aria-hidden="true" className={isFilled ? 'text-warning' : 'text-border-strong'}>
+              <span
+                key={score}
+                aria-hidden="true"
+                className={isFilled ? 'text-warning' : 'text-border-strong'}
+              >
                 ★
               </span>
             );

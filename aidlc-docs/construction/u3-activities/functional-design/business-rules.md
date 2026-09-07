@@ -32,7 +32,7 @@ An unbounded field is not neutral: with manual Jalali entry a mistyped year puts
 
 **BR-U3-11** — the choice is presented as **two pictures, side by side**, not as two labels: the exact option renders a **pin**, the approximate option renders a **shaded circle**. The selected one is outlined.
 
-This is the Divar control, and it is better than the one this plan originally proposed. Q4 `A` put the consequence in *words* beside each radio. Showing a pin next to a circle does not depend on the reader parsing a sentence, in a second language, on a phone, while doing something else. For the most consequential field in the product, seeing the difference beats reading about it.
+This is the Divar control, and it is better than the one this plan originally proposed. Q4 `A` put the consequence in _words_ beside each radio. Showing a pin next to a circle does not depend on the reader parsing a sentence, in a second language, on a phone, while doing something else. For the most consequential field in the product, seeing the difference beats reading about it.
 
 **BR-U3-12** — `exactAddress` is **required when precision is `exact`**, and optional otherwise.
 
@@ -44,13 +44,13 @@ This is the Divar control, and it is better than the one this plan originally pr
 
 **BR-U3-16 (INV-5)** — same viewer, same activity: **no `coordinate` key**, and an `approximateArea` **derived from the neighborhood alone**.
 
-**BR-U3-17** — `approximateArea` for a neighborhood *n* is exactly `{ center: n.center, radiusMeters: n.radiusMeters }`. Not a function of the activity. Not jittered. **Two activities in the same neighborhood produce identical areas** — which is the point: the map then carries precisely what the neighborhood name carries, and nothing more.
+**BR-U3-17** — `approximateArea` for a neighborhood _n_ is exactly `{ center: n.center, radiusMeters: n.radiusMeters }`. Not a function of the activity. Not jittered. **Two activities in the same neighborhood produce identical areas** — which is the point: the map then carries precisely what the neighborhood name carries, and nothing more.
 
 **BR-U3-18** — `coordinate` and `approximateArea` are **mutually exclusive** on a projected view.
 
 **BR-U3-19** — these rules apply on **every** surface that can carry an activity: feed, search results, category browse, detail, my-activities, the map view, the author's public profile, and anything U4–U6 add. The rule lives in `projectActivity`, so a new surface inherits it rather than re-implementing it.
 
-**BR-U3-20** — NFR-S6: all of the above is client-side in Round 1 and is **not a security control** until Round 2 enforces it server-side. What Round 1 fixes is the *shape* — the same pure function runs on both sides, and the same property tests run against both.
+**BR-U3-20** — NFR-S6: all of the above is client-side in Round 1 and is **not a security control** until Round 2 enforces it server-side. What Round 1 fixes is the _shape_ — the same pure function runs on both sides, and the same property tests run against both.
 
 ---
 
@@ -84,32 +84,35 @@ Public, not private. US-53 — "see a person's rating and history" — depends o
 
 ## 5. City Filtering (CQ2 `A`, **amended by CR-05**)
 
-> **Amended 2026-08-08 (CR-05, answer Q2 `A`).** CQ2 `A` chose city-*first* navigation and BR-U3-50/51 encoded it as a scope. In practice Round-1 content is almost entirely Tehran, so a viewer placed in another city without asking met a one-item feed and concluded the app was broken. The city is now a filter someone opts into. The original text of each amended rule is kept below it, because BR-U3-53 depended on the old form and its dependency did not survive.
+> **Amended 2026-08-08 (CR-05, answer Q2 `A`).** CQ2 `A` chose city-_first_ navigation and BR-U3-50/51 encoded it as a scope. In practice Round-1 content is almost entirely Tehran, so a viewer placed in another city without asking met a one-item feed and concluded the app was broken. The city is now a filter someone opts into. The original text of each amended rule is kept below it, because BR-U3-53 depended on the old form and its dependency did not survive.
 
 **BR-U3-50** — the feed, search, and category browse are scoped to **one city only when the viewer chooses one**. With no city chosen — the default — they are **unscoped** and return activities from every city.
-> *Was: "are scoped to one city."*
+
+> _Was: "are scoped to one city."_
 
 **BR-U3-51** — the active city defaults to **all cities**. It is switchable from the top bar, where "all cities" is an explicit named option rather than a cleared filter, and it persists locally. Switching it **does not** change the saved profile — the same separation US-21 already requires for the neighborhood filter. Posting still needs one concrete city, supplied by `composeCityId`: the active city if chosen, else the viewer's `homeCityId`, else Tehran.
-> *Was: "defaults to the viewer's `homeCityId`, then to Tehran."* Only the default changed; the no-write-to-profile guarantee is the part that mattered and it is untouched.
 
-**BR-U3-52** — a city with no activities gets an **honest empty state** naming the city, not a spinner and not a blank screen (NFR-U5). Still reachable — a viewer who *does* choose a small city gets exactly this — but it is no longer the state a new viewer lands in by default.
+> _Was: "defaults to the viewer's `homeCityId`, then to Tehran."_ Only the default changed; the no-write-to-profile guarantee is the part that mattered and it is untouched.
+
+**BR-U3-52** — a city with no activities gets an **honest empty state** naming the city, not a spinner and not a blank screen (NFR-U5). Still reachable — a viewer who _does_ choose a small city gets exactly this — but it is no longer the state a new viewer lands in by default.
 
 **BR-U3-53** — ⚠️ **RETIRED. Its premise is gone, and its retirement is not free.**
-> *Was: "city scoping **dissolves** the cross-city distance problem CR-01 §4 raised. Hop distance between two cities is undefined because the adjacency graph is disconnected; scoping to one city means it is never computed. The question stops existing rather than needing an answer."*
+
+> _Was: "city scoping **dissolves** the cross-city distance problem CR-01 §4 raised. Hop distance between two cities is undefined because the adjacency graph is disconnected; scoping to one city means it is never computed. The question stops existing rather than needing an answer."_
 
 The question stopped existing only because scoping guaranteed it was never asked. An unscoped feed asks it on **every** ranking pass: a Tehran viewer now routinely sees activities in Mashhad and Yazd, and proximity has to mean something for them. See **BR-U3-54**, which is what BR-U3-53 was standing in for all along.
 
 **BR-U3-54 (new, CR-05)** — **unmeasurable distance is UNDEFINED, not far.** Proximity contributes a term only when **both** neighborhoods are present in the adjacency graph. Otherwise it contributes **no term at all** and its weight is redistributed, exactly as BR-U3-61 requires for any missing input. Such an activity is ranked on interest and recency alone.
 
-The graph covers Tehran only, so in practice this covers two cases with one test: an activity in a different city, and two neighborhoods in the same non-Tehran city — which has neighborhood *names* (CR-04) but no adjacency data and never had any.
-→ *Property test (P-U3-07).*
+The graph covers Tehran only, so in practice this covers two cases with one test: an activity in a different city, and two neighborhoods in the same non-Tehran city — which has neighborhood _names_ (CR-04) but no adjacency data and never had any.
+→ _Property test (P-U3-07)._
 
-**Why this needed a rule rather than being left to the code**: before CR-05 the code produced two *different* answers for the same situation, and the difference was invisible because city scoping made it unreachable.
+**Why this needed a rule rather than being left to the code**: before CR-05 the code produced two _different_ answers for the same situation, and the difference was invisible because city scoping made it unreachable.
 
-| Activity | `neighborhoodId` | In `GRAPH` (Tehran-only)? | Old result |
-|---|---|---|---|
-| Mashhad | present | no | `neighborhoodDistance` → `FAR` (7) → `max(0, 1 − 7/6)` = **0, at full 0.45 weight** |
-| Yazd | absent (no neighborhoods in that city) | — | `null` → **term dropped, weight redistributed** |
+| Activity | `neighborhoodId`                       | In `GRAPH` (Tehran-only)? | Old result                                                                          |
+| -------- | -------------------------------------- | ------------------------- | ----------------------------------------------------------------------------------- |
+| Mashhad  | present                                | no                        | `neighborhoodDistance` → `FAR` (7) → `max(0, 1 − 7/6)` = **0, at full 0.45 weight** |
+| Yazd     | absent (no neighborhoods in that city) | —                         | `null` → **term dropped, weight redistributed**                                     |
 
 So a Yazd activity systematically **outranked** an otherwise-identical Mashhad one, for no reason a user could perceive and none a designer intended — purely because Mashhad has neighborhood data in the reference set and Yazd does not. Better data made an activity rank worse.
 
@@ -123,21 +126,21 @@ BR-U3-54 makes both behave identically, which is the honest reading: the adjacen
 
 **BR-U3-60** — the combined score is a **weighted sum** of three terms, each normalized to 0–1:
 
-| Term | Meaning | Weight |
-|---|---|---|
-| `proximity` | 1 − (hop distance ÷ max hops), from the viewer's neighborhood | 0.45 |
-| `interest` | overlap between the viewer's tags and the activity's categories, over the viewer's tag count | 0.35 |
-| `recency` | how soon the activity starts, decaying over the 2-month horizon | 0.20 |
+| Term        | Meaning                                                                                      | Weight |
+| ----------- | -------------------------------------------------------------------------------------------- | ------ |
+| `proximity` | 1 − (hop distance ÷ max hops), from the viewer's neighborhood                                | 0.45   |
+| `interest`  | overlap between the viewer's tags and the activity's categories, over the viewer's tag count | 0.35   |
+| `recency`   | how soon the activity starts, decaying over the 2-month horizon                              | 0.20   |
 
 Weights are **data, not code**, so tuning does not require a change to the ranking function. FR-27 wants this to be the recommendation-engine seam; a seam that cannot be tuned is not one.
 
 **BR-U3-61** — **a term whose input is missing contributes zero**, and the remaining weights are renormalized. This is what makes Q1 and Q2 fall out rather than needing special cases: a viewer with no neighborhood simply has no proximity term.
 
 **BR-U3-62** — ranking **preserves the set**: same activities out as in, none added, none dropped.
-→ *Property test.*
+→ _Property test._
 
 **BR-U3-63** — ranking is **deterministic and total**: identical input yields identical order, and every activity receives a position. Ties break by `startsAt`, then by `id` — never by insertion order, which is not stable across a repository swap.
-→ *Property test.*
+→ _Property test._
 
 **BR-U3-64 (Q1 `A`)** — the **neighborhood mode** requires a viewer neighborhood. Without one it falls back to combined, **says so on screen**, and offers a one-tap way to set one. Never a dead end; never a silent lie about what is being ranked.
 
@@ -145,8 +148,8 @@ Weights are **data, not code**, so tuning does not require a change to the ranki
 
 **BR-U3-66** — ranking is a **pure function in its own module**, taking the viewer's context and returning an order. It reads no repository and performs no I/O (FR-27).
 
-**BR-U3-67** — ranking runs **before projection** in the read pipeline, so it may use fields the viewer will not receive. That freedom must not become an ordering leak: the *output order* may not encode a withheld field.
-→ *Property test.*
+**BR-U3-67** — ranking runs **before projection** in the read pipeline, so it may use fields the viewer will not receive. That freedom must not become an ordering leak: the _output order_ may not encode a withheld field.
+→ _Property test._
 
 ---
 
@@ -155,14 +158,14 @@ Weights are **data, not code**, so tuning does not require a change to the ranki
 **BR-U3-70** — filters combine **AND across types, OR within a type** (Q8 `A`). Two categories mean "either"; a category plus a neighborhood means "both".
 
 **BR-U3-71** — filter composition is **commutative**: applying the same filters in any order yields the same set. This holds by construction under BR-U3-70 rather than by testing — the composed predicate is a conjunction of independent disjunctions.
-→ *Property test.*
+→ _Property test._
 
 **BR-U3-72** — search matches `title` and `description`, both **normalized with `normalizePersian`** (BR-U1-03), substring, case-insensitive. Reusing U1's function is what makes ک/ك, ی/ي, and ZWNJ variants match without a second implementation to drift.
 
 **BR-U3-73** — a title match ranks above a description match; within each, the combined score orders the rest.
 
-**BR-U3-74** — **search results obey INV-2 and INV-5 exactly as the feed does.** This is stated separately because search is the one path where the *matching* text and the *returned* text differ — a query can match against a description the viewer may partially not receive.
-→ *Property test.*
+**BR-U3-74** — **search results obey INV-2 and INV-5 exactly as the feed does.** This is stated separately because search is the one path where the _matching_ text and the _returned_ text differ — a query can match against a description the viewer may partially not receive.
+→ _Property test._
 
 **BR-U3-75** — an empty result set gets a designed empty state suggesting a wider neighborhood or a category, never a blank screen (NFR-U5, US-20).
 
@@ -194,17 +197,17 @@ Weights are **data, not code**, so tuning does not require a change to the ranki
 
 Seven. Four from the story map, two added at design, **one added by CR-05**.
 
-| ID | Property | Category |
-|---|---|---|
-| **P-U3-01** | ⚠️ For any activity with `neighborhood` precision and any non-author viewer, the projection has **no `exactAddress` and no `coordinate` key**, and its `approximateArea` **equals the one derived from its neighborhood alone** | Safety — INV-2, INV-5 |
-| **P-U3-02** | Ranking preserves the set | Invariance |
-| **P-U3-03** | Ranking is deterministic and total | Determinism |
-| **P-U3-04** | Filter composition is commutative | Commutativity |
-| **P-U3-05** | ⚠️ Search results satisfy P-U3-01 for every query | Safety — BR-U3-74 |
-| **P-U3-06** | Ranking order is unchanged when a withheld field is varied | Non-leakage — BR-U3-67 |
-| **P-U3-07** | ⚠️ For any viewer and any two activities identical except that one is in a city **with** neighborhood data and one in a city **without**, neither outranks the other on proximity — cross-city contributes no term either way | Consistency — BR-U3-54, CR-05 |
+| ID          | Property                                                                                                                                                                                                                        | Category                      |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **P-U3-01** | ⚠️ For any activity with `neighborhood` precision and any non-author viewer, the projection has **no `exactAddress` and no `coordinate` key**, and its `approximateArea` **equals the one derived from its neighborhood alone** | Safety — INV-2, INV-5         |
+| **P-U3-02** | Ranking preserves the set                                                                                                                                                                                                       | Invariance                    |
+| **P-U3-03** | Ranking is deterministic and total                                                                                                                                                                                              | Determinism                   |
+| **P-U3-04** | Filter composition is commutative                                                                                                                                                                                               | Commutativity                 |
+| **P-U3-05** | ⚠️ Search results satisfy P-U3-01 for every query                                                                                                                                                                               | Safety — BR-U3-74             |
+| **P-U3-06** | Ranking order is unchanged when a withheld field is varied                                                                                                                                                                      | Non-leakage — BR-U3-67        |
+| **P-U3-07** | ⚠️ For any viewer and any two activities identical except that one is in a city **with** neighborhood data and one in a city **without**, neither outranks the other on proximity — cross-city contributes no term either way   | Consistency — BR-U3-54, CR-05 |
 
-**P-U3-01's equality clause is the one that matters.** A test asserting only "no coordinate key" passes against a jittered implementation, which is the exact failure INV-5 exists to prevent. Asserting the area *equals* the neighborhood-derived area is what makes jitter a test failure.
+**P-U3-01's equality clause is the one that matters.** A test asserting only "no coordinate key" passes against a jittered implementation, which is the exact failure INV-5 exists to prevent. Asserting the area _equals_ the neighborhood-derived area is what makes jitter a test failure.
 
 **P-U3-06** is unusual and worth keeping: it generates two activities differing only in a field the viewer cannot see, and asserts their relative order is unchanged. It is the only check that the rank-before-project ordering is not being used to smuggle information out.
 
@@ -212,17 +215,17 @@ Seven. Four from the story map, two added at design, **one added by CR-05**.
 
 ## 11. Rule Summary
 
-| ID range | Area | Property tests |
-|---|---|---|
-| BR-U3-01 … 07 | Creation and validation | — |
-| BR-U3-10 … 20 | ⚠️ Location precision | 1 (P-U3-01) |
-| BR-U3-30 … 34 | Edit and cancel | — |
-| BR-U3-40 … 43 | Past activities leave discovery | — |
-| BR-U3-50 … 53 | City scoping | — |
-| BR-U3-60 … 67 | Ranking | 3 (P-U3-02, 03, 06) |
-| BR-U3-70 … 75 | Filters and search | 2 (P-U3-04, 05) |
-| BR-U3-80 … 81 | Pagination | — |
-| BR-U3-90 … 94 | The map | — |
+| ID range      | Area                            | Property tests      |
+| ------------- | ------------------------------- | ------------------- |
+| BR-U3-01 … 07 | Creation and validation         | —                   |
+| BR-U3-10 … 20 | ⚠️ Location precision           | 1 (P-U3-01)         |
+| BR-U3-30 … 34 | Edit and cancel                 | —                   |
+| BR-U3-40 … 43 | Past activities leave discovery | —                   |
+| BR-U3-50 … 53 | City scoping                    | —                   |
+| BR-U3-60 … 67 | Ranking                         | 3 (P-U3-02, 03, 06) |
+| BR-U3-70 … 75 | Filters and search              | 2 (P-U3-04, 05)     |
+| BR-U3-80 … 81 | Pagination                      | —                   |
+| BR-U3-90 … 94 | The map                         | —                   |
 
 **48 rules, 6 property tests, 1 new contract invariant.**
 

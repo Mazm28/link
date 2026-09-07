@@ -24,9 +24,7 @@ function pathsWithUndefined(value: unknown, path = ''): string[] {
 
 function keysOf(value: unknown): Set<string> {
   return new Set(
-    value !== null && typeof value === 'object' && !Array.isArray(value)
-      ? Object.keys(value)
-      : [],
+    value !== null && typeof value === 'object' && !Array.isArray(value) ? Object.keys(value) : [],
   );
 }
 

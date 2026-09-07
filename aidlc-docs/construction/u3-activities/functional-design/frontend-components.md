@@ -11,20 +11,20 @@ All copy comes from the Persian catalogue by key.
 
 Nine from `components.md` §5.2, plus three the clarifications added.
 
-| Component | Stories |
-|---|---|
-| `FeedScreen` | US-20, US-21, US-22 |
-| `ActivityCard` | US-20, US-25 |
-| `ActivityDetailScreen` | US-25 |
-| `ActivityComposerScreen` | US-10, US-12 |
-| **`LocationPrecisionField`** ⚠️ | **US-11** |
-| `MyActivitiesScreen` | US-13 |
-| `SearchScreen` | US-23 |
-| `FilterPanel` *(extended, exists from CR-02)* | US-23 |
-| `CategoryBrowseScreen` | US-24 |
-| **`ActivityMap`** — NEW | CQ3 |
-| **`LocationPicker`** — NEW | CQ2 |
-| **`CitySwitcher`** — NEW | CQ2 |
+| Component                                     | Stories             |
+| --------------------------------------------- | ------------------- |
+| `FeedScreen`                                  | US-20, US-21, US-22 |
+| `ActivityCard`                                | US-20, US-25        |
+| `ActivityDetailScreen`                        | US-25               |
+| `ActivityComposerScreen`                      | US-10, US-12        |
+| **`LocationPrecisionField`** ⚠️               | **US-11**           |
+| `MyActivitiesScreen`                          | US-13               |
+| `SearchScreen`                                | US-23               |
+| `FilterPanel` _(extended, exists from CR-02)_ | US-23               |
+| `CategoryBrowseScreen`                        | US-24               |
+| **`ActivityMap`** — NEW                       | CQ3                 |
+| **`LocationPicker`** — NEW                    | CQ2                 |
+| **`CitySwitcher`** — NEW                      | CQ2                 |
 
 ---
 
@@ -53,7 +53,7 @@ props: {
    is shown to everyone          is shown
 ```
 
-Each preview renders **the poster's actual neighborhood** — their own circle, their own pin — not a generic illustration. A person deciding whether to publish their home address should see what that decision produces for *their* address.
+Each preview renders **the poster's actual neighborhood** — their own circle, their own pin — not a generic illustration. A person deciding whether to publish their home address should see what that decision produces for _their_ address.
 
 **Why pictures rather than labelled radios.** The plan's Q4 `A` put the consequence in words beside each option, and the Divar screenshot showed a better answer. Words require the reader to parse a sentence, in a second language, on a phone, while doing something else. A pin next to a circle does not. For the single most consequential field in the product, showing beats telling.
 
@@ -82,14 +82,14 @@ Opens centred on the chosen neighborhood, so the first interaction is an adjustm
 props: { activities: ActivityView[]; onSelect: (id: ActivityId) => void }
 ```
 
-| Behaviour | Rule |
-|---|---|
-| Shows the **current filtered set**, not everything | BR-U3-90 |
-| `coordinate` present → **pin** | BR-U3-91 |
-| `approximateArea` present → **shaded circle**, no pin | BR-U3-91 |
-| Several approximate activities in one neighborhood → **one circle with a count** | BR-U3-92 |
-| A legend states which is which | BR-U3-91 |
-| Neshan tiles when configured; tile-free area rendering when not | BR-U3-93, NFR-R10 |
+| Behaviour                                                                        | Rule              |
+| -------------------------------------------------------------------------------- | ----------------- |
+| Shows the **current filtered set**, not everything                               | BR-U3-90          |
+| `coordinate` present → **pin**                                                   | BR-U3-91          |
+| `approximateArea` present → **shaded circle**, no pin                            | BR-U3-91          |
+| Several approximate activities in one neighborhood → **one circle with a count** | BR-U3-92          |
+| A legend states which is which                                                   | BR-U3-91          |
+| Neshan tiles when configured; tile-free area rendering when not                  | BR-U3-93, NFR-R10 |
 
 **The component cannot draw a pin for an approximate activity, because it is never given a coordinate for one.** That is not a rule it follows — it is the shape of its input.
 
@@ -100,7 +100,10 @@ props: { activities: ActivityView[]; onSelect: (id: ActivityId) => void }
 ## 5. `FeedScreen`
 
 ```ts
-state: { mode: 'combined' | 'neighborhood' | 'interest'; view: 'list' | 'map' }
+state: {
+  mode: 'combined' | 'neighborhood' | 'interest';
+  view: 'list' | 'map';
+}
 ```
 
 Three tabs above the feed, combined default (Q11 `A`). A mode switch is **not** a filter — it changes what "relevant" means rather than narrowing a set — so it stays out of the filter panel CR-02 built.
@@ -117,9 +120,9 @@ A list/map toggle switches the same result set between `ActivityCard`s and `Acti
 
 Both render **from `ActivityView` only** — never from `Activity`. That is what makes INV-2 and INV-5 structural at the component level: the exact address and coordinate are not in scope to leak.
 
-| Precision | Location line |
-|---|---|
-| `exact` | full address, with a pin on the detail map |
+| Precision      | Location line                                       |
+| -------------- | --------------------------------------------------- |
+| `exact`        | full address, with a pin on the detail map          |
 | `neighborhood` | «حوالی {نام محله}», with a circle on the detail map |
 
 The detail screen shows the host with their rating — this is the moment someone decides whether to contact a stranger, and reputation is most of what they have.
@@ -154,14 +157,14 @@ Grouped upcoming / past / cancelled, each with its request count; past activitie
 
 ## 10. States (NFR-U5)
 
-| Surface | Loading | Empty | Error |
-|---|---|---|---|
-| Feed | Card skeletons | Widen neighborhood / browse categories | Retry |
-| Feed, empty city | — | **Names the city** (BR-U3-52) | — |
-| Search | Skeletons | «چیزی پیدا نشد» + clear filters | Retry |
-| Map | Skeleton | Same as feed | **Tile-free area rendering**, not a broken frame |
-| Composer | — | — | Inline per field |
-| My activities | Skeletons | How to create a first activity | Retry |
+| Surface          | Loading        | Empty                                  | Error                                            |
+| ---------------- | -------------- | -------------------------------------- | ------------------------------------------------ |
+| Feed             | Card skeletons | Widen neighborhood / browse categories | Retry                                            |
+| Feed, empty city | —              | **Names the city** (BR-U3-52)          | —                                                |
+| Search           | Skeletons      | «چیزی پیدا نشد» + clear filters        | Retry                                            |
+| Map              | Skeleton       | Same as feed                           | **Tile-free area rendering**, not a broken frame |
+| Composer         | —              | —                                      | Inline per field                                 |
+| My activities    | Skeletons      | How to create a first activity         | Retry                                            |
 
 ---
 

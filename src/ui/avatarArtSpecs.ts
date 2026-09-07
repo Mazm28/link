@@ -48,4 +48,3 @@ export function hasAvatarArt(preset: string | undefined): boolean {
 export function stripPrefix(preset: string): string {
   return preset.startsWith('avt_') ? preset.slice(4) : preset;
 }
-

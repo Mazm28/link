@@ -26,7 +26,12 @@ export function Card({
   // (NFR-U3).
   if (interactive) {
     return (
-      <button type="button" onClick={onClick} className={`${classes} w-full text-start`} data-testid={testId}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={`${classes} w-full text-start`}
+        data-testid={testId}
+      >
         {children}
       </button>
     );

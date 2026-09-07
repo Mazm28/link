@@ -7,6 +7,7 @@
 ## Future Scope
 
 The Operations phase will eventually include:
+
 - Deployment planning and execution
 - Monitoring and observability setup
 - Incident response procedures

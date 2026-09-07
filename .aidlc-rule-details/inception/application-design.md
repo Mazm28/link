@@ -1,9 +1,11 @@
 # Application Design - Detailed Steps
 
 ## Purpose
+
 **High-level component identification and service layer design**
 
 Application Design focuses on:
+
 - Identifying main functional components and their responsibilities
 - Defining component interfaces (not detailed business logic)
 - Designing service layer for orchestration
@@ -12,6 +14,7 @@ Application Design focuses on:
 **Note**: Detailed business logic design happens later in Functional Design (per-unit, CONSTRUCTION phase)
 
 ## Prerequisites
+
 - Workspace Detection must be complete
 - Requirements Analysis recommended (provides functional context)
 - User Stories recommended (user stories guide design decisions)
@@ -20,16 +23,19 @@ Application Design focuses on:
 ## Step-by-Step Execution
 
 ### 1. Analyze Context
+
 - Read `aidlc-docs/inception/requirements/requirements.md` and `aidlc-docs/inception/user-stories/stories.md`
 - Identify key business capabilities and functional areas
 - Determine design scope and complexity
 
 ### 2. Create Application Design Plan
+
 - Generate plan with checkboxes [] for application design
 - Focus on components, responsibilities, methods, business rules, and services
 - Each step and sub-step should have a checkbox []
 
 ### 3. Include Mandatory Design Artifacts in Plan
+
 - **ALWAYS** include these mandatory artifacts in the design plan:
   - [ ] Generate components.md with component definitions and high-level responsibilities
   - [ ] Generate component-methods.md with method signatures (business rules detailed later in Functional Design)
@@ -38,6 +44,7 @@ Application Design focuses on:
   - [ ] Validate design completeness and consistency
 
 ### 4. Generate Context-Appropriate Questions
+
 **DIRECTIVE**: Analyze the requirements and stories to generate questions relevant to THIS specific application design. Use the categories below as guidance. Evaluate each category and, when in doubt about applicability, ask the question rather than skipping it — overconfidence leads to poor outcomes (see overconfidence-prevention.md).
 
 - EMBED questions using [Answer]: tag format
@@ -46,6 +53,7 @@ Application Design focuses on:
 - **When in doubt, ask the question** - overconfidence leads to poor designs
 
 **Question categories to evaluate** (consider ALL categories):
+
 - **Component Identification** - Ask about component boundaries, organization, and grouping strategies
 - **Component Methods** - Ask about method signatures, input/output expectations, and interface contracts (detailed business rules come later)
 - **Service Layer Design** - Ask about service orchestration, boundaries, and coordination patterns
@@ -53,22 +61,27 @@ Application Design focuses on:
 - **Design Patterns** - Ask about architectural style preferences, pattern choices, and design constraints
 
 ### 5. Store Application Design Plan
+
 - Save as `aidlc-docs/inception/plans/application-design-plan.md`
 - Include all [Answer]: tags for user input
 - Ensure plan covers all design aspects
 
 ### 6. Request User Input
+
 - Ask user to fill [Answer]: tags directly in the plan document
 - Emphasize importance of design decisions
 - Provide clear instructions on completing the [Answer]: tags
 
 ### 7. Collect Answers
+
 - Wait for user to provide answers to all questions using [Answer]: tags in the document
 - Do not proceed until ALL [Answer]: tags are completed
 - Review the document to ensure no [Answer]: tags are left blank
 
 ### 8. ANALYZE ANSWERS (MANDATORY)
+
 Before proceeding, you MUST carefully review all user answers for:
+
 - **Vague or ambiguous responses**: "mix of", "somewhere between", "not sure", "depends"
 - **Undefined criteria or terms**: References to concepts without clear definitions
 - **Contradictory answers**: Responses that conflict with each other
@@ -76,7 +89,9 @@ Before proceeding, you MUST carefully review all user answers for:
 - **Answers that combine options**: Responses that merge different approaches without clear decision rules
 
 ### 9. MANDATORY Follow-up Questions
+
 If the analysis in step 8 reveals ANY ambiguous answers, you MUST:
+
 - Add specific follow-up questions to the plan document using [Answer]: tags
 - DO NOT proceed to approval until all ambiguities are resolved
 - Examples of required follow-ups:
@@ -86,6 +101,7 @@ If the analysis in step 8 reveals ANY ambiguous answers, you MUST:
   - "You mentioned 'depends on complexity' - how do you define complexity levels?"
 
 ### 10. Generate Application Design Artifacts
+
 - Execute the approved plan to generate design artifacts
 - Create `aidlc-docs/inception/application-design/components.md` with:
   - Component name and purpose
@@ -107,6 +123,7 @@ If the analysis in step 8 reveals ANY ambiguous answers, you MUST:
 - Create `aidlc-docs/inception/application-design/application-design.md` that consolidates the multiple design docs created above in a single doc.
 
 ### 11. Log Approval
+
 - Log approval prompt with timestamp in `aidlc-docs/audit.md`
 - Include complete approval prompt text
 - Use ISO 8601 timestamp format
@@ -132,16 +149,19 @@ If the analysis in step 8 reveals ANY ambiguous answers, you MUST:
 ```
 
 ### 13. Wait for Explicit Approval
+
 - Do not proceed until the user explicitly approves the application design
 - Approval must be clear and unambiguous
 - If user requests changes, update the design and repeat the approval process
 
 ### 14. Record Approval Response
+
 - Log the user's approval response with timestamp in `aidlc-docs/audit.md`
 - Include the exact user response text
 - Mark the approval status clearly
 
 ### 15. Update Progress
+
 - Mark Application Design stage complete in `aidlc-docs/aidlc-state.md`
 - Update the "Current Status" section
 - Prepare for transition to next stage

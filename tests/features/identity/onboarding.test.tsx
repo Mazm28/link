@@ -99,9 +99,7 @@ describe('profile setup — US-02', () => {
       timeout: 3000,
     });
 
-    expect(
-      screen.getByText(/لینک هیچ‌وقت موقعیت مکانی دستگاهت را نمی‌خواند/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/لینک هیچ‌وقت موقعیت مکانی دستگاهت را نمی‌خواند/)).toBeInTheDocument();
   });
 
   it('labels the telegram field as never shown publicly (BR-U2-63)', async () => {

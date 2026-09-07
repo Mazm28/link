@@ -9,15 +9,15 @@
 
 U4 is unusual: **its entities already exist.** U1 defined `JoinRequest`, `Attendance`, `Rating`, `Notification` and `RatingSummary`, and the mock repository already reads and writes all five. This document therefore does two things — it states the entities as they now stand, and it marks precisely what **changes**.
 
-| Entity | Status in U4 |
-|---|---|
-| `JoinRequest` | Inherited. **One new field** (`requestSeq`) — §3.2 |
-| `Attendance` | Inherited unchanged |
-| `Rating` | Inherited unchanged. Comment now **stored and never displayed** |
-| `Notification` | Inherited unchanged. U4 is the first unit to render it |
-| `RatingSummary` | Inherited. **Threshold 3 → 2** |
-| `SharedContact` | **`'none'` becomes a legacy variant** — §2 |
-| `RequestQuota` | **New**, client-side only — §5 |
+| Entity          | Status in U4                                                    |
+| --------------- | --------------------------------------------------------------- |
+| `JoinRequest`   | Inherited. **One new field** (`requestSeq`) — §3.2              |
+| `Attendance`    | Inherited unchanged                                             |
+| `Rating`        | Inherited unchanged. Comment now **stored and never displayed** |
+| `Notification`  | Inherited unchanged. U4 is the first unit to render it          |
+| `RatingSummary` | Inherited. **Threshold 3 → 2**                                  |
+| `SharedContact` | **`'none'` becomes a legacy variant** — §2                      |
+| `RequestQuota`  | **New**, client-side only — §5                                  |
 
 ---
 
@@ -25,7 +25,7 @@ U4 is unusual: **its entities already exist.** U1 defined `JoinRequest`, `Attend
 
 ```ts
 export type SharedContact =
-  | { kind: 'none' }                        // ⚠️ LEGACY — unwriteable since CR-07
+  | { kind: 'none' } // ⚠️ LEGACY — unwriteable since CR-07
   | { kind: 'phone'; value: string }
   | { kind: 'telegram'; value: string };
 ```
@@ -47,7 +47,7 @@ This is the same shape as `Activity.exactAddress` in U3: **storage is not disclo
 
 Already true in U1's definition and restated because U4 is where it matters: `sharedContact` stores the literal value at the moment of sending, not a reference to the user's profile. If someone later changes their phone number, the request still records what was actually disclosed. A reference would rewrite history and misrepresent what the poster received.
 
-CR-07 Q7 (`B`, from the earlier round) interacts with this: a Telegram ID typed at request time is used for **that request only** and never saved to the profile. The snapshot is therefore sometimes the *only* record of that value — which is correct, and is why it must not be normalised away.
+CR-07 Q7 (`B`, from the earlier round) interacts with this: a Telegram ID typed at request time is used for **that request only** and never saved to the profile. The snapshot is therefore sometimes the _only_ record of that value — which is correct, and is why it must not be normalised away.
 
 ---
 
@@ -59,12 +59,12 @@ interface JoinRequest {
   activityId: ActivityId;
   requesterId: UserId;
   note?: string;
-  sharedContact: SharedContact;   // see §2
-  status: RequestStatus;          // 'sent' | 'withdrawn'
+  sharedContact: SharedContact; // see §2
+  status: RequestStatus; // 'sent' | 'withdrawn'
   contactRevoked: boolean;
   createdAt: string;
   withdrawnAt?: string;
-  requestSeq: 1 | 2;              // NEW — see §3.2
+  requestSeq: 1 | 2; // NEW — see §3.2
 }
 ```
 
@@ -103,16 +103,16 @@ interface Rating {
   activityId: ActivityId;
   raterId: UserId;
   subjectId: UserId;
-  score: number;        // 1..5
-  comment?: string;     // ⚠️ STORED, NEVER DISPLAYED IN ROUND 1
+  score: number; // 1..5
+  comment?: string; // ⚠️ STORED, NEVER DISPLAYED IN ROUND 1
   createdAt: string;
 }
 
 interface RatingSummary {
-  average: number | null;      // null below the threshold
+  average: number | null; // null below the threshold
   count: number;
   activitiesAttended: number;
-  isNewMember: boolean;        // count < 2
+  isNewMember: boolean; // count < 2
 }
 ```
 
@@ -120,7 +120,7 @@ interface RatingSummary {
 
 Answer Q5 `A`. Comments are captured and stored; **no surface renders them in Round 1.**
 
-**This is a privacy decision, not a scope cut.** US-53 requires that individual ratings are *not attributable to their authors*. With few ratings, an unattributed comment plus a known activity roster frequently identifies its author — an activity with three attendees leaves very little ambiguity. Displaying comments "anonymously" would therefore *break* US-53 while appearing to satisfy it.
+**This is a privacy decision, not a scope cut.** US-53 requires that individual ratings are _not attributable to their authors_. With few ratings, an unattributed comment plus a known activity roster frequently identifies its author — an activity with three attendees leaves very little ambiguity. Displaying comments "anonymously" would therefore _break_ US-53 while appearing to satisfy it.
 
 **Design constraint that follows**: no view type may expose `comment`. `ProfileView.rating` is a `RatingSummary`, which has no comment field, and that is the mechanism — the same way `SentRequestView` enforces FR-35's asymmetry by having no field for it. **This must not be "handled in the UI".**
 
@@ -137,8 +137,8 @@ The reasoning is Round-1-specific and worth recording so it is revisited rather 
 ```ts
 interface RequestQuota {
   userId: UserId;
-  dayKey: string;     // Tehran-local calendar day, 'YYYY-MM-DD' Jalali-derived
-  count: number;      // requests sent that day
+  dayKey: string; // Tehran-local calendar day, 'YYYY-MM-DD' Jalali-derived
+  count: number; // requests sent that day
 }
 ```
 
@@ -164,16 +164,20 @@ interface Attendance {
 }
 ```
 
-**Absence is a third state.** A participant with no `Attendance` row is *unconfirmed*, which is distinct from `attended: false`. U3's seed deliberately contains both. The poster's UI must show unconfirmed people as pending rather than as no-shows, and `canRate` must refuse both — for different reasons, with different messages.
+**Absence is a third state.** A participant with no `Attendance` row is _unconfirmed_, which is distinct from `attended: false`. U3's seed deliberately contains both. The poster's UI must show unconfirmed people as pending rather than as no-shows, and `canRate` must refuse both — for different reasons, with different messages.
 
 ```ts
 interface Notification {
   id: NotificationId;
   userId: UserId;
-  kind: 'request_received' | 'request_withdrawn' | 'activity_cancelled'
-      | 'attendance_due' | 'rating_received';
-  channel: 'in_app';          // FR-72 — the seam, never anything else in R1
-  payload: Record<string, string>;   // ⚠️ IDs ONLY
+  kind:
+    | 'request_received'
+    | 'request_withdrawn'
+    | 'activity_cancelled'
+    | 'attendance_due'
+    | 'rating_received';
+  channel: 'in_app'; // FR-72 — the seam, never anything else in R1
+  payload: Record<string, string>; // ⚠️ IDs ONLY
   createdAt: string;
   readAt?: string;
 }

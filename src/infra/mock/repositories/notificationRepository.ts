@@ -42,12 +42,14 @@ export function createNotificationRepository(ctx: MockContext): NotificationRepo
   return {
     async list(userId: UserId): Promise<Notification[]> {
       await ctx.delay();
-      return ctx.store
-        .read()
-        .notifications.filter((n) => n.userId === userId)
-        /* U6 / BR-U6-30 — filtered before the sort and before return. */
-        .filter((n) => !isFromHidden(n, userId))
-        .sort((x, y) => y.createdAt.localeCompare(x.createdAt));
+      return (
+        ctx.store
+          .read()
+          .notifications.filter((n) => n.userId === userId)
+          /* U6 / BR-U6-30 — filtered before the sort and before return. */
+          .filter((n) => !isFromHidden(n, userId))
+          .sort((x, y) => y.createdAt.localeCompare(x.createdAt))
+      );
     },
 
     /** Drives the nav badge, which per personas.md is the product's only

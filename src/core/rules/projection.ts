@@ -1,11 +1,4 @@
-import type {
-  Activity,
-  ActivityView,
-  ProfileView,
-  RatingSummary,
-  User,
-  UserId,
-} from '../domain';
+import type { Activity, ActivityView, ProfileView, RatingSummary, User, UserId } from '../domain';
 import { deriveState } from './activityLifecycle';
 import { areaOf } from './geo';
 
@@ -60,9 +53,7 @@ export function projectProfile(
     displayName: user.displayName,
     interestIds: user.interestIds,
     ...(user.homeCityId === undefined ? {} : { cityId: user.homeCityId }),
-    ...(user.homeNeighborhoodId === undefined
-      ? {}
-      : { neighborhoodId: user.homeNeighborhoodId }),
+    ...(user.homeNeighborhoodId === undefined ? {} : { neighborhoodId: user.homeNeighborhoodId }),
     rating,
     accountType: user.accountType,
     isVerifiedVenue,
@@ -133,9 +124,7 @@ export function projectActivity(
     categoryIds: activity.categoryIds,
     startsAt: activity.startsAt,
     cityId: activity.cityId,
-    ...(activity.neighborhoodId === undefined
-      ? {}
-      : { neighborhoodId: activity.neighborhoodId }),
+    ...(activity.neighborhoodId === undefined ? {} : { neighborhoodId: activity.neighborhoodId }),
     locationPrecision: activity.locationPrecision,
     status: activity.status,
     derivedState: deriveState(activity, now),

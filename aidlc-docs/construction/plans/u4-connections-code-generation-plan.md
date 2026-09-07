@@ -13,18 +13,18 @@
 
 ### 1.1 Stories — 9 (US-32 retired by CR-07)
 
-| Story | Title | Steps |
-|---|---|---|
-| **US-30** | Send a request, choose what to share | 4, 8, 12, 24, 25 |
-| **US-31** ⚠️ | **Disclosure — SAFETY-CRITICAL** | 4, 26, 38 |
-| ~~US-32~~ | ⛔ Retired by CR-07 | — |
-| **US-33** | See and withdraw sent requests | 13, 28 |
-| **US-40** | Requests inbox with badge | 14, 27, 31, 32 |
-| **US-41** | My details are not shared | 27, 40 |
-| **US-50** | Confirm attendance | 15, 29 |
-| **US-51** | Rate someone I met | 16, 30 |
+| Story        | Title                                    | Steps            |
+| ------------ | ---------------------------------------- | ---------------- |
+| **US-30**    | Send a request, choose what to share     | 4, 8, 12, 24, 25 |
+| **US-31** ⚠️ | **Disclosure — SAFETY-CRITICAL**         | 4, 26, 38        |
+| ~~US-32~~    | ⛔ Retired by CR-07                      | —                |
+| **US-33**    | See and withdraw sent requests           | 13, 28           |
+| **US-40**    | Requests inbox with badge                | 14, 27, 31, 32   |
+| **US-41**    | My details are not shared                | 27, 40           |
+| **US-50**    | Confirm attendance                       | 15, 29           |
+| **US-51**    | Rate someone I met                       | 16, 30           |
 | **US-52** ⚠️ | **Rating eligibility — SAFETY-CRITICAL** | 5, 6, 16, 30, 36 |
-| **US-53** | Rating and history on a profile | 9, 33 |
+| **US-53**    | Rating and history on a profile          | 9, 33            |
 
 ### 1.2 Dependencies
 
@@ -56,7 +56,7 @@ Most of the repository layer was built in U1 and **works**. Steps 5–7 move rea
 
 ## 2. ⚠️ The Three Rules That Govern This Unit
 
-**US-31 — the disclosure.** The primary mitigation for AR-02, and CR-07 made it *more* load-bearing by retiring the alternative. Verbatim text, warning first, not collapsible, not dismissible, visible without scrolling, adjacent to send. `stories.md`: weaken it and the risk acceptance no longer holds.
+**US-31 — the disclosure.** The primary mitigation for AR-02, and CR-07 made it _more_ load-bearing by retiring the alternative. Verbatim text, warning first, not collapsible, not dismissible, visible without scrolling, adjacent to send. `stories.md`: weaken it and the risk acceptance no longer holds.
 
 **US-52 — `canRate` is the check.** Hiding a control is not a check (NFR-S6). One pure function, called by the sheet, again by the write, and again by Round 2's server.
 
@@ -111,7 +111,7 @@ Most of the repository layer was built in U1 and **works**. Steps 5–7 move rea
 
 - [ ] **Step 24** — `ContactShareSelector` — two options, ⚠️ **neither pre-selected**, inline Telegram entry that never falls back.
 - [ ] **Step 25** — `JoinRequestSheet` — note, selector, disclosure, send, انصراف.
-- [ ] **Step 26** ⚠️ — `DisclosureNotice` — **verbatim, warning first, required-line after, not collapsible, not dismissible, no scroll.** Header comment: *do not "improve" this component.*
+- [ ] **Step 26** ⚠️ — `DisclosureNotice` — **verbatim, warning first, required-line after, not collapsible, not dismissible, no scroll.** Header comment: _do not "improve" this component._
 - [ ] **Step 27** — `RequestsInboxScreen` — **rebuilt from scratch** (Q1 `C`), grouped by activity, most recent first, with the requester's **rating summary**, the FR-35 asymmetry line, and revoked shown as revoked.
 - [ ] **Step 28** — `SentRequestsScreen` — ⚠️ withdrawal confirmation states honestly that the poster may already have saved the detail (BR-U4-42).
 - [ ] **Step 29** — `AttendanceConfirmationScreen` — every requester, ⚠️ **three states** (attended / not attended / unconfirmed), never showing unconfirmed as absent.

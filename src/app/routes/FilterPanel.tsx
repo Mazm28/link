@@ -126,16 +126,16 @@ export function FilterPanel() {
        * read pipeline have supported it since U1; only the control was
        * missing (CR-01 change A). */}
       {/* Neighborhoods belong to a city, so this only makes sense once one is
-        * chosen. Showing every city's محله‌ها at once would be a list nobody
-        * can use. */}
+       * chosen. Showing every city's محله‌ها at once would be a list nobody
+       * can use. */}
       {cityId !== null && (
-      <NeighborhoodSelector
-        cityId={cityId}
-        mode="multiple"
-        value={neighborhoodIds}
-        onChange={setNeighborhoodIds}
-        label={t('activity.neighborhoodLabel')}
-      />
+        <NeighborhoodSelector
+          cityId={cityId}
+          mode="multiple"
+          value={neighborhoodIds}
+          onChange={setNeighborhoodIds}
+          label={t('activity.neighborhoodLabel')}
+        />
       )}
 
       <fieldset className="flex flex-col gap-2">

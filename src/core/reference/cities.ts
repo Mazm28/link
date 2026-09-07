@@ -32,9 +32,7 @@ import type { City } from '../domain';
  * neighborhood — the INV-5 fallback, derived from the CITY and identical for
  * every activity in it.
  */
-const CITY_DEFS: ReadonlyArray<
-  readonly [string, string, number, number, number, boolean]
-> = [
+const CITY_DEFS: ReadonlyArray<readonly [string, string, number, number, number, boolean]> = [
   ['tehran', 'تهران', 35.6997, 51.4015, 18000, true],
   ['mashhad', 'مشهد', 36.2972, 59.6067, 14000, true],
   ['isfahan', 'اصفهان', 32.6572, 51.6776, 12000, true],

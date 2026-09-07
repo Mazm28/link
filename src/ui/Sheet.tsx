@@ -116,9 +116,7 @@ export function Sheet({
          * which is why the fix belongs here rather than in each of them. */
         className="relative flex max-h-[85dvh] w-full max-w-lg flex-col overflow-y-auto rounded-t-2xl bg-surface p-4 pb-8 shadow-xl"
       >
-        {title !== undefined ? (
-          <h2 className="mb-3 text-lg font-bold text-text">{title}</h2>
-        ) : null}
+        {title !== undefined ? <h2 className="mb-3 text-lg font-bold text-text">{title}</h2> : null}
         {children}
       </div>
     </div>,

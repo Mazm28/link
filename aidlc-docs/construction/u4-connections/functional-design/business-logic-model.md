@@ -6,7 +6,7 @@
 
 ## 1. Why this unit is one state machine
 
-`unit-of-work.md` Q2 `A` kept U4 whole rather than splitting it. The reason is visible here: **rating eligibility is a function of request data *and* attendance data together.** Split the unit and `canRate` straddles a boundary, which makes US-52 — a safety-critical story — untestable in isolation.
+`unit-of-work.md` Q2 `A` kept U4 whole rather than splitting it. The reason is visible here: **rating eligibility is a function of request data _and_ attendance data together.** Split the unit and `canRate` straddles a boundary, which makes US-52 — a safety-critical story — untestable in isolation.
 
 ```
   interest ──▶ REQUEST ──▶ disclosure ──▶ inbox ──▶ (the meeting, off-platform)
@@ -79,7 +79,7 @@ Everything to the right of "the meeting" depends on everything to its left. The 
                        withdrawn (requestSeq = 2) ── TERMINAL
 ```
 
-**No `accepted` or `rejected` state exists.** CQ5 settled there is no approval gate (AR-02): a request is *delivered*, not adjudicated. Adding an acceptance state would reintroduce the gate the product deliberately does not have — and would change what the disclosure means, since "the host has not approved this" is a load-bearing clause of US-31's copy.
+**No `accepted` or `rejected` state exists.** CQ5 settled there is no approval gate (AR-02): a request is _delivered_, not adjudicated. Adding an acceptance state would reintroduce the gate the product deliberately does not have — and would change what the disclosure means, since "the host has not approved this" is a load-bearing clause of US-31's copy.
 
 **Terminal is terminal** (BR-U4-33). Without it, withdraw-and-resend keeps someone at the top of a poster's inbox indefinitely.
 
@@ -173,7 +173,7 @@ The last branch is the abuse guard, not an oversight. Ratings cannot be manufact
                                                contact — FR-35 by type
 ```
 
-**The gate is the repository method, not the component** (BR-U4-91). This is why P-U4-04 tests at the repository boundary *and* on the rendered DOM: "the repository is correct" and "the page shows only what the repository returned" are different claims, and U3 already shipped a defect of the second kind.
+**The gate is the repository method, not the component** (BR-U4-91). This is why P-U4-04 tests at the repository boundary _and_ on the rendered DOM: "the repository is correct" and "the page shows only what the repository returned" are different claims, and U3 already shipped a defect of the second kind.
 
 ---
 
@@ -189,7 +189,7 @@ The last branch is the abuse guard, not an oversight. Ratings cannot be manufact
   nav badge ◀── unread REQUESTS only ── BR-U4-102
 ```
 
-**The badge counts one thing** (Q6 `C`). US-40 calls it *the entire retention mechanism* for the poster persona; a number that sometimes means "requests" and sometimes "anything at all" is one nobody can act on.
+**The badge counts one thing** (Q6 `C`). US-40 calls it _the entire retention mechanism_ for the poster persona; a number that sometimes means "requests" and sometimes "anything at all" is one nobody can act on.
 
 **Payloads carry IDs only** (BR-U4-92, NFR-S1). Notifications are the most-copied, least-scrutinised objects in a system; a contact value inside one would route around §6's gate completely.
 
@@ -215,7 +215,7 @@ U4's repository layer already works. The design change is **where the reasoning 
         checked inline                   └── requiresDisclosure(...)
 ```
 
-**Why extraction is not gold-plating.** A list cannot express *why* someone was refused, so the UI cannot explain it — and §4.1's two different situations collapse into one silent absence. And an inline check cannot be re-run server-side, so Round 2 re-implements it, differently, and the two drift. `component-methods.md` specified both as pure functions for exactly these reasons; U1's own comment in `connectionRepository.ts` says U4 would move them.
+**Why extraction is not gold-plating.** A list cannot express _why_ someone was refused, so the UI cannot explain it — and §4.1's two different situations collapse into one silent absence. And an inline check cannot be re-run server-side, so Round 2 re-implements it, differently, and the two drift. `component-methods.md` specified both as pure functions for exactly these reasons; U1's own comment in `connectionRepository.ts` says U4 would move them.
 
 ---
 

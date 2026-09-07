@@ -165,9 +165,7 @@ export function ActivityDetailModal({
           <Avatar
             name={activity.author.displayName}
             size="md"
-            {...(activity.author.avatarId === undefined
-              ? {}
-              : { src: activity.author.avatarId })}
+            {...(activity.author.avatarId === undefined ? {} : { src: activity.author.avatarId })}
           />
           <div className="flex flex-1 flex-col">
             <span className="text-xs text-text-muted">{t('demo.host')}</span>

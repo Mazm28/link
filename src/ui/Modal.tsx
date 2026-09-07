@@ -30,9 +30,7 @@ export function Modal({ open, onClose, title, children, 'data-testid': testId }:
         aria-label={title}
         className="relative w-full max-w-md rounded-[var(--radius-card)] bg-surface p-5 shadow-xl"
       >
-        {title !== undefined ? (
-          <h2 className="mb-3 text-lg font-bold text-text">{title}</h2>
-        ) : null}
+        {title !== undefined ? <h2 className="mb-3 text-lg font-bold text-text">{title}</h2> : null}
         {children}
       </div>
     </div>

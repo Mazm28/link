@@ -21,11 +21,13 @@
 ## Mermaid Diagram Validation
 
 ### Required Validation Steps
+
 1. **Syntax Check**: Validate Mermaid syntax before file creation
 2. **Character Escaping**: Ensure special characters are properly escaped
 3. **Fallback Content**: Provide text alternative if Mermaid fails validation
 
 ### Mermaid Validation Rules
+
 ```markdown
 ## BEFORE creating any file with Mermaid diagrams:
 
@@ -38,15 +40,19 @@
 ```
 
 ### Implementation Pattern
-```markdown
+
+````markdown
 ## Workflow Visualization
 
 ### Mermaid Diagram (if syntax valid)
+
 ```mermaid
 [validated diagram content]
 ```
+````
 
 ### Text Alternative (always include)
+
 ```
 Phase 1: INCEPTION
 - Stage 1: Workspace Detection (COMPLETED)
@@ -57,6 +63,7 @@ Phase 1: INCEPTION
 ## General Content Validation
 
 ### Pre-Creation Validation Checklist
+
 - [ ] Validate embedded code blocks (Mermaid, JSON, YAML)
 - [ ] Check special character escaping
 - [ ] Verify markdown syntax correctness
@@ -64,6 +71,7 @@ Phase 1: INCEPTION
 - [ ] Include fallback content for complex elements
 
 ### Error Prevention Rules
+
 1. **Always validate before using tools/commands to write files**: Never write unvalidated content
 2. **Escape special characters**: Particularly in diagrams and code blocks
 3. **Provide alternatives**: Include text versions of visual content
@@ -72,6 +80,7 @@ Phase 1: INCEPTION
 ## Validation Failure Handling
 
 ### When Validation Fails
+
 1. **Log the error**: Record what failed validation
 2. **Use fallback content**: Switch to text-based alternative
 3. **Continue workflow**: Don't block on content validation failures

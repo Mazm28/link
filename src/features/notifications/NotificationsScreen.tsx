@@ -58,10 +58,7 @@ export function NotificationsScreen() {
       {isLoading ? (
         <Skeleton variant="card" lines={4} />
       ) : (data ?? []).length === 0 ? (
-        <EmptyState
-          title={t('notifications.emptyTitle')}
-          message={t('notifications.emptyBody')}
-        />
+        <EmptyState title={t('notifications.emptyTitle')} message={t('notifications.emptyBody')} />
       ) : (
         <ul className="flex flex-col gap-2" data-testid="notifications-list">
           {(data ?? []).map((notification) => {

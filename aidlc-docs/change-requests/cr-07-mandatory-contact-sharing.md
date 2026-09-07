@@ -24,12 +24,12 @@ This was chosen deliberately, after the argument against it was put. This docume
 
 After CR-07, and taking your other answers into account:
 
-| Mitigation | Status after CR-07 | In Round 1? |
-|---|---|---|
-| **FR-32** — mandatory disclosure at the point of sharing | ✅ Unchanged, still binding | ✅ Yes |
-| **FR-31** — "share nothing" as a real, prominent option | ❌ **REMOVED by this CR** | ❌ Gone |
-| **FR-38** — rate limiting | ✅ **RESTORED to Round 1 by answer Q1 `B`** — see §5 | ✅ Yes, as a courtesy limit |
-| **FR-60/61** — reporting | ✅ Survives, U6 builds it; review console is Round 3 | ⚠️ Capture only |
+| Mitigation                                               | Status after CR-07                                   | In Round 1?                 |
+| -------------------------------------------------------- | ---------------------------------------------------- | --------------------------- |
+| **FR-32** — mandatory disclosure at the point of sharing | ✅ Unchanged, still binding                          | ✅ Yes                      |
+| **FR-31** — "share nothing" as a real, prominent option  | ❌ **REMOVED by this CR**                            | ❌ Gone                     |
+| **FR-38** — rate limiting                                | ✅ **RESTORED to Round 1 by answer Q1 `B`** — see §5 | ✅ Yes, as a courtesy limit |
+| **FR-60/61** — reporting                                 | ✅ Survives, U6 builds it; review console is Round 3 | ⚠️ Capture only             |
 
 **Resolved: one of the four is gone permanently (FR-31), and Q1 `B` brought FR-38 back to replace it.** Round 1 therefore ships with **two active guards**, not one. The rest of this section records the situation as it stood before that answer, because the reasoning is what produced it.
 
@@ -50,24 +50,25 @@ I am not raising this to relitigate `D` — you may well accept it, and it is a 
 
 ## 3. What changes, concretely
 
-| Artifact | Change |
-|---|---|
-| `requirements.md` FR-31 | Rewritten: the user selects phone **or** Telegram. The "or nothing" clause is struck |
-| `requirements.md` AR-02 | Mitigation list loses FR-31; risk restated and re-accepted (see §4) |
-| `stories.md` US-32 | **Retired.** Its three acceptance criteria go with it |
-| `stories.md` US-30 | Criterion "must actively choose … or nothing" amended to two options |
-| `stories.md` US-41 | Criterion "a requester shared nothing → told plainly there is no way to reach them" — now unreachable for new requests, but see Q3 |
-| `stories.md` validation checklist | "Sharing nothing is a first-class option" removed from the abuse-mitigation list |
-| `unit-of-work-story-map.md` | U4 drops to **9 stories**; the U4 count and totals updated |
-| `component-methods.md` | `validateShareSelection` no longer accepts `'none'`; `requiresDisclosure` becomes always-true |
-| `domain` `SharedContact` | The `'none'` variant — retained or removed? See Q3 |
-| Seed data | 5 of 18 seeded requests use `kind: 'none'` — see Q3 |
+| Artifact                          | Change                                                                                                                             |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `requirements.md` FR-31           | Rewritten: the user selects phone **or** Telegram. The "or nothing" clause is struck                                               |
+| `requirements.md` AR-02           | Mitigation list loses FR-31; risk restated and re-accepted (see §4)                                                                |
+| `stories.md` US-32                | **Retired.** Its three acceptance criteria go with it                                                                              |
+| `stories.md` US-30                | Criterion "must actively choose … or nothing" amended to two options                                                               |
+| `stories.md` US-41                | Criterion "a requester shared nothing → told plainly there is no way to reach them" — now unreachable for new requests, but see Q3 |
+| `stories.md` validation checklist | "Sharing nothing is a first-class option" removed from the abuse-mitigation list                                                   |
+| `unit-of-work-story-map.md`       | U4 drops to **9 stories**; the U4 count and totals updated                                                                         |
+| `component-methods.md`            | `validateShareSelection` no longer accepts `'none'`; `requiresDisclosure` becomes always-true                                      |
+| `domain` `SharedContact`          | The `'none'` variant — retained or removed? See Q3                                                                                 |
+| Seed data                         | 5 of 18 seeded requests use `kind: 'none'` — see Q3                                                                                |
 
 ---
 
 ## 4. Decisions needed
 
 ### Question 1
+
 **AR-02 re-acceptance.** With "share nothing" gone and no Round-1 rate limit, the mandatory in-UI disclosure (FR-32) is the only active mitigation in Round 1.
 
 A) **Accept it as it stands.** Round 1 is a prototype with seeded data and no public users; the risk is real but not yet live, and Round 2 brings FR-38 rate limiting and a real backend before anyone is exposed.
@@ -85,6 +86,7 @@ E) Other (please describe after [Answer]: tag below)
 ---
 
 ### Question 2
+
 What replaces the "nothing" option in the share sheet?
 
 A) **Two options only** — «شماره تلفن» and «آی‌دی تلگرام» — and the request cannot be sent until one is chosen. Nothing is pre-selected (US-30's rule survives).
@@ -98,6 +100,7 @@ C) Other (please describe after [Answer]: tag below)
 ---
 
 ### Question 3
+
 Existing data: 5 of the 18 seeded join requests carry `sharedContact: {kind: 'none'}`, and `SharedContact['none']` is part of the domain type. US-41 also has a criterion about the poster being told when a requester shared nothing.
 
 A) **Keep `'none'` in the type and the data as a legacy state.** New requests cannot produce it; old ones still render, and US-41's "no contact route" copy stays for them. Nothing is rewritten or lost.
@@ -111,7 +114,8 @@ C) Other (please describe after [Answer]: tag below)
 ---
 
 ### Question 4
-Does this change what the **disclosure** says? Today it tells the requester their detail goes immediately to an unapproved stranger and cannot be recalled. It was written for a *voluntary* act.
+
+Does this change what the **disclosure** says? Today it tells the requester their detail goes immediately to an unapproved stranger and cannot be recalled. It was written for a _voluntary_ act.
 
 A) **Same text.** It is already the strongest copy in the product and US-31 warns against weakening it; the wording holds whether or not there was an alternative.
 
@@ -140,7 +144,7 @@ Both positions were right about different things, and the resolution keeps both 
 
 ### 5.2 The other three
 
-**Q2 `B`** — the sheet offers «شماره تلفن» and «آی‌دی تلگرام», nothing pre-selected, plus a plain statement that joining requires sharing one of them and a way to back out. The choice is *share or do not join*, stated, rather than a dead end the user has to infer.
+**Q2 `B`** — the sheet offers «شماره تلفن» and «آی‌دی تلگرام», nothing pre-selected, plus a plain statement that joining requires sharing one of them and a way to back out. The choice is _share or do not join_, stated, rather than a dead end the user has to infer.
 
 **Q3 `A`** — `SharedContact['none']` stays in the domain type as a **legacy state**. New requests cannot produce it; the 5 seeded requests carrying it still render, and US-41's "no contact route" copy survives for them. No migration, no schema bump, no discarded history. New writes are constrained by `validateShareSelection`, not by the type.
 
@@ -151,7 +155,7 @@ Both positions were right about different things, and the resolution keeps both 
 ## 6. What this CR does NOT change
 
 - **FR-32's disclosure remains mandatory, unavoidable, adjacent to the send action, and not collapsible.** US-31's rule stands untouched.
-- **Nothing is pre-selected.** US-30's requirement survives verbatim — mandatory *sharing* is not a default *selection*.
+- **Nothing is pre-selected.** US-30's requirement survives verbatim — mandatory _sharing_ is not a default _selection_.
 - **No silent substitution.** Selecting Telegram without a stored ID still fails and prompts, and never sends a phone number instead.
 - **FR-35's asymmetry.** The poster's own details are still never disclosed.
 

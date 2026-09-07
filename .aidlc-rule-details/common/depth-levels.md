@@ -9,11 +9,13 @@
 ## Stage Selection vs Detail Level
 
 ### Stage Selection (Binary)
+
 - **Workflow Planning** decides: EXECUTE or SKIP for each stage
 - **If EXECUTE**: Stage runs and creates ALL its defined artifacts
 - **If SKIP**: Stage doesn't run at all
 
 ### Detail Level (Adaptive)
+
 - **Simple problems**: Concise artifacts with essential detail
 - **Complex problems**: Comprehensive artifacts with extensive detail
 - **Model decides**: Based on problem characteristics, not prescriptive rules
@@ -32,6 +34,7 @@ The model considers these factors when determining appropriate detail:
 ## Example: Requirements Analysis Artifacts
 
 **All scenarios create the same artifacts**:
+
 - `requirement-verification-questions.md` (if needed)
 - `requirements.md`
 
@@ -40,26 +43,31 @@ The model considers these factors when determining appropriate detail:
 **Detail level varies by complexity**:
 
 ### Simple Scenario (Bug Fix)
+
 - **requirement-verification-questions.md**: necessary clarifying questions
 - **requirements.md**: Concise functional requirement, minimal sections
 
 ### Complex Scenario (System Migration)
+
 - **requirement-verification-questions.md**: Multiple rounds, 10+ questions
 - **requirements.md**: Comprehensive functional + non-functional requirements, traceability, acceptance criteria
 
 ## Example: Application Design Artifacts
 
 **All scenarios create the same artifacts**:
+
 - `application-design.md`
 - `component-diagram.md`
 
 **Detail level varies by complexity**:
 
 ### Simple Scenario (Single Component)
+
 - **application-design.md**: Basic component description, key methods
 - **component-diagram.md**: Simple diagram with essential relationships
 
 ### Complex Scenario (Multi-Component System)
+
 - **application-design.md**: Detailed component responsibilities, all methods with signatures, design patterns, alternatives considered
 - **component-diagram.md**: Comprehensive diagram with all relationships, data flows, integration points
 

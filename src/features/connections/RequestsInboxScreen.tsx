@@ -84,7 +84,9 @@ export function RequestsInboxScreen() {
         activityId,
         requests: [...requests].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
       }))
-      .sort((x, y) => (y.requests[0]?.createdAt ?? '').localeCompare(x.requests[0]?.createdAt ?? ''));
+      .sort((x, y) =>
+        (y.requests[0]?.createdAt ?? '').localeCompare(x.requests[0]?.createdAt ?? ''),
+      );
   }, [data]);
 
   return (
@@ -125,9 +127,7 @@ export function RequestsInboxScreen() {
                 <Link to={`/activity/${group.activityId}`} className="hover:underline">
                   {titleOf.get(group.activityId) ?? t('requests.forActivity')}
                 </Link>{' '}
-                <span className="text-sm font-normal text-fg-muted">
-                  ({group.requests.length})
-                </span>
+                <span className="text-sm font-normal text-fg-muted">({group.requests.length})</span>
               </h2>
 
               <ul className="flex flex-col gap-3">

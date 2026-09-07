@@ -146,7 +146,13 @@ export function JalaliDatePicker({
    * wrong does not produce a subtle bug — it produces a calendar a Persian
    * speaker cannot read at a glance. */
   const firstWeekdayIndex = useMemo(() => {
-    const first = fromJalali({ year: displayed.year, month: displayed.month, day: 1, hour: 12, minute: 0 });
+    const first = fromJalali({
+      year: displayed.year,
+      month: displayed.month,
+      day: 1,
+      hour: 12,
+      minute: 0,
+    });
     if (!first.ok) return 0;
     // JS getDay(): 0 = Sunday. Saturday (6) must map to 0.
     return (first.value.getDay() + 1) % 7;
@@ -202,7 +208,9 @@ export function JalaliDatePicker({
       return;
     }
 
-    const parts = toLatinDigits(raw).split(/[/\-.]/).map(Number);
+    const parts = toLatinDigits(raw)
+      .split(/[/\-.]/)
+      .map(Number);
     const [y, m, d] = parts;
     if (parts.length !== 3 || y === undefined || m === undefined || d === undefined) return;
     if (Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d)) return;

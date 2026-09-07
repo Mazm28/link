@@ -8,7 +8,12 @@ import {
   type UserId,
 } from '@core/domain';
 import { ErrorCode, refusal } from '@core/errors';
-import type { ActivityDraft, ActivityPatch, ActivityRepository, FeedParams } from '@core/repositories';
+import type {
+  ActivityDraft,
+  ActivityPatch,
+  ActivityRepository,
+  FeedParams,
+} from '@core/repositories';
 import { rankActivities } from '@core/rules/ranking';
 import type { MockContext } from './context';
 
@@ -77,9 +82,7 @@ export function createActivityRepository(ctx: MockContext): ActivityRepository {
         categoryIds: draft.categoryIds,
         startsAt: draft.startsAt,
         cityId: draft.cityId,
-        ...(draft.neighborhoodId === undefined
-          ? {}
-          : { neighborhoodId: draft.neighborhoodId }),
+        ...(draft.neighborhoodId === undefined ? {} : { neighborhoodId: draft.neighborhoodId }),
         locationPrecision: draft.locationPrecision,
         status: draft.publish ? 'published' : 'draft',
         // FR-56: written inert so paid placement needs no migration later.

@@ -1,9 +1,4 @@
-import type {
-  Activity,
-  CategoryId,
-  InterestTagId,
-  NeighborhoodId,
-} from '../domain';
+import type { Activity, CategoryId, InterestTagId, NeighborhoodId } from '../domain';
 import { buildGraph, neighborhoodDistance } from './neighborhood';
 import { TEHRAN_NEIGHBORHOODS } from '../reference/tehran';
 
@@ -127,7 +122,11 @@ export function scoreActivity(
       ? [proximityTerm(viewer, activity)]
       : mode === 'interest'
         ? [interestTerm(viewer, activity)]
-        : [proximityTerm(viewer, activity), interestTerm(viewer, activity), recencyTerm(activity, now)];
+        : [
+            proximityTerm(viewer, activity),
+            interestTerm(viewer, activity),
+            recencyTerm(activity, now),
+          ];
 
   const present = terms.filter((t): t is Term => t !== null);
   if (present.length === 0) return 0;

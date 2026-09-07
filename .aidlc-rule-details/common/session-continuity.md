@@ -1,12 +1,14 @@
 # Session Continuity Templates
 
 ## Welcome Back Prompt Template
+
 When a user returns to continue work on an existing AI-DLC project, present this prompt:
 
 ```markdown
 **Welcome back! I can see you have an existing AI-DLC project in progress.**
 
 Based on your aidlc-state.md, here's your current status:
+
 - **Project**: [project-name]
 - **Current Phase**: [INCEPTION/CONSTRUCTION/OPERATIONS]
 - **Current Stage**: [Stage Name]
@@ -19,10 +21,11 @@ A) Continue where you left off ([Next step description])
 
 B) Review a previous stage ([Show available stages])
 
-[Answer]: 
+[Answer]:
 ```
 
 ## MANDATORY: Session Continuity Instructions
+
 1. **Always read aidlc-state.md first** when detecting existing project
 2. **Parse current status** from the workflow file to populate the prompt
 3. **MANDATORY: Load Previous Stage Artifacts** - Before resuming any stage, automatically read all relevant artifacts from previous stages:
@@ -50,4 +53,5 @@ B) Review a previous stage ([Show available stages])
 9. **Asking questions**: ALWAYS ask clarification or user feedback questions by placing them in .md files. DO NOT place the multiple-choice questions in-line in the chat session.
 
 ## Error Handling
-If artifacts are missing or corrupted during session resumption, see [error-handling.md](error-handling.md) for guidance on recovery procedures. 
+
+If artifacts are missing or corrupted during session resumption, see [error-handling.md](error-handling.md) for guidance on recovery procedures.

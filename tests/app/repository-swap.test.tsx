@@ -80,8 +80,7 @@ function createStubHttpRepositories(): Repositories {
   return {
     auth: {
       requestCode: () => Promise.resolve({ sent: true as const, resendAfterSeconds: 60 }),
-      verifyCode: () =>
-        Promise.resolve({ userId: VIEWER, startedAt: new Date().toISOString() }),
+      verifyCode: () => Promise.resolve({ userId: VIEWER, startedAt: new Date().toISOString() }),
       getSession: () => Promise.resolve({ userId: VIEWER, startedAt: new Date().toISOString() }),
       signOut: () => Promise.resolve(),
     },

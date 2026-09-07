@@ -13,10 +13,13 @@ Fill in the letter choice after each `[Answer]:` tag. If none of the options fit
 You do not have to write formal language — plain description after "Other" is perfectly fine.
 
 Example:
+
 ```
 [Answer]: B
 ```
+
 or
+
 ```
 [Answer]: X — I want both, but the cafe part should come later
 ```
@@ -40,6 +43,7 @@ You want a **mobile app** with roughly three ideas in it:
 # Section A — Scope and Priority
 
 ## Question 1
+
 Is my understanding above (the three ideas: user activity posts, activity suggestions, café/venue posts) correct?
 
 A) Yes, all three are correct and all three should be in the app
@@ -55,6 +59,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: A
 
 ## Question 2
+
 What should we build in this first round of work?
 
 A) A **working prototype** — real app, core features work end to end, not production polished
@@ -70,6 +75,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: C
 
 ## Question 3
+
 Who are the main types of users? (This determines how many different experiences we design.)
 
 A) Just **regular users** (people posting and joining activities) — café posts handled later
@@ -89,6 +95,7 @@ X) Other (please describe after [Answer]: tag below)
 # Section B — Core Functionality
 
 ## Question 4
+
 When a user finds an activity post they like, what happens? What does "connect to the post" mean?
 
 A) **Request to join** — the poster approves or rejects each person who asks
@@ -104,6 +111,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: C but the way of communication is in Q5
 
 ## Question 5
+
 How do people communicate in the app?
 
 A) **Group chat per activity** — everyone who joined an activity gets a shared chat
@@ -119,6 +127,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: X when someone request to join, a message contains a phone number or telegram ID been sent to poster
 
 ## Question 6
+
 You mentioned "be friend with you" — how should the friendship / connection part work?
 
 A) **Follow model** (like Instagram) — one-way, you follow people whose activities interest you
@@ -134,6 +143,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: D I ment they make friend IRL
 
 ## Question 7
+
 How should users find activities? (Choose the primary way — we can add others later.)
 
 A) **Location-based feed** — show activities near me, sorted by distance
@@ -149,6 +159,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: X all of them
 
 ## Question 8
+
 For the **activity suggestion** feature you mentioned — what kind of suggestions do you have in mind?
 
 A) **Simple rule-based** — suggest based on my stated interests, my location, and what's popular nearby
@@ -164,6 +175,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: D
 
 ## Question 9
+
 How should café / venue accounts be verified? (This matters because fake business accounts are a real risk.)
 
 A) **Manual review** — venue signs up, an admin approves before they can post
@@ -183,6 +195,7 @@ X) Other (please describe after [Answer]: tag below)
 # Section C — Safety and Trust
 
 ## Question 10
+
 This app puts strangers in physical rooms together, so safety is a genuine requirement, not a nice-to-have. Which safety features should the first version have? (You can pick a letter, or use Other to list exactly what you want.)
 
 A) **Essential set** — report user, report post, block user, and hide exact location until you've joined
@@ -198,6 +211,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: D and also there is no exact location of user in the app.
 
 ## Question 11
+
 How precisely should activity locations be shown?
 
 A) **Exact address, visible to everyone** — simplest, matches how public events work
@@ -211,6 +225,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: C choose by poster
 
 ## Question 12
+
 Should there be any age restriction or age-based separation?
 
 A) **18+ only** — simplest, avoids most legal complexity around minors
@@ -228,6 +243,7 @@ X) Other (please describe after [Answer]: tag below)
 # Section D — Platform and Technical Direction
 
 ## Question 13
+
 Which mobile platforms do you need?
 
 A) **Both iOS and Android from one codebase** (cross-platform framework)
@@ -243,6 +259,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: X web version for now
 
 ## Question 14
+
 Do you have a preference for the mobile technology?
 
 A) **React Native / Expo** — JavaScript & TypeScript, fast to develop, large ecosystem, easiest to preview and iterate
@@ -258,6 +275,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: D
 
 ## Question 15
+
 Do you have a preference for the backend?
 
 A) **Backend-as-a-service** (Supabase or Firebase) — auth, database, storage, realtime chat, and push notifications mostly ready-made; fastest path to a working app
@@ -273,6 +291,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: D
 
 ## Question 16
+
 Where will this run, and roughly what scale should we design for?
 
 A) **Local development only for now** — I just want it running on my machine / my phone
@@ -288,6 +307,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: X one big city
 
 ## Question 17
+
 How should users sign in?
 
 A) **Email + password** only
@@ -303,6 +323,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: B
 
 ## Question 18
+
 Do you need push notifications in the first version? (e.g. "someone joined your activity", "new message", "activity starts in 1 hour")
 
 A) **Yes** — notifications are core to the experience
@@ -320,6 +341,7 @@ X) Other (please describe after [Answer]: tag below)
 # Section E — Business Context
 
 ## Question 19
+
 Is this a commercial product or a personal/learning project? (This changes how much rigor we apply to legal, privacy, and payments.)
 
 A) **Personal / learning project** — I want to build and use it, no business plans yet
@@ -335,6 +357,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: B
 
 ## Question 20
+
 Any monetization in this first version? (Cafés paying to promote events, premium user features, etc.)
 
 A) **No monetization at all** in this version
@@ -348,6 +371,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: B
 
 ## Question 21
+
 Is there a specific region, country, or language this launches in first? (Affects language/RTL support, map providers, and privacy law — GDPR, etc.)
 
 A) **English, global** — no specific region
@@ -367,6 +391,7 @@ X) Other (please describe after [Answer]: tag below)
 These questions decide which additional AI-DLC rule sets are enforced as hard constraints during design and code generation.
 
 ## Question: Security Extensions
+
 Should security extension rules be enforced for this project?
 
 A) Yes — enforce all SECURITY rules as blocking constraints (recommended for production-grade applications)
@@ -378,6 +403,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: A
 
 ## Question: Resiliency Extensions
+
 Should the resiliency baseline be applied to this project?
 
 **What this extension is.** Enabling it applies a set of **directional, design-time best practices** for building resilient systems, derived from the **AWS Well-Architected Framework (Reliability Pillar)** and resilience-review guidance. It steers requirements, design, and code toward fault tolerance, high availability, observability, and recoverability — covering 15 practice areas across business goals, change management, observability, high availability, disaster recovery, and continuous improvement.
@@ -395,6 +421,7 @@ X) Other (please describe after [Answer]: tag below)
 [Answer]: A
 
 ## Question: Property-Based Testing Extension
+
 Should property-based testing (PBT) rules be enforced for this project?
 
 A) Yes — enforce all PBT rules as blocking constraints (recommended for projects with business logic, data transformations, serialization, or stateful components)
@@ -413,6 +440,4 @@ X) Other (please describe after [Answer]: tag below)
 
 If there's anything about your vision I didn't ask about — a specific app you want it to feel like, a feature you're excited about, something you definitely don't want — write it here:
 
-[Additional Notes]: 
-
----
+[Additional Notes]: ---

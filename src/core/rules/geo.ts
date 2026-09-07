@@ -41,10 +41,7 @@ import { ALL_NEIGHBORHOOD_BY_ID } from '../reference/neighborhoods';
  * "no coordinate key" would pass against a jittered implementation, and jitter
  * is exactly the failure this exists to prevent.
  */
-export function areaOf(
-  cityId: CityId,
-  neighborhoodId?: NeighborhoodId,
-): GeoArea | undefined {
+export function areaOf(cityId: CityId, neighborhoodId?: NeighborhoodId): GeoArea | undefined {
   /* Still IDS ONLY, never an activity — the guarantee is unchanged. The city
    * is the fallback for the twenty cities with no neighborhood dataset: an
    * activity there resolves to a city-sized circle, identical for every
@@ -78,8 +75,7 @@ export function distanceMeters(a: GeoPoint, b: GeoPoint): number {
   const lat1 = toRadians(a.lat);
   const lat2 = toRadians(b.lat);
 
-  const h =
-    Math.sin(dLat / 2) ** 2 + Math.sin(dLng / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+  const h = Math.sin(dLat / 2) ** 2 + Math.sin(dLng / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
 
   return 2 * EARTH_RADIUS_M * Math.asin(Math.min(1, Math.sqrt(h)));
 }

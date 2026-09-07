@@ -132,9 +132,9 @@ export function NeighborhoodSelector(props: NeighborhoodSelectorProps) {
           ) : (
             <div className="flex max-h-[60vh] flex-col gap-5 overflow-y-auto">
               {/* Tehran is grouped by district. The other four cities have no
-                * district breakdown — their neighborhoods come from Divar's
-                * listings, which do not carry one — so they render as a single
-                * flat list rather than under 22 empty Tehran headings. */}
+               * district breakdown — their neighborhoods come from Divar's
+               * listings, which do not carry one — so they render as a single
+               * flat list rather than under 22 empty Tehran headings. */}
               {props.cityId !== TEHRAN_CITY_ID ? (
                 <div className="flex flex-wrap gap-2">
                   {matches.map((neighborhood) => (
@@ -149,25 +149,25 @@ export function NeighborhoodSelector(props: NeighborhoodSelectorProps) {
                 </div>
               ) : (
                 TEHRAN_DISTRICTS.map((district) => {
-                const items = byDistrict.get(district.id);
-                if (!items || items.length === 0) return null;
+                  const items = byDistrict.get(district.id);
+                  if (!items || items.length === 0) return null;
 
-                return (
-                  <section key={district.id} className="flex flex-col gap-2">
-                    <h3 className="text-xs font-medium text-fg-muted">{district.nameFa}</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {items.map((neighborhood) => (
-                        <Chip
-                          key={neighborhood.id}
-                          label={neighborhood.nameFa}
-                          selected={selected.includes(neighborhood.id)}
-                          onClick={() => toggle(neighborhood.id)}
-                          data-testid={`neighborhood-selector-option-${neighborhood.id}`}
-                        />
-                      ))}
-                    </div>
-                  </section>
-                );
+                  return (
+                    <section key={district.id} className="flex flex-col gap-2">
+                      <h3 className="text-xs font-medium text-fg-muted">{district.nameFa}</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {items.map((neighborhood) => (
+                          <Chip
+                            key={neighborhood.id}
+                            label={neighborhood.nameFa}
+                            selected={selected.includes(neighborhood.id)}
+                            onClick={() => toggle(neighborhood.id)}
+                            data-testid={`neighborhood-selector-option-${neighborhood.id}`}
+                          />
+                        ))}
+                      </div>
+                    </section>
+                  );
                 })
               )}
             </div>

@@ -14,14 +14,14 @@ The `@font-face` declarations in [`src/styles/global.css`](../../src/styles/glob
 
 ## Provenance
 
-| | |
-|---|---|
-| Project | Vazirmatn by Saber Rastikerdar — <https://github.com/rastikerdar/vazirmatn> |
-| Release | **v33.003** (the font build reports version 33.197) |
-| Archive | `vazirmatn-v33.003.zip`, 13,047,191 bytes |
-| SHA-256 | `0a9afd41967e6f57096a56a181a23f81a2b999b62f1f2a4e4b26736580854fdb` |
-| Licence | SIL Open Font License 1.1 — `OFL.txt`, checked in alongside |
-| Taken from | `fonts/webfonts/` in the archive; every other file discarded |
+|            |                                                                             |
+| ---------- | --------------------------------------------------------------------------- |
+| Project    | Vazirmatn by Saber Rastikerdar — <https://github.com/rastikerdar/vazirmatn> |
+| Release    | **v33.003** (the font build reports version 33.197)                         |
+| Archive    | `vazirmatn-v33.003.zip`, 13,047,191 bytes                                   |
+| SHA-256    | `0a9afd41967e6f57096a56a181a23f81a2b999b62f1f2a4e4b26736580854fdb`          |
+| Licence    | SIL Open Font License 1.1 — `OFL.txt`, checked in alongside                 |
+| Taken from | `fonts/webfonts/` in the archive; every other file discarded                |
 
 Three weights out of the ten published, because `global.css` declares three. Shipping the variable
 `Vazirmatn[wght].woff2` (111 KB) instead would cost more than all three static weights together,

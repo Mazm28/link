@@ -79,11 +79,11 @@ areaOf(neighborhoodId) -> { center: n.center, radiusMeters: n.radiusMeters }
 
 The three ways this goes wrong, all of which the signature makes unwriteable:
 
-| Tempting implementation | Why it leaks |
-|---|---|
-| Circle centred on the real point | The centre **is** the real point. The radius is decoration |
-| Real point + random jitter | Two viewers comparing screens, or one refreshing, averages the jitter away |
-| Real point snapped to a fine grid | A 100 m grid narrows a home to one city block |
+| Tempting implementation           | Why it leaks                                                               |
+| --------------------------------- | -------------------------------------------------------------------------- |
+| Circle centred on the real point  | The centre **is** the real point. The radius is decoration                 |
+| Real point + random jitter        | Two viewers comparing screens, or one refreshing, averages the jitter away |
+| Real point snapped to a fine grid | A 100 m grid narrows a home to one city block                              |
 
 `areaOf(neighborhoodId)` admits none of them, which is why it takes the id rather than the activity.
 
@@ -124,11 +124,11 @@ score(activity, viewer) =
 
 CR-02 made interests and location optional, so:
 
-| Viewer | Terms available | Result |
-|---|---|---|
-| Seeded user | all three | full combined ranking |
-| Post-CR-02 user, no interests, no neighborhood | recency only | a chronological feed, honestly labelled |
-| Has interests, no neighborhood | interest + recency | works |
+| Viewer                                         | Terms available    | Result                                  |
+| ---------------------------------------------- | ------------------ | --------------------------------------- |
+| Seeded user                                    | all three          | full combined ranking                   |
+| Post-CR-02 user, no interests, no neighborhood | recency only       | a chronological feed, honestly labelled |
+| Has interests, no neighborhood                 | interest + recency | works                                   |
 
 **This is why the weighted form was chosen over a tiered one.** A tiered ranking needs an explicit branch for every combination of missing inputs; a weighted sum with renormalization handles them all with one rule, and Q1 and Q2's fallbacks stop being special cases.
 
@@ -208,16 +208,16 @@ The middle two cases were the same situation reaching two different answers, and
 
 ## 8. Error and Refusal Handling
 
-| Situation | Code | Surface |
-|---|---|---|
-| Precision not chosen | `precision_required` | Inline, blocks publish |
-| Exact chosen, no address | `address_required` | Inline |
-| Date in the past | `date_in_past` | Inline on the picker |
-| Date > 2 months ahead | `date_too_far` | Inline on the picker |
-| Title/description length | `title_invalid_length` / `description_invalid_length` | Inline |
-| Not the author | `forbidden` | Refused by the repository, not just hidden |
-| Cancel a past activity | `forbidden` | Control absent **and** action refused |
-| Incomplete profile | `profile_incomplete` | Blocks the composer, links to setup |
+| Situation                | Code                                                  | Surface                                    |
+| ------------------------ | ----------------------------------------------------- | ------------------------------------------ |
+| Precision not chosen     | `precision_required`                                  | Inline, blocks publish                     |
+| Exact chosen, no address | `address_required`                                    | Inline                                     |
+| Date in the past         | `date_in_past`                                        | Inline on the picker                       |
+| Date > 2 months ahead    | `date_too_far`                                        | Inline on the picker                       |
+| Title/description length | `title_invalid_length` / `description_invalid_length` | Inline                                     |
+| Not the author           | `forbidden`                                           | Refused by the repository, not just hidden |
+| Cancel a past activity   | `forbidden`                                           | Control absent **and** action refused      |
+| Incomplete profile       | `profile_incomplete`                                  | Blocks the composer, links to setup        |
 
 All are expected refusals returning `Result` (U1 Q7 `A`). None throws.
 
@@ -225,18 +225,18 @@ All are expected refusals returning `Result` (U1 Q7 `A`). None throws.
 
 ## 9. Traceability
 
-| Story | Where satisfied |
-|---|---|
-| **US-10** create | §1, BR-U3-01…07 |
-| **US-11** precision ⚠️ | §1 write side, §2 read side, BR-U3-10…20, P-U3-01, P-U3-05 |
-| **US-12** edit/cancel | §5, BR-U3-30…34 |
-| **US-13** my activities | §6, BR-U3-41 |
-| **US-20** combined feed | §3, §4, BR-U3-60…63 |
-| **US-21** neighborhood feed | §4.2, BR-U3-64 |
-| **US-22** interest feed | §4.2, BR-U3-65 |
-| **US-23** search and filter | §3, BR-U3-70…75, P-U3-04, P-U3-05 |
-| **US-24** category browse | BR-U3-70, city-scoped |
-| **US-25** detail | §2 — same projection, no exceptions |
+| Story                       | Where satisfied                                            |
+| --------------------------- | ---------------------------------------------------------- |
+| **US-10** create            | §1, BR-U3-01…07                                            |
+| **US-11** precision ⚠️      | §1 write side, §2 read side, BR-U3-10…20, P-U3-01, P-U3-05 |
+| **US-12** edit/cancel       | §5, BR-U3-30…34                                            |
+| **US-13** my activities     | §6, BR-U3-41                                               |
+| **US-20** combined feed     | §3, §4, BR-U3-60…63                                        |
+| **US-21** neighborhood feed | §4.2, BR-U3-64                                             |
+| **US-22** interest feed     | §4.2, BR-U3-65                                             |
+| **US-23** search and filter | §3, BR-U3-70…75, P-U3-04, P-U3-05                          |
+| **US-24** category browse   | BR-U3-70, city-scoped                                      |
+| **US-25** detail            | §2 — same projection, no exceptions                        |
 
 ---
 
@@ -244,7 +244,7 @@ All are expected refusals returning `Result` (U1 Q7 `A`). None throws.
 
 Every rule in this unit is enforced in a client. **The client is not the security boundary.**
 
-`projectActivity` running in a browser is a rendering decision, not a control — the data reached the browser to be projected. What Round 1 delivers is the *shape*: one pure function, one enforcement point, and a property test that runs against it. Round 2 runs the same function server-side against the same tests, and only then is US-11 enforced rather than merely honoured.
+`projectActivity` running in a browser is a rendering decision, not a control — the data reached the browser to be projected. What Round 1 delivers is the _shape_: one pure function, one enforcement point, and a property test that runs against it. Round 2 runs the same function server-side against the same tests, and only then is US-11 enforced rather than merely honoured.
 
 This matters more here than anywhere else in the product, because US-11 is the story where being wrong publishes somebody's home address.
 

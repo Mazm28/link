@@ -12,6 +12,7 @@ Unit definitions, responsibilities, and code organization strategy.
 Link is a **monolith** — one deployable web application (Q4 `A`). Units are therefore **modules within a single application**, not independently deployable services.
 
 Per AI-DLC terminology:
+
 - **Service** — an independently deployable component. Link has **one** in Round 1: the web application itself.
 - **Module** — a logical grouping within that service. Link has **six**, listed below.
 - **Unit of Work** — the planning construct. One unit = one module = one build-and-review increment.
@@ -68,14 +69,14 @@ Per AI-DLC terminology:
 
 This table is the traceability bridge that the override in §2 depends on.
 
-| Unit | Owns these directories |
-|---|---|
-| **U1** Foundation and Localization | `src/core/domain/`, `src/core/repositories/`, `src/infra/mock/`, `src/ui/`, `src/app/`, plus `src/core/rules/{jalali,persianText}` |
-| **U2** Identity and Profile | `src/features/identity/`, `src/core/services/{auth,profile}Service` |
-| **U3** Activities and Discovery | `src/features/activities/`, `src/core/services/activityService`, `src/core/rules/{locationPrecision,ranking,filters,activityLifecycle}` |
-| **U4** Connections | `src/features/connections/`, `src/features/notifications/`, `src/core/services/{connection,notification}Service`, `src/core/rules/{ratingEligibility,contactSharing}` |
-| **U5** Venue Dashboard | `src/features/venues/`, `src/core/services/venueService` |
-| **U6** Safety and Trust | `src/features/safety/`, `src/core/services/safetyService`, `src/core/rules/visibility` |
+| Unit                               | Owns these directories                                                                                                                                                |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **U1** Foundation and Localization | `src/core/domain/`, `src/core/repositories/`, `src/infra/mock/`, `src/ui/`, `src/app/`, plus `src/core/rules/{jalali,persianText}`                                    |
+| **U2** Identity and Profile        | `src/features/identity/`, `src/core/services/{auth,profile}Service`                                                                                                   |
+| **U3** Activities and Discovery    | `src/features/activities/`, `src/core/services/activityService`, `src/core/rules/{locationPrecision,ranking,filters,activityLifecycle}`                               |
+| **U4** Connections                 | `src/features/connections/`, `src/features/notifications/`, `src/core/services/{connection,notification}Service`, `src/core/rules/{ratingEligibility,contactSharing}` |
+| **U5** Venue Dashboard             | `src/features/venues/`, `src/core/services/venueService`                                                                                                              |
+| **U6** Safety and Trust            | `src/features/safety/`, `src/core/services/safetyService`, `src/core/rules/visibility`                                                                                |
 
 **Note on `core/rules` distribution**: rule modules are owned by the unit that needs them first, not all by U1. `visibility` belongs to U6 even though `core/rules` is structurally foundational — because blocking cannot be meaningfully implemented or tested until the surfaces it must suppress exist. U1 creates the `core/rules/` directory and its two localization modules; later units add their own.
 
@@ -90,12 +91,12 @@ This table is the traceability bridge that the override in §2 depends on.
 
 Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules that fail the build** (Q6 `A`), not by convention:
 
-| Rule | Enforced constraint |
-|---|---|
-| DEP-1 | `core/domain` imports nothing from the application |
+| Rule      | Enforced constraint                                                                         |
+| --------- | ------------------------------------------------------------------------------------------- |
+| DEP-1     | `core/domain` imports nothing from the application                                          |
 | **DEP-2** | `features/`, `app/`, `ui/` **must never import `infra/`** — except `app/RepositoryProvider` |
-| DEP-3 | `ui/` imports nothing from `core/`, `features/`, `infra/` |
-| DEP-4 | `core/services` imports repository interfaces only |
+| DEP-3     | `ui/` imports nothing from `core/`, `features/`, `infra/`                                   |
+| DEP-4     | `core/services` imports repository interfaces only                                          |
 
 **Why mechanical enforcement**: a `features/` → `infra/` import is precisely the mistake that silently breaks the Round-2 backend swap. It would not fail any test, would not be visible in the running app, and would only surface when the swap was attempted. Catching it in CI costs nothing.
 
@@ -110,6 +111,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 **Purpose**: establish everything every other unit depends on — the domain model, the data-access contract, the mock implementation, the localization system, and the UI primitives.
 
 **Responsibilities**
+
 - Define all domain entity types and the four viewer-scoped view types
 - Define the six repository interfaces and the four contract invariants
 - Implement the versioned localStorage store with seeded Persian data
@@ -140,6 +142,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 **Purpose**: get a user into the app with a profile that makes the feed meaningful.
 
 **Responsibilities**
+
 - Mocked phone + OTP sign-in flow
 - Profile setup: name, avatar, bio, interests, home neighborhood
 - Profile editing and account deletion with activity anonymization
@@ -152,7 +155,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 
 **Exposes**: current-user session context, `NeighborhoodSelector` and `InterestSelector` (reused by U3's filters).
 
-**Stories**: US-01, US-02, US-03, US-73 · *(US-04 session expiry is Round 2)*
+**Stories**: US-01, US-02, US-03, US-73 · _(US-04 session expiry is Round 2)_
 
 **Safety-critical stories**: none, but US-73 safety guidance is the **primary compensating control for AR-01** (no age restriction) and must not be treated as boilerplate.
 
@@ -165,6 +168,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 **Purpose**: the content of the product — creating activities and finding them.
 
 **Responsibilities**
+
 - Activity creation with **mandatory location-precision choice**
 - Activity editing, cancellation, lifecycle
 - Feed with three ranking modes: combined, neighborhood, interest
@@ -193,6 +197,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 **Purpose**: the core loop — turning interest into an actual introduction, and turning a meeting into reputation.
 
 **Responsibilities**
+
 - Join request with **explicit contact-share selection, nothing pre-selected**
 - The mandatory disclosure notice
 - Sent-requests list with honest withdrawal
@@ -206,7 +211,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 
 **Depends on**: U1, U2, U3
 
-**Stories** (9 since CR-07): US-30, US-31, ~~US-32~~, US-33, US-40, US-41, US-50, US-51, US-52, US-53 · *(**US-32 retired 2026-08-08 by CR-07** — sharing is mandatory. **US-34 rate limiting: a Round-1 courtesy limit of 5/day was pulled forward by CR-07 Q1 `B`; enforced rate limiting remains Round 2**.)*
+**Stories** (9 since CR-07): US-30, US-31, ~~US-32~~, US-33, US-40, US-41, US-50, US-51, US-52, US-53 · _(**US-32 retired 2026-08-08 by CR-07** — sharing is mandatory. **US-34 rate limiting: a Round-1 courtesy limit of 5/day was pulled forward by CR-07 Q1 `B`; enforced rate limiting remains Round 2**.)_
 
 **Safety-critical stories**: **US-31** (disclosure) and **US-52** (rating eligibility). Two of the four.
 
@@ -225,6 +230,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 **Purpose**: let cafés and similar venues publish the activities they already run.
 
 **Responsibilities**
+
 - Venue registration with pending status
 - Approval-status states and explanation
 - Role-gated `/venue/*` dashboard
@@ -252,6 +258,7 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 **Purpose**: give users the means to remove and report bad actors, and capture the evidence Round 3 moderation will need.
 
 **Responsibilities**
+
 - Report a user, with free-text and optional evidence for off-platform abuse
 - Report an activity, including the suspected-harvesting reason
 - **Bidirectional blocking** suppressing visibility across every surface
@@ -276,15 +283,15 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 
 ## 4. Unit Summary
 
-| Unit | Stories | Safety-critical | Components | Depends on | Parallelizable with |
-|---|---|---|---|---|---|
-| U1 Foundation and Localization | 3 | — | ~40 | — | — |
-| U2 Identity and Profile | 4 | — | 8 | U1 | — |
-| U3 Activities and Discovery | 10 | US-11 | 9 | U1, U2 | — |
-| U4 Connections | 10 | US-31, US-52 | 11 | U1–U3 | U5 |
-| U5 Venue Dashboard | 5 | — | 6 | U1–U3 | U4 |
-| U6 Safety and Trust | 3 | US-72 | 4 | U1–U4 | — |
-| **Total Round 1** | **35** | **4** | **~78** | | |
+| Unit                           | Stories | Safety-critical | Components | Depends on | Parallelizable with |
+| ------------------------------ | ------- | --------------- | ---------- | ---------- | ------------------- |
+| U1 Foundation and Localization | 3       | —               | ~40        | —          | —                   |
+| U2 Identity and Profile        | 4       | —               | 8          | U1         | —                   |
+| U3 Activities and Discovery    | 10      | US-11           | 9          | U1, U2     | —                   |
+| U4 Connections                 | 10      | US-31, US-52    | 11         | U1–U3      | U5                  |
+| U5 Venue Dashboard             | 5       | —               | 6          | U1–U3      | U4                  |
+| U6 Safety and Trust            | 3       | US-72           | 4          | U1–U4      | —                   |
+| **Total Round 1**              | **35**  | **4**           | **~78**    |            |                     |
 
 **Build sequence**: U1 → U2 → U3 → { U4, U5 } → U6
 
@@ -296,12 +303,13 @@ Dependency rules DEP-1 … DEP-4 are enforced by **ESLint import-boundary rules 
 
 ## 5. Out of Scope for These Units
 
-| Stories | Target |
-|---|---|
+| Stories                                   | Target                               |
+| ----------------------------------------- | ------------------------------------ |
 | US-04 session expiry, US-34 rate limiting | **Round 2** — require a real backend |
-| US-80, US-81, US-82 moderation console | **Round 3** — admin console |
+| US-80, US-81, US-82 moderation console    | **Round 3** — admin console          |
 
 **Round-1 obligations these create** (must be honoured in U1 and U6 or Rounds 2–3 need a data migration):
+
 - `AccountStatus` includes `suspended`; `ActivityStatus` includes `unpublished` — **U1**
 - Report records store full context from the start — **U6**
 - Notification records carry a `channel` field, always `in_app` — **U4**

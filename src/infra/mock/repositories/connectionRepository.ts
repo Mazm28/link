@@ -324,16 +324,18 @@ export function createConnectionRepository(ctx: MockContext): ConnectionReposito
        * the predicate cannot disagree. They would have disagreed exactly at
        * the edges, where it matters: the UI would offer a write the store then
        * refuses, or hide one it would have allowed. */
-      return rateableParticipants({
-        actorId,
-        activity,
-        attendance: state.attendance,
-        existingRatings: state.ratings,
-        now: ctx.now(),
-      })
-        /* U6 / BR-U6-30 — never offer a blocked person to rate. */
-        .filter((id) => !isHiddenFrom(actorId, id, ctx.blockIndexFor()))
-        .map((id) => ctx.profileOf(id, actorId));
+      return (
+        rateableParticipants({
+          actorId,
+          activity,
+          attendance: state.attendance,
+          existingRatings: state.ratings,
+          now: ctx.now(),
+        })
+          /* U6 / BR-U6-30 — never offer a blocked person to rate. */
+          .filter((id) => !isHiddenFrom(actorId, id, ctx.blockIndexFor()))
+          .map((id) => ctx.profileOf(id, actorId))
+      );
     },
 
     /**

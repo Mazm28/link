@@ -89,9 +89,7 @@ const arbCategoryIds = fc
 
 export const arbSharedContact: fc.Arbitrary<SharedContact> = fc.oneof(
   fc.constant<SharedContact>({ kind: 'none' }),
-  fc
-    .stringMatching(/^09[0-9]{9}$/)
-    .map((value): SharedContact => ({ kind: 'phone', value })),
+  fc.stringMatching(/^09[0-9]{9}$/).map((value): SharedContact => ({ kind: 'phone', value })),
   fc
     .stringMatching(/^[a-z_][a-z0-9_]{4,15}$/)
     .map((value): SharedContact => ({ kind: 'telegram', value })),

@@ -11,12 +11,12 @@ Dependency matrix, communication patterns, and data flow.
 
 Four rules govern all imports. They are mechanically checkable and should be enforced by an ESLint import boundary rule at Code Generation.
 
-| # | Rule | Why |
-|---|---|---|
-| **DEP-1** | `core/domain` imports nothing from the application | Root of the graph; keeps types portable to Round 2's backend |
-| **DEP-2** | `features/`, `app/`, and `ui/` **must never import from `infra/`** | The rule that makes NFR-A1 real — components cannot know which repository implementation exists |
-| **DEP-3** | `ui/` imports nothing from `core/`, `features/`, or `infra/` | Keeps primitives reusable and business-free |
-| **DEP-4** | `core/services` imports repository **interfaces** only, never implementations | Same reason as DEP-2, one layer down |
+| #         | Rule                                                                          | Why                                                                                             |
+| --------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **DEP-1** | `core/domain` imports nothing from the application                            | Root of the graph; keeps types portable to Round 2's backend                                    |
+| **DEP-2** | `features/`, `app/`, and `ui/` **must never import from `infra/`**            | The rule that makes NFR-A1 real — components cannot know which repository implementation exists |
+| **DEP-3** | `ui/` imports nothing from `core/`, `features/`, or `infra/`                  | Keeps primitives reusable and business-free                                                     |
+| **DEP-4** | `core/services` imports repository **interfaces** only, never implementations | Same reason as DEP-2, one layer down                                                            |
 
 **The one exception**: `app/RepositoryProvider` is the single module permitted to import `infra/`. It is the composition root. Swapping mock for HTTP is a change to this one file.
 
@@ -79,21 +79,21 @@ infra/mock  --> core/repositories, core/rules, core/domain
 
 `X` = depends on. Rows depend on columns.
 
-| ↓ depends on → | domain | rules | repos | services | ui | infra |
-|---|:--:|:--:|:--:|:--:|:--:|:--:|
-| `core/domain` | — | | | | | |
-| `core/rules` | X | — | | | | |
-| `core/repositories` | X | | — | | | |
-| `core/services` | X | X | X | — | | |
-| `ui/` | | | | | — | |
-| `features/identity` | X | | | X | X | |
-| `features/activities` | X | X | | X | X | |
-| `features/connections` | X | X | | X | X | |
-| `features/venues` | X | | | X | X | |
-| `features/safety` | X | | | X | X | |
-| `features/notifications` | X | | | X | X | |
-| `infra/mock` | X | X | X | | | — |
-| `app/` | X | | X | X | X | **X** |
+| ↓ depends on →           | domain | rules | repos | services | ui  | infra |
+| ------------------------ | :----: | :---: | :---: | :------: | :-: | :---: |
+| `core/domain`            |   —    |       |       |          |     |       |
+| `core/rules`             |   X    |   —   |       |          |     |       |
+| `core/repositories`      |   X    |       |   —   |          |     |       |
+| `core/services`          |   X    |   X   |   X   |    —     |     |       |
+| `ui/`                    |        |       |       |          |  —  |       |
+| `features/identity`      |   X    |       |       |    X     |  X  |       |
+| `features/activities`    |   X    |   X   |       |    X     |  X  |       |
+| `features/connections`   |   X    |   X   |       |    X     |  X  |       |
+| `features/venues`        |   X    |       |       |    X     |  X  |       |
+| `features/safety`        |   X    |       |       |    X     |  X  |       |
+| `features/notifications` |   X    |       |       |    X     |  X  |       |
+| `infra/mock`             |   X    |   X   |   X   |          |     |   —   |
+| `app/`                   |   X    |       |   X   |    X     |  X  | **X** |
 
 Features import `core/rules` only for **display-time derivations** — for example `deriveState` to label an activity as past, or `formatJalali` to render a date. They never call safety predicates to decide what to show, because by then the repository has already applied them.
 
@@ -122,6 +122,7 @@ flowchart LR
 ```
 
 **Text alternative**:
+
 ```
 U1 Foundation and Localization
   -> U2 Identity and Profile
@@ -130,31 +131,31 @@ U1 Foundation and Localization
             -> U5 Venue Dashboard -+--> U6 Safety and Trust
 ```
 
-| Unit | Depends on | Reason |
-|---|---|---|
-| U1 | — | Domain types, repository interfaces, mock store, RTL and Jalali infrastructure, UI primitives. Everything needs it. |
-| U2 | U1 | Needs types, repositories, and primitives. Establishes the current-user context everything else reads. |
-| U3 | U1, U2 | Activities have authors; the feed ranks by the viewer's neighborhood and interests. |
-| U4 | U1, U2, U3 | Requests target activities; ratings depend on attendance at activities. |
-| U5 | U1, U2, U3 | Venue activities are activities with constrained fields. |
-| U6 | U1, U2, U3, U4 | Blocking must suppress visibility across **every** surface the earlier units built. It can only be verified once they exist. |
+| Unit | Depends on     | Reason                                                                                                                       |
+| ---- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| U1   | —              | Domain types, repository interfaces, mock store, RTL and Jalali infrastructure, UI primitives. Everything needs it.          |
+| U2   | U1             | Needs types, repositories, and primitives. Establishes the current-user context everything else reads.                       |
+| U3   | U1, U2         | Activities have authors; the feed ranks by the viewer's neighborhood and interests.                                          |
+| U4   | U1, U2, U3     | Requests target activities; ratings depend on attendance at activities.                                                      |
+| U5   | U1, U2, U3     | Venue activities are activities with constrained fields.                                                                     |
+| U6   | U1, U2, U3, U4 | Blocking must suppress visibility across **every** surface the earlier units built. It can only be verified once they exist. |
 
 **U4 and U5 are independent of each other** and may be built in either order or in parallel.
 
-**Why U6 is last**: this is the one ordering decision worth defending. Blocking could be built earlier, but its acceptance criterion is "absent from *every* feed, search result, and listing." That statement is only testable once every feed, search, and listing exists. Building it last means its property-based test runs against the complete set of read paths rather than a partial one.
+**Why U6 is last**: this is the one ordering decision worth defending. Blocking could be built earlier, but its acceptance criterion is "absent from _every_ feed, search result, and listing." That statement is only testable once every feed, search, and listing exists. Building it last means its property-based test runs against the complete set of read paths rather than a partial one.
 
 ---
 
 ## 5. Communication Patterns
 
-| Pattern | Where used | Mechanism |
-|---|---|---|
-| **Dependency injection via context** | `app/RepositoryProvider` → all consumers | React context supplies concrete repositories. The NFR-A1 seam. |
-| **Query / mutation** | Features → services → repositories | TanStack Query; hooks own cache keys, services own invalidation |
-| **Pure function call** | Services and infra → `core/rules` | Synchronous, no I/O |
-| **Viewer-scoped projection** | Repositories → features | Every read takes a viewer and returns a view type |
-| **Event-derived notification** | `connectionService` → `notificationService` | Direct call within the operation; not an event bus — a bus would be over-engineering at this size |
-| **Cache invalidation cascade** | Services → query client | Blocking is the widest cascade |
+| Pattern                              | Where used                                  | Mechanism                                                                                         |
+| ------------------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **Dependency injection via context** | `app/RepositoryProvider` → all consumers    | React context supplies concrete repositories. The NFR-A1 seam.                                    |
+| **Query / mutation**                 | Features → services → repositories          | TanStack Query; hooks own cache keys, services own invalidation                                   |
+| **Pure function call**               | Services and infra → `core/rules`           | Synchronous, no I/O                                                                               |
+| **Viewer-scoped projection**         | Repositories → features                     | Every read takes a viewer and returns a view type                                                 |
+| **Event-derived notification**       | `connectionService` → `notificationService` | Direct call within the operation; not an event bus — a bus would be over-engineering at this size |
+| **Cache invalidation cascade**       | Services → query client                     | Blocking is the widest cascade                                                                    |
 
 ---
 
@@ -237,13 +238,13 @@ Poster unread badge increments        the only signal - no push
 
 The Round-1 quality gate is that swapping the repository implementation requires no screen changes. Concretely:
 
-| Changes in Round 2 | Does not change |
-|---|---|
-| `app/RepositoryProvider` — supplies `infra/http` instead of `infra/mock` | Every file under `features/` |
-| New `infra/http` implementing the same six interfaces | Every file under `ui/` |
-| `authService` internals — real OTP | `core/domain`, `core/rules` |
-| Server-side enforcement of INV-1 … INV-4 | `core/repositories` interfaces |
-| | `core/services` signatures |
+| Changes in Round 2                                                       | Does not change                |
+| ------------------------------------------------------------------------ | ------------------------------ |
+| `app/RepositoryProvider` — supplies `infra/http` instead of `infra/mock` | Every file under `features/`   |
+| New `infra/http` implementing the same six interfaces                    | Every file under `ui/`         |
+| `authService` internals — real OTP                                       | `core/domain`, `core/rules`    |
+| Server-side enforcement of INV-1 … INV-4                                 | `core/repositories` interfaces |
+|                                                                          | `core/services` signatures     |
 
 **How this gets verified rather than asserted**: Code Generation will produce a stub HTTP repository and a test that mounts the application against it. If any screen requires modification, NFR-A1 has been violated and the gate fails.
 

@@ -1,7 +1,12 @@
 import type { CityId, InterestTagId } from '@core/domain';
 import { t, tError } from '@core/i18n';
 import { toPersianDigits, countCodePoints } from '@core/rules/persianText';
-import { BIO_MAX, NAME_MAX, type FieldErrors, type SetupDraft } from '@core/rules/profileValidation';
+import {
+  BIO_MAX,
+  NAME_MAX,
+  type FieldErrors,
+  type SetupDraft,
+} from '@core/rules/profileValidation';
 import { Input } from '@ui/Input';
 import { TextArea } from '@ui/TextArea';
 import { AvatarPresetPicker } from './AvatarPresetPicker';

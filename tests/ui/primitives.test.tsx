@@ -46,7 +46,15 @@ describe('Button', () => {
 describe('Input', () => {
   function Harness({ type = 'tel' as const }) {
     const [value, setValue] = useState('');
-    return <Input value={value} onChange={setValue} label="شماره موبایل" type={type} data-testid="phone" />;
+    return (
+      <Input
+        value={value}
+        onChange={setValue}
+        label="شماره موبایل"
+        type={type}
+        data-testid="phone"
+      />
+    );
   }
 
   it('normalizes Persian digits so a Persian keyboard produces a valid number', async () => {

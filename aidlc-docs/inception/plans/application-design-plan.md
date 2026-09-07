@@ -20,16 +20,16 @@ Same format as before: a letter after each `[Answer]:` tag, or **X** with your o
 
 **Business capabilities identified** from the approved requirements and stories:
 
-| Capability | Stories | Notes |
-|---|---|---|
-| Identity and profile | US-01 … US-04 | Mocked auth in Round 1; real OTP in Round 2 |
-| Activity authoring and lifecycle | US-10 … US-13 | Includes the safety-critical location-precision rule |
-| Discovery and ranking | US-20 … US-25 | Three ranking modes plus search and filters |
-| Connection and contact exchange | US-30 … US-33, US-40, US-41 | Deliberately asymmetric; the highest-risk area |
-| Attendance and reputation | US-50 … US-53 | Post-hoc confirmation gates rating eligibility |
-| Venue management | US-60 … US-64 | Distinct persona, role-gated surface |
-| Safety and trust | US-70 … US-73 | Blocking cross-cuts every read path |
-| Localization | US-90 … US-92 | Cross-cutting; affects every component |
+| Capability                       | Stories                     | Notes                                                |
+| -------------------------------- | --------------------------- | ---------------------------------------------------- |
+| Identity and profile             | US-01 … US-04               | Mocked auth in Round 1; real OTP in Round 2          |
+| Activity authoring and lifecycle | US-10 … US-13               | Includes the safety-critical location-precision rule |
+| Discovery and ranking            | US-20 … US-25               | Three ranking modes plus search and filters          |
+| Connection and contact exchange  | US-30 … US-33, US-40, US-41 | Deliberately asymmetric; the highest-risk area       |
+| Attendance and reputation        | US-50 … US-53               | Post-hoc confirmation gates rating eligibility       |
+| Venue management                 | US-60 … US-64               | Distinct persona, role-gated surface                 |
+| Safety and trust                 | US-70 … US-73               | Blocking cross-cuts every read path                  |
+| Localization                     | US-90 … US-92               | Cross-cutting; affects every component               |
 
 **Design scope**: complex. **Design complexity driver**: not the number of components, but the fact that four safety invariants must hold across every read path, and that the repository interface doubles as the Round-2 API contract.
 
@@ -38,9 +38,10 @@ Same format as before: a letter after each `[Answer]:` tag, or **X** with your o
 # SECTION A — Design Questions
 
 ## Question 1
+
 **Code organization.** How should the source tree be structured?
 
-A) **Feature-first, with a shared core** *(my recommendation)* — `src/features/activities/`, `src/features/connections/`, etc., each owning its components, hooks, and logic; plus `src/core/` for domain types, the repository layer, and cross-cutting rules. Maps directly onto the 6 proposed units, so each unit is a mostly-self-contained folder and the Construction phase stays clean.
+A) **Feature-first, with a shared core** _(my recommendation)_ — `src/features/activities/`, `src/features/connections/`, etc., each owning its components, hooks, and logic; plus `src/core/` for domain types, the repository layer, and cross-cutting rules. Maps directly onto the 6 proposed units, so each unit is a mostly-self-contained folder and the Construction phase stays clean.
 
 B) **Layer-first** — `src/components/`, `src/hooks/`, `src/services/`, `src/types/`. Familiar, but a single unit's work scatters across every folder, which fights the per-unit Construction loop.
 
@@ -48,12 +49,13 @@ C) **Atomic design** — atoms/molecules/organisms/templates/pages. Strong for d
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 2
+
 **Repository interface granularity.** This is the most consequential question here, because the interface you pick becomes the contract Round 2's backend must satisfy.
 
-A) **One repository per aggregate** *(my recommendation)* — `UserRepository`, `ActivityRepository`, `ConnectionRepository`, `VenueRepository`, `SafetyRepository`, `ReferenceDataRepository`. Six focused interfaces that map cleanly to future REST resources, are individually mockable, and let a unit depend only on what it uses.
+A) **One repository per aggregate** _(my recommendation)_ — `UserRepository`, `ActivityRepository`, `ConnectionRepository`, `VenueRepository`, `SafetyRepository`, `ReferenceDataRepository`. Six focused interfaces that map cleanly to future REST resources, are individually mockable, and let a unit depend only on what it uses.
 
 B) **One repository per entity** — a separate interface for JoinRequest, Attendance, and Rating as well. More granular, but splits the connection lifecycle across three interfaces when it is really one flow.
 
@@ -61,25 +63,27 @@ C) **A single `DataProvider` facade** with all methods — simplest to wire, but
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 3
+
 **Where business rules live.** NFR-A4 requires business logic to be framework-independent, and the PBT extension will test it as invariants.
 
-A) **Pure functions in a `core/rules/` module, called by hooks** *(my recommendation)* — e.g. `canRate(actor, activity, requests, attendance): boolean` and `visibleAddressFor(activity, viewer): string | null`. No React, no data fetching, no side effects. Directly property-testable, and reusable server-side in Round 2 — which is exactly what NFR-S6 asks for.
+A) **Pure functions in a `core/rules/` module, called by hooks** _(my recommendation)_ — e.g. `canRate(actor, activity, requests, attendance): boolean` and `visibleAddressFor(activity, viewer): string | null`. No React, no data fetching, no side effects. Directly property-testable, and reusable server-side in Round 2 — which is exactly what NFR-S6 asks for.
 
 B) **Methods on domain classes** — OOP style with behaviour on entities. Testable, but serialization to and from the mock store gets more involved.
 
-C) **Inside React hooks** — simplest to write, but couples the safety invariants to React and makes property testing awkward. *(I'd advise against this specifically because the four safety rules are the things most worth testing exhaustively.)*
+C) **Inside React hooks** — simplest to write, but couples the safety invariants to React and makes property testing awkward. _(I'd advise against this specifically because the four safety rules are the things most worth testing exhaustively.)_
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 4
+
 **Service layer.** The stage rules call for a service layer; in a frontend this needs interpretation.
 
-A) **Thin orchestration services as plain modules** *(my recommendation)* — e.g. `connectionService.sendJoinRequest()` composes validation, the rule check, and the repository write. Called by hooks; hooks stay about UI state. Gives a clean seam where Round 2 swaps local orchestration for API calls.
+A) **Thin orchestration services as plain modules** _(my recommendation)_ — e.g. `connectionService.sendJoinRequest()` composes validation, the rule check, and the repository write. Called by hooks; hooks stay about UI state. Gives a clean seam where Round 2 swaps local orchestration for API calls.
 
 B) **No separate service layer** — hooks call repositories and rules directly. Less indirection, but orchestration logic ends up duplicated across components.
 
@@ -87,38 +91,41 @@ C) **Full service classes with dependency injection** — most testable in theor
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 5
-**How blocking is enforced.** US-72 requires blocked users to be absent from *every* feed, search result, and listing, in both directions. Where should that be guaranteed?
 
-A) **Enforced inside the repository layer** *(my recommendation)* — every read method applies the block filter before returning. A new screen added later cannot forget it, because it never sees blocked content. Defense by construction rather than by discipline.
+**How blocking is enforced.** US-72 requires blocked users to be absent from _every_ feed, search result, and listing, in both directions. Where should that be guaranteed?
+
+A) **Enforced inside the repository layer** _(my recommendation)_ — every read method applies the block filter before returning. A new screen added later cannot forget it, because it never sees blocked content. Defense by construction rather than by discipline.
 
 B) **Enforced in the rules layer**, applied by each caller — explicit and visible, but every new read path must remember to call it, and one omission is a safety defect.
 
-C) **Enforced in the UI** — filter at render time. *(I'd advise against: the data still reaches the client, and Round 2 would need entirely different enforcement.)*
+C) **Enforced in the UI** — filter at render time. _(I'd advise against: the data still reaches the client, and Round 2 would need entirely different enforcement.)_
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 6
+
 **How the location-precision rule is enforced.** US-11 requires that for approximate-precision activities the exact address is absent from delivered data, not merely hidden.
 
-A) **Repository returns a viewer-scoped projection** *(my recommendation)* — read methods take the viewer and return an `ActivityView` in which `exactAddress` is simply absent when precision is approximate. The full address never enters component state, so it cannot leak through devtools, a share preview, or a future feature. Mirrors what Round 2's API must do server-side.
+A) **Repository returns a viewer-scoped projection** _(my recommendation)_ — read methods take the viewer and return an `ActivityView` in which `exactAddress` is simply absent when precision is approximate. The full address never enters component state, so it cannot leak through devtools, a share preview, or a future feature. Mirrors what Round 2's API must do server-side.
 
 B) **Rules function strips it**, called by each caller — same effect when applied, but relies on every caller remembering.
 
-C) **Components choose what to render** — the address is in state and simply not displayed. *(Advise against: this is precisely the "hidden with CSS" failure US-11 explicitly rules out.)*
+C) **Components choose what to render** — the address is in state and simply not displayed. _(Advise against: this is precisely the "hidden with CSS" failure US-11 explicitly rules out.)_
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 7
+
 **Mock data persistence.** Round 1 persists to localStorage so the prototype feels real.
 
-A) **Versioned localStorage store, seeded on first run, reset control in a dev menu** *(my recommendation)* — a schema version key so changing the shape does not leave a broken store; a visible way to reset to seed data for demos.
+A) **Versioned localStorage store, seeded on first run, reset control in a dev menu** _(my recommendation)_ — a schema version key so changing the shape does not leave a broken store; a visible way to reset to seed data for demos.
 
 B) **In-memory only** — resets on every reload. Simpler, but actions do not persist, which makes the prototype feel fake.
 
@@ -126,12 +133,13 @@ C) **IndexedDB** — more capable, more complexity than this data volume needs.
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]:
 
 ## Question 8
+
 **UI component foundation**, given full RTL is mandatory.
 
-A) **Hand-built primitives on Tailwind, using CSS logical properties** *(my recommendation)* — full control over RTL correctness, no third-party library fighting `dir="rtl"`, no bundle weight from unused components. Costs more initial work on inputs, sheets, and date pickers.
+A) **Hand-built primitives on Tailwind, using CSS logical properties** _(my recommendation)_ — full control over RTL correctness, no third-party library fighting `dir="rtl"`, no bundle weight from unused components. Costs more initial work on inputs, sheets, and date pickers.
 
 B) **Headless library (Radix or Headless UI) plus Tailwind** — accessible behaviour for free (focus traps, dialogs), still fully styleable. Good accessibility story; adds a dependency whose RTL behaviour needs verifying.
 
@@ -139,9 +147,7 @@ C) **A full component library (MUI or similar)** — fastest to assemble, but he
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
-
----
+[Answer]: ---
 
 ## Shortcut
 
@@ -151,9 +157,7 @@ If you agree with every recommendation, write `all recommended` here and leave t
 
 ## Anything to add?
 
-[Additional Notes]: 
-
----
+[Additional Notes]: ---
 
 # SECTION B — Mandatory Design Artifacts
 
