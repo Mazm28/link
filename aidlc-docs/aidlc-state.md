@@ -22,7 +22,9 @@
 
 **🔀 CR-01 is now FULLY LIVE** — `aidlc-docs/change-requests/cr-01-location-filters-and-map.md`. **A** (the neighborhood filter) is wired in `FilterPanel`, shown only once a city is chosen; **B** (filters on the right) shipped in CR-02; **C** (a second city) shipped as 25 cities — adopted first as city-first navigation, then **amended by CR-05 to city-as-filter**; **D** (the activity map) was un-deferred 2026-08-05 and is designed in U3 under INV-5. Nothing from CR-01 remains deferred.
 
-**Next action**: answer the **U6 functional-design questions** (`construction/plans/u6-safety-functional-design-plan.md`), then generate U6's artifacts. U6 is the LAST unit in the current plan.
+**Next action**: approve **U6 Functional Design**, then its Code Generation. U6 is the LAST unit in the current plan.
+
+**⚠️ AR-05 IS NEW AND LIVE** — `requirements.md`. Blocking excludes a blocked person's rating from the subject's aggregate (U6 Q1 `A`), so **blocking can suppress an unfavourable rating**: rate 1 star → get blocked → average rises, repeatable. Accepted deliberately for maximum separation. **Round 2 must recompute the aggregate server-side with blocks NOT applied.** Until then the vector is live and unmitigated.
 
 **⚠️ U5 VENUE DASHBOARD IS DEFERRED, NOT DONE** (user choice, 2026-08-09). Five stories (US-60…64) unbuilt, `features/venues/` is an empty `.gitkeep`, `venueRepository` has no caller. Because U6 is last, **nothing downstream will surface U5's absence** — it has to be remembered deliberately.
 
@@ -143,7 +145,7 @@ Build sequence: **U1 → U2 → U3 → { U4, U5 } → U6**. Critical path: U1→
 - [x] **U4** Functional Design — COMPLETE and **APPROVED 2026-08-08** (4 artifacts, 59 rules, 6 PBT properties; **CR-07 folded in** — US-32 retired, AR-02 re-accepted)
 - [x] **U4** Code Generation — Part 1 APPROVED · Part 2 COMPLETE · **APPROVED 2026-08-09** (45/45 steps, **290 tests passing**; two post-approval graph findings folded in, neither changing production logic)
 - [ ] **U5** Venue Dashboard — ⚠️ **DEFERRED by user choice 2026-08-09**, not cancelled. Off the critical path; 5 stories (US-60…64) unbuilt, `features/venues/` empty
-- [ ] **U6** Functional Design — **IN PROGRESS** (Part 1 Planning, 2026-08-09)
+- [x] **U6** Functional Design — **COMPLETE 2026-08-09** (4 artifacts, 27 rules, 5 PBT properties; **AR-05 recorded**, CR-08 resolved, CR-09 split out; awaiting approval)
 - [ ] U4–U6 Code Generation — **EXECUTE** per unit (always)
 - [ ] Build and Test — **EXECUTE** once after all units
 

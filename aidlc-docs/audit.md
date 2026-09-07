@@ -1829,3 +1829,29 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **U6 PART 2 IS NOW UNBLOCKED** — U6 Q5 `C` required CR-08 answered first, and it is.
 
 ---
+
+## U6 Functional Design — Part 2 (Generation) COMPLETE
+**Timestamp**: 2026-08-09T05:30:00Z
+**User Input**: "generate U6's artifacts"
+**AI Response**: "Four artifacts generated under construction/u6-safety/functional-design/. 27 rules (BR-U6-10…52), 5 property tests."
+**Context**: CONSTRUCTION — U6 Functional Design complete, awaiting approval.
+
+**⚠️ NO NEW ENTITY, NO NEW FIELD, NO MIGRATION — SCHEMA STAYS v3.** Stated as a design claim rather than an omission: **blocking is not a thing to store more of, it is a filter to apply in more places.** A U6 that needed a new table would be solving the wrong problem. The only structural change is `Report.reasonCode` narrowing from `string` to a union — and the entity's own comment already said *"Taxonomy is defined in U6."*
+
+**The unit is one table, not two screens** — `business-logic-model.md` §3, the complete read-path map: nine paths, where the filter sits in each, and what it deliberately does not touch.
+
+**⚠️ FILTER POSITION IS A RULE, NOT A STYLE PREFERENCE (BR-U6-32).** The block filter runs BEFORE pagination on every path. Filtering afterwards produces short pages, and **a short page leaks the existence of hidden content through its own length** — ask for 20, receive 17, and you have learned three things exist that you cannot see. U1 placed the activity filter at step 2 for exactly this reason; U6 applies the same placement to eight more paths rather than inventing a second convention.
+
+**⚠️ A CONSEQUENCE OF AR-05 THAT ONLY APPEARED WHILE MODELLING IT**: `getRatingSummary` becomes a function of **(subject, viewer)** rather than of subject alone, because the aggregate now excludes ratings from people the VIEWER has blocked. **It therefore stops being cacheable across viewers** — anything memoizing it by subject id alone becomes a cross-viewer leak, showing one person's filtered average to somebody else. Recorded in `business-logic-model.md` §3.2 before any code exists to get it wrong.
+
+**REVERSIBILITY IS A PROPERTY OF THE DESIGN, NOT A FEATURE.** BR-U6-15: a block DELETES NOTHING; everything is filtered on read. So US-72's *"normal visibility resumes"* is true by construction rather than by a restore procedure — if a block deleted rows, unblocking would have to resurrect them, and would fail because the information would be gone. Also what lets a Round-3 moderator see what a block hid. Pinned by **P-U6-03** and **P-U6-04**.
+
+**⚠️ THE US-73 LINK IS DESIGNED AS A POSITION RULE (BR-U6-51).** The obvious implementation — the guidance link inside or above the disclosure — is the one that WEAKENS it, and `stories.md` says a weakened disclosure invalidates AR-02's acceptance. CR-07 has since removed one of the two remaining mitigations, so the disclosure carries more weight than when that sentence was written. The link goes AFTER both lines, outside the notice box, visually subordinate, not a dismiss control, and must not lose the sheet's state. **`DisclosureNotice` is not modified** — its header already says *do not "improve" this component*, and a link inside it would be the first such improvement.
+
+**A COPY DECISION THAT IS DELIBERATELY AN OMISSION**: the block confirmation does NOT mention that the blocked person's rating stops counting. Stating it would advertise the vector — *"block your critics to raise your average"*. The copy describes what a person will experience; the behaviour is recorded in AR-05 and in the design, not surfaced as a feature.
+
+**`harvesting` kept separate from `fake_activity`** — they look similar and are not: one is a post about nothing, the other is a post designed to extract phone numbers. **AR-02 says to monitor for harvesting patterns after launch, and that monitoring needs a code it can count.** Folding them together would hide the exact signal the accepted risk asks to watch.
+
+**⚠️ P-U6-01's COMPLETENESS IS BOUNDED BY U5's DEFERRAL** — it enumerates read paths, so the venue dashboard's are absent. Complete for what exists; must be extended when U5 lands. Written into the artifact so *"verified across every read path"* is never read as stronger than it was.
+
+---
