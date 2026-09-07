@@ -2130,3 +2130,31 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **Measured, not estimated**: 41 files · **305 tests** · ~11 s · build **≈144.1 KB gzipped** against NFR-P3's 250 KB budget.
 
 ---
+
+## U5 Venue Dashboard — un-deferred, Functional Design Part 1 started
+**Timestamp**: 2026-08-09T08:20:00Z
+**User Input**: "build U5"
+**AI Response**: "U5 un-deferred. Opening its Functional Design with a plan and questions."
+**Context**: CONSTRUCTION — re-entering the per-unit loop for the last unbuilt unit.
+
+**This closes the gap Build and Test refused to paper over.** The summary's first refused claim was *"all units build and pass — five of six"*; building U5 makes it six.
+
+**⚠️ AND IT RE-OPENS AN OBLIGATION**: `P-U6-01` enumerates read paths, and its own comment says the property *"must be extended when U5 lands, or the claim silently becomes false."* U5's scope therefore includes extending it — the venue dashboard adds read paths that blocking must cover.
+
+**U5 plan created**: `construction/plans/u5-venues-functional-design-plan.md` — 6 questions.
+
+**⚠️ THREE THINGS ARE GENUINELY MISSING, and each was found by reading the code rather than the stories:**
+
+1. **`recurrence` IS WRITTEN AND NEVER READ.** `RecurrenceRule` is stored on `Activity`, one seeded activity carries it, and **nothing anywhere expands it**. US-63's criterion is *"upcoming occurrences appear in the feed as separate dated entries"* — so the entire story is unimplemented, and it is the one hard design question in this unit.
+
+2. **`incrementViews` HAS NO CALLER.** The method exists and is correct; nothing calls it. So `activityViews` never increases and **US-64's view count would render `0` for everything, forever** — a metric screen showing a number that can never change.
+
+3. **`RoleGuard` has no caller** — the `/venue/*` branch it was written for does not exist.
+
+**⚠️ THE CONSTRAINT THAT DECIDES THE RECURRENCE DESIGN, AND IT IS NOT IN ANY STORY**: `JoinRequest.activityId` is an `ActivityId`, so **an occurrence someone can JOIN must have an id**. A purely derived occurrence — computed from the rule at read time, never stored — has none, and would appear in the feed as **something nobody can request to join**: a visible listing that silently cannot be acted on, which is worse than not offering recurrence at all. `Attendance`, `Rating` and `activityViews` are keyed the same way. This effectively rules out pure derivation, and the plan says so rather than letting Part 2 discover it.
+
+**U4 and U6 CHANGED U5's SCOPE WHILE IT WAS DEFERRED** — recorded so the unit is not built against its original definition: US-62's inbox must honour **INV-3** exactly as the user inbox does; **P-U6-01 must be extended** to the dashboard's read paths; and **CR-07's mandatory sharing** applies to venue activities too, so joining a café event discloses a real phone number.
+
+**Q4 raises a question the story does not answer**: wiring `incrementViews` means deciding whether a venue's own visits count. If they do, **a venue refreshing its own page inflates its only metric** and FR-55's number stops meaning anything.
+
+---

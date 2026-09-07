@@ -154,7 +154,7 @@ Build sequence: **U1 → U2 → U3 → { U4, U5 } → U6**. Critical path: U1→
 - [x] **U3** Code Generation — Part 1 APPROVED · Part 2 COMPLETE 2026-08-05 (45/45 steps) · CR-05 folded in 2026-08-08 · **APPROVED 2026-08-08** (6 CR-05 changes adopted, 22 tests added, 3 defects fixed, font closed; **250 tests passing**)
 - [x] **U4** Functional Design — COMPLETE and **APPROVED 2026-08-08** (4 artifacts, 59 rules, 6 PBT properties; **CR-07 folded in** — US-32 retired, AR-02 re-accepted)
 - [x] **U4** Code Generation — Part 1 APPROVED · Part 2 COMPLETE · **APPROVED 2026-08-09** (45/45 steps, **290 tests passing**; two post-approval graph findings folded in, neither changing production logic)
-- [ ] **U5** Venue Dashboard — ⚠️ **DEFERRED by user choice 2026-08-09**, not cancelled. Off the critical path; 5 stories (US-60…64) unbuilt, `features/venues/` empty
+- [ ] **U5** Venue Dashboard — ⚠️ **UN-DEFERRED 2026-08-09**, now in Functional Design Part 1. 5 stories (US-60…64)
 - [x] **U6** Functional Design — COMPLETE and **APPROVED 2026-08-09** (4 artifacts, 27 rules, 5 PBT properties; **AR-05 recorded**, CR-08 resolved, CR-09 split out)
 - [x] **U6** Code Generation — Part 1 APPROVED · Part 2 COMPLETE · **APPROVED 2026-08-09** (27/27 steps, **305 tests passing**)
 - [ ] U4–U6 Code Generation — **EXECUTE** per unit (always)
