@@ -1855,3 +1855,25 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **⚠️ P-U6-01's COMPLETENESS IS BOUNDED BY U5's DEFERRAL** — it enumerates read paths, so the venue dashboard's are absent. Complete for what exists; must be extended when U5 lands. Written into the artifact so *"verified across every read path"* is never read as stronger than it was.
 
 ---
+
+## ✅ U6 Functional Design APPROVED · Code Generation Part 1 started
+**Timestamp**: 2026-08-09T05:45:00Z
+**User Input**: "approve and start code generation"
+**AI Response**: "U6 Functional Design approved. Creating the code generation plan for approval before any code is written."
+**Context**: CONSTRUCTION — U6 Functional Design CLOSED. U6 Code Generation Part 1 OPEN.
+
+**Approval covers**: four artifacts, 27 rules (BR-U6-10…52), five property tests, the AR-05 acceptance, the complete nine-path block table, and the US-73 guidance-link position rule. Schema stays v3.
+
+**⚠️ A REFACTOR THE PLAN MUST NAME, FOUND WHILE SCOPING**: AR-05 makes the rating aggregate viewer-dependent, and the call chain is `ratingSummary(subject)` → `profileOrNull(subject)` → `profileOf(subject)` → **9 call sites** across the mock repositories. Every one must now pass a viewer. **Making `viewerId` REQUIRED rather than optional is the design decision**: a defaulted parameter would let a forgotten call site silently return an UNFILTERED summary — the failure mode being invisible is exactly what makes it dangerous. Required means the compiler enumerates the work, the same discipline INV-5's `areaOf(neighborhoodId)` used to make a coordinate-derived area unwriteable.
+
+**U6 code generation plan created**: `construction/plans/u6-safety-code-generation-plan.md` — **27 steps**, awaiting approval.
+
+**Weighted differently from U3 and U4** (45 steps each): **ten of the twenty-seven steps are the SAME operation applied to different read paths.** That repetition IS the unit — U6 is a filter, not a feature, and the plan says so in §1.4 with an explicit instruction not to rewrite `buildBlockIndex` or `filterVisibleActivities`, which are correct and whose symmetry is load-bearing.
+
+**Steps carrying a ⚠️**: Step 4 (AR-05's viewer-scoped aggregate) · Step 13 (audit all nine paths filter BEFORE pagination — BR-U6-32, the short-page leak) · Step 18 (the guidance link's position, with `DisclosureNotice` explicitly not modified) · Step 20 (P-U6-01 across all nine paths) · Step 22 (**verify P-U6-01 against a deliberately broken filter**) · Step 24 (document-order assertion on the guidance link) · Step 25 (record the test count).
+
+**Step 19 carries a U4 lesson forward verbatim**: check the seed against reality before adding rows. U4's attempt at exactly this step drafted three rows, two unnecessary and one contradicting `buildAttendance`.
+
+**§6 records six things the plan deliberately does NOT do** — no moderation console, no account suspension, no automatic action on report volume, no CR-08 Part B, no deletion on block, no schema change. Stated so a later session does not add them believing they were forgotten.
+
+---
