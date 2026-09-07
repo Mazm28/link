@@ -1743,3 +1743,42 @@ this is a similar project. describe difference we have from them and suggest wha
 **Gates**: typecheck clean · lint clean · **290/290** · build 143.2 KB gzipped. `git mv` used, so the moves show as renames and the history follows the files.
 
 ---
+
+## ✅ U4 Code Generation APPROVED · U5 deferred · U6 Safety and Trust started
+**Timestamp**: 2026-08-09T04:00:00Z
+**User Input**: "approve U4 and start U6"
+**AI Response**: "U4 approved and recorded. U5 explicitly deferred, not forgotten. Opening U6 Functional Design Part 1."
+**Context**: CONSTRUCTION — U4 CLOSED. U6 Functional Design OPEN.
+
+**What this approval covers**: 45/45 code-generation steps, three pure rules, two services, nine components, the two never-implemented steps of the binding seven-step sequence (BR-U4-30, BR-U4-32), 290 passing tests, and the two post-approval graph findings — the rating-eligibility wiring gap and the two import cycles. Neither of those changed production logic.
+
+**⚠️ U5 VENUE DASHBOARD IS DEFERRED, NOT DONE.** The user chose U6 next. U5 is off the critical path (`unit-of-work.md`: build sequence U1 → U2 → U3 → {U4, U5} → U6), so this is legitimate sequencing — but U5's five stories (US-60…64) remain unbuilt, `src/features/venues/` is an empty `.gitkeep`, and `venueRepository` has no caller. **U6 is now the last unit in the current plan, so nothing downstream will surface U5's absence.** Recorded here so it is a decision rather than a gap discovered later.
+
+**⚠️ U6 IS ORDERED LAST BY DESIGN, AND THAT REASONING NOW PAYS OFF.** `unit-of-work.md` §U6: US-72's criterion is *"absent from **every** feed, search result, and listing"*, which is only testable once every feed, search and listing exists. U6 running after U4 means its property test covers the complete set of read paths rather than sampling a partial one. **With U5 deferred, "every read path" now excludes the venue dashboard** — the property will be complete for what exists, and must be re-run when U5 lands.
+
+**⚠️ A CROSS-UNIT GAP FOUND WHILE SCOPING U6 — US-73 criterion 4 IS UNMET.**
+> *"Given I am about to send a first join request, When the sheet opens, Then a link to safety guidance is present alongside the disclosure (US-31)."*
+
+`JoinRequestSheet` has **no link to safety guidance**. U4 built that sheet and did not implement this, because **US-73 belongs to U2 and was not in U4's story list** — the criterion describes a screen U2 could not build, since the join sheet did not exist until U4. It fell between two units, and neither owned it.
+
+This is not cosmetic. US-73's own notes call the guidance screen **"the product's primary compensating control"**, precisely because there is no age restriction (AR-01) and no approval gate (AR-02) — and CR-07 has since removed the third mitigation by retiring US-32. Assigned to U6, which owns safety.
+
+**What U6 already has, and what it does not**: `core/rules/visibility` (INV-1 filtering, `buildBlockIndex`, `canSendRequestTo`) and the whole `safetyRepository` (report, block, unblock, listBlocks) were built in U1 and work. What does NOT exist: **`core/services/safetyService`** and **every screen** — `src/features/safety/` is an empty `.gitkeep`, and nothing outside the repository interface calls `blockUser`, `reportUser` or `reportActivity`. Like U4, U6 is mostly wiring and verification rather than greenfield.
+
+**U6 plan created**: `construction/plans/u6-safety-functional-design-plan.md` — 6 questions, awaiting answers.
+
+**⚠️ THE CENTRAL U6 FINDING, MEASURED RATHER THAN ASSUMED: BLOCKING FILTERS ACTIVITIES AND NOTHING ELSE.** Of U4's read paths, NONE applies the block index — `listIncomingRequests`, `listSentRequests`, `listRateableParticipants`, `getRatingSummary`, `ctx.ratingSummary`, `listAttendance` all ignore it. So today, after blocking someone: **their join request stays in your inbox WITH the contact detail they shared**, they remain offered for you to rate, **their rating still counts toward your public score**, and they still appear in your attendance list.
+
+US-72's literal wording covers activities — "absent from every feed, search result, category listing, and filtered view" — and that IS satisfied. But the story's own sentence is *"so that we stop appearing to each other"*, and U4's carry-forward already recorded *"Blocking and reporting must extend to requests (U6)"*. **This table is the substance of U6, not the screens.**
+
+**THIS IS EXACTLY WHY U6 WAS SCHEDULED LAST**, and the first concrete payoff of that ordering: none of these surfaces existed before U4, so the gap was not visible in any earlier unit.
+
+**⚠️ "FILTER EVERYTHING" IS THE WRONG ANSWER, AND ONE ROW IS AN ABUSE VECTOR.** If a block removes the blocked person's rating from your aggregate, **blocking becomes a way to delete a bad review** — rate-me-badly, I block you, my score recovers. That is reputation gaming arriving through the back door of a safety feature, and US-52 exists to prevent exactly that class of thing. Attendance has the same shape: if they attended, they attended, and erasing it rewrites the record that makes ratings meaningful (FR-45). Recommended Q1 `B` — everything two-way EXCEPT ratings and attendance.
+
+**Q2 applies BR-U4-42's honesty rule to a new case**: hiding an already-delivered request does not un-disclose the phone number it carried. Withdrawal was forbidden from implying recall because that would be false; the same is true here.
+
+**Q4 notes a promise the product cannot keep**: nothing reads reports until Round 3, so telling a reporter their report "will be reviewed" is an expectation two rounds away from being true.
+
+**⚠️ CR-08 SURFACED — RAISED, UNANSWERED, AND IT PREDATES THIS SESSION.** `change-requests/cr-08-join-window-and-public-questions.md` (2026-09-04, from a competitive comparison against AmUp) carries **four unanswered questions** and states it touches U6. Its Part B — a public, author-answered question channel — re-enters withdrawn CR-06's territory. Raised as U6 Q5 rather than silently ignored or silently absorbed.
+
+---
