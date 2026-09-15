@@ -2181,3 +2181,12 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **Context**: Construction / U5 / Functional Design Part 2 — complete; awaiting approval to proceed to U5 Code Generation.
 
 ---
+
+## U5 Venue Dashboard — Functional Design Approved; Code Generation Part 1
+
+**Timestamp**: 2026-09-15T00:00:00Z
+**User Input**: "approve and start code generation"
+**AI Response**: "U5 Functional Design approved and recorded in aidlc-state.md. Created aidlc-docs/construction/plans/u5-venues-code-generation-plan.md — 34 steps across domain/schema (3), rules (2), repository (6), services (2), i18n (1), frontend (10), seed (1), tests (6) and verification (3). Expected test growth +30 to +40 including 8 property tests. The plan foregrounds the three pre-existing defects (no actor on three venue methods, getVenueProfile ignoring its viewer, register not promoting accountType) and step 29's extension of P-U6-01 to eleven read paths. Section 6 records what the plan deliberately excludes, including the dev approval toggle rejected under Q3 A. Awaiting approval before Part 2 execution."
+**Context**: Construction / U5 / Code Generation Part 1 — plan created; awaiting approval to execute.
+
+---
