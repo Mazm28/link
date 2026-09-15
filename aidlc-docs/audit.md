@@ -2158,3 +2158,17 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **Q4 raises a question the story does not answer**: wiring `incrementViews` means deciding whether a venue's own visits count. If they do, **a venue refreshing its own page inflates its only metric** and FR-55's number stops meaning anything.
 
 ---
+
+## U5 Venue Dashboard — Functional Design (Part 1) — Answers Collected
+
+**Timestamp**: 2026-09-15T00:00:00Z
+**User Input**: "1.  A
+
+2.  A
+3. A
+4. A
+5. A"
+**AI Response**: "Recorded Q1=A (materialise occurrences on publish), Q2=A (8-week horizon), Q3=A (build registration honestly; pending strands until Round 3), Q4=A (count every activity-detail open except the author's own), Q5=A (reuse RequestsInboxScreen in the dashboard). Q6 left blank. Analysed for contradictions and appended §6 to the plan: 8 weeks (56d) fits under BR-U3-04's 60-day cap; a new optional `seriesId` on `Activity` is required and does not exist; up to 8 near-identical rows per series enter the ranked feed and Part 2 must say how the feed treats a series; Q3=A remains demoable because U1 seeds 3 approved venue owners; Q5=A is nearly free since `listIncomingRequests` is scoped by `posterId` and venue activities carry the owner's `authorId`. No blocking contradiction — approval requested for Part 2."
+**Context**: Construction / U5 / Functional Design Part 1 — answer collection and contradiction analysis complete; awaiting approval to generate Part 2 artifacts.
+
+---

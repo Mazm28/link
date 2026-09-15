@@ -78,8 +78,8 @@ The same applies to `Attendance`, `Rating` and `activityViews`, all keyed by `Ac
 - [x] Read the unit definition, story map and US-60…64
 - [x] Audit existing venue code; find the three gaps (§2.2)
 - [x] Identify how U4/U6/CR-07 changed the scope (§2.3)
-- [ ] **Collect answers below**
-- [ ] Analyse for contradictions; raise a clarification file if any
+- [x] **Collect answers below** — Q1 `A`, Q2 `A`, Q3 `A`, Q4 `A`, Q5 `A` (Q6 left blank)
+- [x] Analyse for contradictions; raise a clarification file if any — see §6, no blocking contradiction
 - [ ] Obtain approval for Part 2
 
 ### Part 2 — Generation *(after approval)*
@@ -107,7 +107,7 @@ C) **Derive for display, materialise on first join** — occurrences render from
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -122,7 +122,7 @@ C) **12 weeks**, since a venue's weekly night is a standing commitment.
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -137,7 +137,7 @@ C) **Auto-approve in Round 1** and note it loudly. Demoable, but it makes `pendi
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -152,7 +152,7 @@ C) **Do not wire it** — leave counts at zero and show only the request count, 
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -165,7 +165,7 @@ B) **A venue-specific inbox** with different layout for higher volume.
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A
 
 ---
 
@@ -173,3 +173,24 @@ C) Other (please describe after [Answer]: tag below)
 Anything else you want from this unit — dashboard layout, what a café owner should see first, or a concern the questions above miss?
 
 [Answer]:
+
+---
+
+## 6. Analysis of the answers (post-collection)
+
+**Verdict: coherent, no blocking contradiction.** Four consequences the answers create, recorded here so Part 2 does not rediscover them.
+
+### 6.1 Q2 `A` does not collide with BR-U3-04 — checked, not assumed
+8 weeks = **56 days**, and `MAX_DAYS_AHEAD` is **60**. Every materialised occurrence validates under the existing rule, so recurrence needs no exemption from U3's cap. Had Q2 been `C` (12 weeks), occurrences past week 8 would have been rejected by the very validator that publishes them.
+
+### 6.2 Q1 `A` requires a NEW field on an EXISTING entity
+`grep seriesId src/` returns **nothing**. Materialised occurrences need a shared `seriesId?: SeriesId` on `Activity` (`entities.ts:186`) for "cancel one / edit future only" to mean anything. This is the only U5 change that reaches into a U3-owned entity — it is additive and optional, so no existing row or rule changes.
+
+### 6.3 ⚠️ 8 rows from one venue enter the same feed
+Materialising a weekly series writes up to 8 real activities that are near-identical apart from `startsAt`. Ranking scores them almost the same, and `recencyTerm` orders them by date — so a single café night can occupy a long run of the feed. **This is a ranking concern U3 never faced**, and Part 2 must state how the feed treats a series. Not a defect in the answer; a consequence of it.
+
+### 6.4 Q3 `A` is demoable after all — via the seed, not the form
+Answering `A` (let a real registration strand as `pending`) would normally mean the approved-venue dashboard could never be reached in a demo. It can: **U1 seeds 3 already-approved venue owners**, so the dashboard, publisher, inbox and metrics are all reachable by signing in as one. The registration form exercises US-60/61's `pending` path; the seed exercises everything after it. Both states render, which is what Q3 `C` would have cost us.
+
+### 6.5 Q5 `A` is nearly free
+`listIncomingRequests(posterId: UserId)` is scoped by **user**, and a venue activity's `authorId` is the owner's user id — so venue join requests already arrive in the existing inbox. Reuse is wiring, not porting, and INV-3 keeps its single implementation.
