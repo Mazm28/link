@@ -2,7 +2,7 @@
 
 ## ▶️ RESUME INSTRUCTIONS (read first in a new session)
 
-**Where we are**: **U1, U2, U3 and U4 are COMPLETE and APPROVED**. **U5 is DEFERRED by user choice; U6 Safety and Trust is in functional design.** The full connection loop works: request → disclosure → inbox → attendance → rating. The app signs a user in, sets up a profile, shows safety guidance, posts **and edits** activities with a location-precision choice, finds them by feed, search, filter, category and **map**, and shows a profile hub and a requests inbox — all in Persian, **now in Vazirmatn rather than a fallback face**. **305 passing tests**, clean typecheck and lint, production build 144.1 KB gzipped.
+**Where we are**: **U1, U2, U3, U4 and U6 are COMPLETE and APPROVED**; Build and Test is complete. **U5 Venue Dashboard is UN-DEFERRED and its Functional Design is COMPLETE and APPROVED (2026-09-15)** — code generation is next. The full connection loop works: request → disclosure → inbox → attendance → rating. The app signs a user in, sets up a profile, shows safety guidance, posts **and edits** activities with a location-precision choice, finds them by feed, search, filter, category and **map**, and shows a profile hub and a requests inbox — all in Persian, **now in Vazirmatn rather than a fallback face**. **305 passing tests**, clean typecheck and lint, production build 144.1 KB gzipped.
 
 **⚠️ A FRESH SESSION MUST READ THIS FIRST — the tree once diverged from the record.** On 2026-08-08, resuming found three days of undocumented, untested, uncommitted work in the workspace: 16 modified and 3 new files, no audit entry, no state entry, no CR document, and a suite still green at exactly the 228 recorded at U3 completion because it did not know the code existed. It is now adopted as **CR-05** (`change-requests/cr-05-navigation-and-requests.md`) and tested. **Record a test count at every gate** — 228 → 228 across three days of visible feature work was detectable in one line.
 
@@ -23,11 +23,19 @@
 
 **🔀 CR-01 is now FULLY LIVE** — `aidlc-docs/change-requests/cr-01-location-filters-and-map.md`. **A** (the neighborhood filter) is wired in `FilterPanel`, shown only once a city is chosen; **B** (filters on the right) shipped in CR-02; **C** (a second city) shipped as 25 cities — adopted first as city-first navigation, then **amended by CR-05 to city-as-filter**; **D** (the activity map) was un-deferred 2026-08-05 and is designed in U3 under INV-5. Nothing from CR-01 remains deferred.
 
-**Next action**: approve **U6 Code Generation**. That closes the last unit in the current plan — after which the remaining work is **Build and Test**, then U5 (deferred), CR-08 Part B, and CR-09.
+**Next action**: **U5 Code Generation Part 1** (the plan). U5's Functional Design is approved — 5 artifacts, 38 rules (BR-U5-01…85), 8 PBT properties. After U5: CR-08 Part B and CR-09.
 
 **⚠️ AR-05 IS NEW AND LIVE** — `requirements.md`. Blocking excludes a blocked person's rating from the subject's aggregate (U6 Q1 `A`), so **blocking can suppress an unfavourable rating**: rate 1 star → get blocked → average rises, repeatable. Accepted deliberately for maximum separation. **Round 2 must recompute the aggregate server-side with blocks NOT applied.** Until then the vector is live and unmitigated.
 
-**⚠️ U5 VENUE DASHBOARD IS DEFERRED, NOT DONE** (user choice, 2026-08-09). Five stories (US-60…64) unbuilt, `features/venues/` is an empty `.gitkeep`, `venueRepository` has no caller. Because U6 is last, **nothing downstream will surface U5's absence** — it has to be remembered deliberately.
+**⚠️ U5 IS DESIGNED BUT NOT BUILT** (Functional Design approved 2026-09-15). `features/venues/` is still an empty `.gitkeep` and `venueRepository` still has no caller. **Three defects in existing code were found by reading the interface, not the backlog**, and U5's code generation must fix all three:
+
+1. **No authorization on three venue methods** — `publishActivity`, `listVenueActivities` and `getMetrics` take **no actor**, so any caller with a `VenueId` could publish as that venue. Latent only because nothing calls them. BR-U5-40 adds `ownerUserId` — **the one U1 interface change in U5**.
+2. **`getVenueProfile` ignores its `_viewerId`** — a venue profile is returned to a viewer who has blocked its owner, while that owner's activities are correctly filtered from the same viewer's feed. **The block is half-applied.** BR-U5-50.
+3. **`register` never sets `accountType: 'venue'`** — so `RoleGuard` would redirect a new owner away from the dashboard their own registration just created. BR-U5-01 makes it one mutation.
+
+⚠️ **P-U6-01 MUST BE EXTENDED IN U5** (P-U5-06). The test's own header says *"verified across every read path"* **silently becomes false** the moment U5 adds one. U5 adds two.
+
+⚠️ **AR-06 IS NEW** — a materialised recurring series is not collapsed in the feed, so up to 8 near-identical rows from one venue can crowd it. US-63's first criterion requires separate dated entries, so collapsing would contradict an approved story. Named, not fixed.
 
 **⚠️ US-73 CRITERION 4 IS UNMET AND ASSIGNED TO U6**: _"a link to safety guidance is present alongside the disclosure"_ on the join sheet. `JoinRequestSheet` has none. It fell between units — US-73 belongs to U2, which could not build a screen that did not exist until U4, and U4's story list did not include US-73. US-73's notes call the guidance screen **the product's primary compensating control**, and CR-07 has since removed one of the other two.
 
@@ -108,7 +116,7 @@
 - **Testing stack**: Vitest + React Testing Library + fast-check (PBT framework, PBT-09)
 - **Backend stack (Round 2)**: Node + TypeScript + Fastify + Zod + PostgreSQL + Prisma, Kavenegar SMS, Neshan maps, Arvan Cloud hosting, GitHub Actions CI
 - **Resiliency**: 99.5% target, RTO/RPO hours, Backup & Restore, single-region multi-zone, direct deploy, version-pinned rollback
-- **Accepted risks**: AR-01 no age restriction, AR-02 no approval gate on contact exchange, AR-03 non-AWS resiliency, AR-04 no in-app chat
+- **Accepted risks**: AR-01 no age restriction, AR-02 no approval gate on contact exchange, AR-03 non-AWS resiliency, AR-04 no in-app chat, AR-05 blocking suppresses an unfavourable rating, AR-06 a recurring series is not collapsed in the feed
 
 ## Stage Progress
 
@@ -154,11 +162,12 @@ Build sequence: **U1 → U2 → U3 → { U4, U5 } → U6**. Critical path: U1→
 - [x] **U3** Code Generation — Part 1 APPROVED · Part 2 COMPLETE 2026-08-05 (45/45 steps) · CR-05 folded in 2026-08-08 · **APPROVED 2026-08-08** (6 CR-05 changes adopted, 22 tests added, 3 defects fixed, font closed; **250 tests passing**)
 - [x] **U4** Functional Design — COMPLETE and **APPROVED 2026-08-08** (4 artifacts, 59 rules, 6 PBT properties; **CR-07 folded in** — US-32 retired, AR-02 re-accepted)
 - [x] **U4** Code Generation — Part 1 APPROVED · Part 2 COMPLETE · **APPROVED 2026-08-09** (45/45 steps, **290 tests passing**; two post-approval graph findings folded in, neither changing production logic)
-- [ ] **U5** Venue Dashboard — ⚠️ **UN-DEFERRED 2026-08-09**, now in Functional Design Part 1. 5 stories (US-60…64)
+- [x] **U5** Functional Design — COMPLETE and **APPROVED 2026-09-15** (5 artifacts, 38 rules BR-U5-01…85, 8 PBT properties; **AR-06 recorded**; 3 pre-existing defects identified — authorization, half-applied block, account promotion)
+- [ ] **U5** Code Generation — ⚠️ **NEXT**. 5 stories (US-60…64). Must include the **P-U6-01 extension** (P-U5-06) and the three fixes above
 - [x] **U6** Functional Design — COMPLETE and **APPROVED 2026-08-09** (4 artifacts, 27 rules, 5 PBT properties; **AR-05 recorded**, CR-08 resolved, CR-09 split out)
 - [x] **U6** Code Generation — Part 1 APPROVED · Part 2 COMPLETE · **APPROVED 2026-08-09** (27/27 steps, **305 tests passing**)
 - [ ] U4–U6 Code Generation — **EXECUTE** per unit (always)
-- [ ] Build and Test — **IN PROGRESS 2026-08-09** ⚠️ covers five of six units; **U5 is deferred and unbuilt**
+- [x] Build and Test — **COMPLETE 2026-08-09** ⚠️ covers five of six units; **must be re-run after U5 lands** so "all units build and pass" becomes true rather than five of six
 
 ### 🟡 OPERATIONS PHASE
 

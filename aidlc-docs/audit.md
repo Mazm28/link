@@ -2172,3 +2172,12 @@ Offered four routes including `C` — allow it, but **amend INV-3 openly** and r
 **Context**: Construction / U5 / Functional Design Part 1 — answer collection and contradiction analysis complete; awaiting approval to generate Part 2 artifacts.
 
 ---
+
+## U5 Venue Dashboard — Functional Design (Part 2) — Generation
+
+**Timestamp**: 2026-09-15T00:00:00Z
+**User Input**: "approve"
+**AI Response**: "Generated five artifacts in aidlc-docs/construction/u5-venues/functional-design/: domain-entities.md, business-rules.md (38 rules, BR-U5-01…85), business-logic-model.md (8 PBT properties, P-U5-01…08), frontend-components.md, extension-compliance.md (0 blocking findings across Security, Resiliency and PBT baselines). Series model: occurrences are materialised Activity rows sharing a new optional Activity.seriesId (schema v3 → v4, additive), horizon 56 days, checked against MAX_DAYS_AHEAD=60. Three pre-existing defects identified by reading the interface rather than the stories and assigned to U5 code generation: (1) publishActivity/listVenueActivities/getMetrics take no actor, so any caller with a VenueId could publish as that venue — BR-U5-40 adds ownerUserId, the one U1 interface change in U5; (2) getVenueProfile ignores its _viewerId, leaving blocking half-applied — BR-U5-50; (3) register never promotes User.accountType to 'venue', so RoleGuard would redirect a new owner away from their own dashboard — BR-U5-01. P-U6-01 is extended to the two new read paths as P-U5-06, discharging the obligation the existing test's header records. AR-06 recorded in requirements.md: a materialised series is not collapsed in the feed, because US-63's first criterion requires separate dated entries. State and plan checkboxes updated."
+**Context**: Construction / U5 / Functional Design Part 2 — complete; awaiting approval to proceed to U5 Code Generation.
+
+---

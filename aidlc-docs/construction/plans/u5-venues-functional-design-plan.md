@@ -80,15 +80,15 @@ The same applies to `Attendance`, `Rating` and `activityViews`, all keyed by `Ac
 - [x] Identify how U4/U6/CR-07 changed the scope (§2.3)
 - [x] **Collect answers below** — Q1 `A`, Q2 `A`, Q3 `A`, Q4 `A`, Q5 `A` (Q6 left blank)
 - [x] Analyse for contradictions; raise a clarification file if any — see §6, no blocking contradiction
-- [ ] Obtain approval for Part 2
+- [x] Obtain approval for Part 2 — granted 2026-09-15
 
 ### Part 2 — Generation *(after approval)*
-- [ ] `domain-entities.md` — recurrence model, series identity, `Venue` states, metrics
-- [ ] `business-rules.md` — BR-U5-xx: registration, approval gating, exact-address, recurrence, metrics
-- [ ] `business-logic-model.md` — the venue lifecycle; recurrence expansion; where approval is enforced
-- [ ] `frontend-components.md` — registration, dashboard, publisher, inbox, metrics
-- [ ] Property tests — including ⚠️ **the P-U6-01 extension**
-- [ ] Extension compliance
+- [x] `domain-entities.md` — recurrence model, series identity, `Venue` states, metrics
+- [x] `business-rules.md` — BR-U5-01…85: registration, approval, recurrence, authorization, blocking, metrics, publishing
+- [x] `business-logic-model.md` — the venue lifecycle; recurrence expansion; where approval is enforced
+- [x] `frontend-components.md` — registration, dashboard, publisher, series, inbox, metrics
+- [x] Property tests — P-U5-01…08, including ⚠️ **the P-U6-01 extension** (P-U5-06)
+- [x] Extension compliance — 0 blocking findings
 
 ---
 
